@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@studio-freight/lenis": "^1.0.42",
+    "@studio-freight/react-lenis": "^1.0.42",
     "clsx": "^2.1.0",
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.447.0",
