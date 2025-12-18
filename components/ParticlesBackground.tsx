@@ -7,6 +7,8 @@ import type { Engine } from "@tsparticles/engine";
 
 export const ParticlesBackground = () => {
   const particlesInit = useCallback(async (engine: Engine) => {
+    // loadSlim загружает только необходимые плагины для работы, 
+    // что уменьшает размер бандла
     await loadSlim(engine);
   }, []);
 
@@ -72,7 +74,8 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 1,
-              minimumValue: 0.1,  // ← Правильно: minimumValue
+              minimumValue: 0.1, // Исправлено: для анимации нужно использовать minimumValue
+              sync: false,
             },
           },
           shape: {
@@ -83,7 +86,8 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 3,
-              minimumValue: 0.1,  // ← Правильно: minimumValue
+              minimumValue: 0.1, // Исправлено: для анимации нужно использовать minimumValue
+              sync: false,
             },
           },
         },
