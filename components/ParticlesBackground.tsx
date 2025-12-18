@@ -1,19 +1,27 @@
 "use client";
 
-import { useCallback } from "react";
-import Particles from "@tsparticles/react";
+import { useEffect, useState } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
 
 export const ParticlesBackground = () => {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
+  const [init, setInit] = useState(false);
+
+  // В v3 инициализация движка делается через useEffect один раз
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
   }, []);
+
+  if (!init) return null;
 
   return (
     <Particles
       id="tsparticles"
-      init={particlesInit}
       options={{
         background: {
           color: {
@@ -62,32 +70,29 @@ export const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              width: 1920,
-              height: 1080,
+              // В v3 параметры density немного изменились, 
+              // используем стандартное сокращение
+              area: 800,
             },
             value: 60,
           },
           opacity: {
-            // В новых версиях диапазон задается здесь
-            value: { min: 0.1, max: 0.8 }, 
+            value: { min: 0.1, max: 0.8 },
             animation: {
               enable: true,
               speed: 1,
               sync: false,
-              // Удалено свойство min/minimumValue, так как оно берется из value выше
             },
           },
           shape: {
             type: "circle",
           },
           size: {
-            // В новых версиях диапазон задается здесь
             value: { min: 1, max: 4 },
             animation: {
               enable: true,
               speed: 3,
               sync: false,
-              // Удалено свойство min/minimumValue
             },
           },
         },
