@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import { Engine } from "@tsparticles/engine";
+import type { Engine } from "@tsparticles/engine";
 
 export const ParticlesBackground = () => {
   const particlesInit = useCallback(async (engine: Engine) => {
@@ -27,7 +27,9 @@ export const ParticlesBackground = () => {
               enable: true,
               mode: "repulse",
             },
-            resize: true,
+            resize: {
+              enable: true, // Теперь объект с enable
+            },
           },
           modes: {
             repulse: {
