@@ -1,125 +1,163 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { motion, animate, useMotionValue, useTransform } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Package, Box, Cpu, Truck, Check, Zap } from "lucide-react";
+import { useMemo, useState } from "react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { PRICE, SERVICES, type Marketplace, type ServiceKey } from "@/app/data/pricing"
 
-const PRICES = {
-  base: 25,
-  packaging: 15,
-  marking: 5,
-  delivery: 35,
-};
+function animateNumber(from: number, to: number, ms = 650, cb: (v: number) => void) {
+  const start = performance.now()
+  function tick(t: number) {
+    const p = Math.min(1, (t - start) / ms)
+    const eased = 1 - Math.pow(1 - p, 3)
+    cb(Math.round(from + (to - from) * eased))
+    if (p < 1) requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
 
-const services = [
-  { id: "base", label: "Приемка", icon: <Package size={24} /> },
-  { id: "packaging", label: "Упаковка", icon: <Box size={24} /> },
-  { id: "marking", label: "Маркировка", icon: <Cpu size={24} /> },
-  { id: "delivery", label: "Доставка на МП", icon: <Truck size={24} /> },
-];
+export default function Calculator() {
+  const [marketplace, setMarketplace] = useState<Marketplace>("Ozon")
+  const [qty, setQty] = useState(200)
+  const [pallets, setPallets] = useState(1)
+  const [selected, setSelected] = useState<Record<ServiceKey, boolean>>({
+    receiving: true,
+    processing: true,
+    packing: true,
+    delivery: true,
+    storage: false,
+    pickup: false,
+    other: false,
+  })
+  const [result, setResult] = useState<number | null>(null)
+  const [animated, setAnimated] = useState(0)
 
-export const Calculator = () => {
-  const [quantity, setQuantity] = useState(100);
-  const [selectedServices, setSelectedServices] = useState<string[]>(["base", "marking"]);
+  const calc = useMemo(() => {
+    // простая и прозрачная формула (чистый TS)
+    const base = qty * PRICE.perItemBase
+    const byPallet = pallets * PRICE.perPallet
+    const servicesSum = (Object.keys(selected) as ServiceKey[])
+      .filter((k) => selected[k])
+      .reduce((sum, k) => {
+        const v = PRICE.services[k]
+        if (k === "storage") return sum + pallets * v
+        if (k === "pickup") return sum + v
+        return sum + qty * v
+      }, 0)
 
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, Math.round);
+    // marketplace пока влияет только в UI (можешь добавить коэффициенты)
+    return Math.max(0, base + byPallet + servicesSum)
+  }, [qty, pallets, selected])
 
-  useEffect(() => {
-    const serviceSum = selectedServices.reduce((acc, s) => acc + PRICES[s as keyof typeof PRICES], 0);
-    const total = serviceSum * quantity;
-    animate(count, total, { duration: 1, ease: "easeOut" });
-  }, [quantity, selectedServices]);
-
-  const toggleService = (id: string) => {
-    setSelectedServices(prev =>
-      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
-    );
-  };
+  const onCalculate = () => {
+    setResult(calc)
+    animateNumber(animated, calc, 700, setAnimated)
+  }
 
   return (
-    <section id="calculator" className="py-24 px-6 relative overflow-hidden bg-black">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Левая часть */}
-          <div className="space-y-12">
-            <div>
-              <h2 className="text-5xl font-black italic uppercase mb-6 tracking-tighter">
-                Smart <span className="text-[#2563EB]">Cost</span> Control
-              </h2>
-              <p className="text-slate-400 font-medium italic uppercase text-sm tracking-widest">
-                Настройте параметры своей партии
-              </p>
-            </div>
+    <section id="calc" className="container">
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-semibold tracking-tight">Калькулятор стоимости</h2>
+          <p className="text-slate-600">
+            Вовлечение + заявка. Расчёт на клиенте, данные берём из `pricing.ts`. :contentReference[oaicite:1]{index=1}
+          </p>
+        </div>
 
-            <div className="bg-card/30 border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
-              <div className="flex justify-between items-end mb-8">
-                <span className="text-sm font-black uppercase text-slate-500">Объем партии</span>
-                <span className="text-4xl font-black italic text-[#2563EB]">{quantity} <small className="text-xs">ШТ</small></span>
-              </div>
-              <input
-                type="range"
-                min="50"
-                max="10000"
-                step="50"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#2563EB]"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {services.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => toggleService(s.id)}
-                  className={`flex items-center gap-3 p-5 rounded-2xl border font-bold transition-all ${
-                    selectedServices.includes(s.id)
-                      ? "bg-[#2563EB] text-black border-[#2563EB] shadow-neon-sm scale-95"
-                      : "bg-white/5 border-white/10 text-white hover:border-white/20"
-                  }`}
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 rounded-2xl border border-slate-100 p-6 bg-white space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <div className="text-sm text-slate-500">Маркетплейс</div>
+                <select
+                  className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                  value={marketplace}
+                  onChange={(e) => setMarketplace(e.target.value as Marketplace)}
                 >
-                  {selectedServices.includes(s.id) ? <Check size={18} /> : s.icon}
-                  <span className="uppercase text-xs tracking-tighter">{s.label}</span>
-                </button>
-              ))}
+                  <option>Ozon</option>
+                  <option>Wildberries</option>
+                  <option>Яндекс Маркет</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-sm text-slate-500">Кол-во товаров</div>
+                <input
+                  type="number"
+                  min={0}
+                  className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                  value={qty}
+                  onChange={(e) => setQty(Number(e.target.value))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-sm text-slate-500">Объём / паллеты</div>
+                <input
+                  type="number"
+                  min={0}
+                  className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                  value={pallets}
+                  onChange={(e) => setPallets(Number(e.target.value))}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="font-semibold">Выбор услуг</div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {SERVICES.map((s) => (
+                  <Checkbox
+                    key={s.key}
+                    label={s.title}
+                    checked={selected[s.key]}
+                    onCheckedChange={(v) => setSelected((prev) => ({ ...prev, [s.key]: v }))}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button size="lg" onClick={onCalculate}>Рассчитать</Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                Получить точный расчёт
+              </Button>
             </div>
           </div>
 
-          {/* Правая часть */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-[#2563EB]/20 blur-[120px] rounded-full group-hover:bg-[#2563EB]/30 transition-colors" />
-            <div className="relative h-full bg-card border border-white/10 rounded-[4rem] p-12 flex flex-col justify-between overflow-hidden">
-              <div className="flex justify-between items-start">
-                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-[#2563EB] rounded-full animate-ping" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">Live Estimate</span>
-              </div>
+          <div className="rounded-2xl border border-slate-100 p-6 bg-white space-y-4">
+            <div className="text-sm text-slate-500">Результат</div>
 
-              <div className="text-center py-10">
-                <div className="text-sm font-bold text-slate-500 uppercase mb-2">Итоговая стоимость</div>
-                <div className="flex items-center justify-center gap-3">
-                  <motion.span className="text-8xl md:text-[120px] font-black italic tracking-tighter leading-none">
-                    {rounded}
-                  </motion.span>
-                  <span className="text-4xl font-black italic text-[#2563EB]">₽</span>
-                </div>
-              </div>
+            <motion.div
+              key={result ?? "empty"}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="text-4xl font-bold tracking-tight"
+            >
+              {result === null ? "—" : `${animated.toLocaleString("ru-RU")} ₽`}
+            </motion.div>
 
-              <div className="space-y-4">
-                <Button className="w-full bg-[#2563EB] text-black hover:bg-white h-20 rounded-[2rem] font-black uppercase italic text-xl shadow-neon group">
-                  Зафиксировать цену <Zap className="ml-2 fill-current group-hover:animate-bounce" />
-                </Button>
-                <p className="text-[10px] text-center text-slate-500 uppercase font-bold tracking-widest">
-                  *Включая скидку 10% на первый заказ
-                </p>
+            <div className="text-sm text-slate-600">
+              {result === null
+                ? "Выберите параметры и нажмите «Рассчитать»."
+                : `Маркетплейс: ${marketplace}. Это предварительный расчёт.`}
+            </div>
+
+            <div className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+              <div className="font-medium text-slate-900">Важно</div>
+              <div className="mt-1">
+                После заявки уточним нюансы (категория товара, упаковка, требования МП).
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
