@@ -14,17 +14,28 @@ export default function Promotions() {
       >
         <div className="space-y-2">
           <h2 className="text-3xl font-semibold tracking-tight">Акции</h2>
-          <p className="text-slate-600">Условия из ТЗ: −10% на первый заказ и −10% за друга. :contentReference[oaicite:2]{index=2}</p>
+          <p className="text-slate-600">
+            Условия: −10% на первый заказ и −10% за приведённого друга.
+          </p>
         </div>
 
         <div className="mt-6 grid md:grid-cols-2 gap-4">
           <div className="rounded-2xl bg-slate-50 p-5">
-            <div className="font-semibold">Скидка 10% на первый заказ</div>
-            <div className="mt-2 text-sm text-slate-600">Просто оставьте заявку — менеджер применит скидку.</div>
+            <div className="font-semibold">
+              Скидка 10% на первый заказ
+            </div>
+            <div className="mt-2 text-sm text-slate-600">
+              Применяется автоматически при первом обращении.
+            </div>
           </div>
+
           <div className="rounded-2xl bg-slate-50 p-5">
-            <div className="font-semibold">Скидка 10% за приведённого друга</div>
-            <div className="mt-2 text-sm text-slate-600">Друга подключили — скидка вам на следующий расчёт.</div>
+            <div className="font-semibold">
+              Скидка 10% за друга
+            </div>
+            <div className="mt-2 text-sm text-slate-600">
+              Приведите клиента — получите скидку на следующий заказ.
+            </div>
           </div>
         </div>
       </motion.div>
