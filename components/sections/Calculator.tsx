@@ -1,129 +1,122 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"; // Нужен будет отдельный файл компонента
-import { Calculator as CalcIcon, Zap } from "lucide-react";
+import { Zap, Package, Truck, ShieldCheck, Check } from "lucide-react";
 
-// Прайс-лист на основе данных FF24
 const PRICES = {
-  base: 25, // Приемка + базовая обработка
+  base: 25,     // Приемка
   packaging: 15, // Упаковка
-  marking: 5, // Маркировка
-  delivery: 35, // Доставка до склада (среднее)
+  marking: 5,    // ШК
+  delivery: 35,  // Доставка
 };
 
 export const Calculator = () => {
   const [quantity, setQuantity] = useState(100);
-  const [services, setServices] = useState(["base", "marking"]);
-  const [total, setTotal] = useState(0);
-
-  // Анимация цифр
+  const [selectedServices, setSelectedServices] = useState(["base", "marking"]);
+  
+  // Анимация живых цифр
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
 
   useEffect(() => {
-    const serviceSum = services.reduce((acc, service) => acc + (PRICES[service as keyof typeof PRICES] || 0), 0);
-    const newTotal = serviceSum * quantity;
-    setTotal(newTotal);
-    
-    const controls = animate(count, newTotal, { duration: 1, ease: "easeOut" });
+    const serviceSum = selectedServices.reduce((acc, s) => acc + (PRICES[s as keyof typeof PRICES] || 0), 0);
+    const total = serviceSum * quantity;
+    const controls = animate(count, total, { duration: 1, ease: "easeOut" });
     return controls.stop;
-  }, [quantity, services]);
+  }, [quantity, selectedServices]);
 
   const toggleService = (id: string) => {
-    setServices(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+    setSelectedServices(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
   };
 
   return (
-    <section id="calculator" className="py-24 px-6 relative">
+    <section id="calculator" className="py-24 px-6 relative overflow-hidden bg-black">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-card border border-border rounded-[3rem] p-8 md:p-16 overflow-hidden relative">
-          {/* Декор */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-DEFAULT/10 blur-[80px] -mr-32 -mt-32" />
-
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-12">
+          
+          {/* Левая часть: Настройки */}
+          <div className="space-y-12">
             <div>
-              <div className="flex items-center gap-3 text-accent-DEFAULT mb-6">
-                <CalcIcon size={24} />
-                <span className="font-black uppercase tracking-widest text-sm">Online-расчет</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-black italic uppercase mb-8">
-                Рассчитайте <br /> стоимость <span className="text-accent-DEFAULT">фулфилмента</span>
+              <h2 className="text-5xl font-black italic uppercase mb-6 tracking-tighter">
+                Smart <span className="text-accent-DEFAULT">Cost</span> Control
               </h2>
-
-              <div className="space-y-10">
-                {/* Слайдер кол-ва */}
-                <div>
-                  <div className="flex justify-between mb-4">
-                    <span className="font-bold uppercase text-sm text-muted-foreground">Кол-во товаров</span>
-                    <span className="text-accent-DEFAULT font-black">{quantity} шт.</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="10" 
-                    max="5000" 
-                    step="10"
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-accent-DEFAULT"
-                  />
-                </div>
-
-                {/* Услуги */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { id: "base", label: "Приемка и проверка" },
-                    { id: "packaging", label: "Упаковка в короб" },
-                    { id: "marking", label: "Маркировка (ШК)" },
-                    { id: "delivery", label: "Доставка до МП" },
-                  ].map((s) => (
-                    <div 
-                      key={s.id}
-                      onClick={() => toggleService(s.id)}
-                      className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-center gap-3 ${
-                        services.includes(s.id) ? "border-accent-DEFAULT bg-accent-DEFAULT/5" : "border-border hover:border-white/20"
-                      }`}
-                    >
-                      <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-                        services.includes(s.id) ? "bg-accent-DEFAULT border-accent-DEFAULT" : "border-white/20"
-                      }`}>
-                        {services.includes(s.id) && <div className="w-2 h-2 bg-black rounded-full" />}
-                      </div>
-                      <span className="text-sm font-bold uppercase">{s.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <p className="text-slate-400 font-medium italic uppercase text-sm tracking-widest">
+                Настройте параметры своей партии
+              </p>
             </div>
 
-            <div className="bg-white/5 border border-white/5 rounded-[2.5rem] p-10 flex flex-col justify-between items-center text-center">
-              <div>
-                <span className="text-muted-foreground font-bold uppercase text-xs tracking-[0.3em] mb-4 block">
-                  Примерная стоимость
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <motion.span className="text-7xl md:text-8xl font-black italic text-glow">
-                    {rounded}
-                  </motion.span>
-                  <span className="text-2xl font-black text-accent-DEFAULT italic">₽</span>
+            {/* Слайдер количества */}
+            <div className="bg-card/30 border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+              <div className="flex justify-between items-end mb-8">
+                <span className="text-sm font-black uppercase text-slate-500">Объем партии</span>
+                <span className="text-4xl font-black italic text-accent-DEFAULT">{quantity} <small className="text-xs">ШТ</small></span>
+              </div>
+              <input 
+                type="range" min="50" max="10000" step="50"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-accent-DEFAULT"
+              />
+            </div>
+
+            {/* Сетка услуг */}
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: "base", label: "Приемка", icon: <Package size={18} /> },
+                { id: "packaging", label: "Упаковка", icon: <ShieldCheck size={18} /> },
+                { id: "marking", label: "ШК", icon: <Zap size={18} /> },
+                { id: "delivery", label: "Доставка", icon: <Truck size={18} /> },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => toggleService(s.id)}
+                  className={`flex items-center gap-3 p-5 rounded-2xl border font-bold transition-all ${
+                    selectedServices.includes(s.id) 
+                    ? "bg-accent-DEFAULT text-black border-accent-DEFAULT shadow-neon-sm scale-95" 
+                    : "bg-white/5 border-white/10 text-white hover:border-white/20"
+                  }`}
+                >
+                  {selectedServices.includes(s.id) ? <Check size={18} /> : s.icon}
+                  <span className="uppercase text-xs tracking-tighter">{s.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Правая часть: Результат (Dashboard Card) */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-accent-DEFAULT/20 blur-[120px] rounded-full group-hover:bg-accent-DEFAULT/30 transition-colors" />
+            <div className="relative h-full bg-card border border-white/10 rounded-[4rem] p-12 flex flex-col justify-between overflow-hidden">
+              <div className="flex justify-between items-start">
+                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-accent-DEFAULT rounded-full animate-ping" />
                 </div>
-                <p className="mt-6 text-muted-foreground text-sm max-w-[200px] mx-auto">
-                  Скидка 10% на первый заказ уже включена в расчет
-                </p>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">Live Estimate</span>
               </div>
 
-              <div className="w-full mt-12 space-y-4">
-                <Button className="w-full bg-accent-DEFAULT text-black hover:bg-white py-8 rounded-2xl font-black uppercase italic text-lg shadow-neon group">
-                  <Zap className="mr-2 fill-current group-hover:animate-pulse" /> Получить КП
+              <div className="text-center py-10">
+                <div className="text-sm font-bold text-slate-500 uppercase mb-2">Итоговая стоимость</div>
+                <div className="flex items-center justify-center gap-3">
+                  <motion.span className="text-8xl md:text-[120px] font-black italic tracking-tighter leading-none">
+                    {rounded}
+                  </motion.span>
+                  <span className="text-4xl font-black italic text-accent-DEFAULT">₽</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Button className="w-full bg-accent-DEFAULT text-black hover:bg-white h-20 rounded-[2rem] font-black uppercase italic text-xl shadow-neon group">
+                  Зафиксировать цену <Zap className="ml-2 fill-current group-hover:animate-bounce" />
                 </Button>
-                <p className="text-[10px] text-muted-foreground uppercase font-bold">
-                  *точный расчет после уточнения габаритов
+                <p className="text-[10px] text-center text-slate-500 uppercase font-bold tracking-widest">
+                  *Включая скидку 10% на первый заказ
                 </p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
