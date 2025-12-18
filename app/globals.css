@@ -4,45 +4,24 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;   /* Тенистый темный */
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --accent-DEFAULT: 217 90% 64%; /* Яркий синий неон */
-    --primary-DEFAULT: 222.2 84% 4.9%;
+    --accent-DEFAULT: 217 90% 64%; /* Синий акцент */
     --card: 224 71.4% 4.1%;
     --card-foreground: 0 0% 98%;
     --border: 217.2 32.4% 15%;
-    --input: 217.2 32.4% 15%;
     --ring: 217 90% 64%;
-    --radius: 1rem;
+    --radius: 0.5rem;
+  }
+
+  body {
+    @apply bg-black text-white antialiased;
   }
 }
 
 @layer utilities {
   .shadow-neon {
-    box-shadow: 0 0 20px hsl(var(--accent-DEFAULT) / 0.4), 
-                0 0 60px hsl(var(--accent-DEFAULT) / 0.1);
+    box-shadow: 0 0 15px hsl(var(--accent-DEFAULT) / 0.5), 
+                0 0 5px hsl(var(--accent-DEFAULT) / 0.3);
   }
-  .text-glow {
-    text-shadow: 0 0 10px hsl(var(--accent-DEFAULT) / 0.5);
-  }
-}
-
-body {
-  @apply bg-background text-foreground antialiased overflow-x-hidden;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Стили для скроллбара в стиле Dark */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent-DEFAULT));
 }
