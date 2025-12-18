@@ -1,27 +1,19 @@
-"use client";
+import Hero from "@/components/sections/Hero"
+import BentoGrid from "@/components/sections/BentoGrid"
+import ProcessSteps from "@/components/sections/ProcessSteps"
+import Calculator from "@/components/sections/Calculator"
+import FAQ from "@/components/sections/FAQ"
+import Footer from "@/components/Footer"
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Hero } from "@/components/sections/Hero";
-import { BentoGrid } from "@/components/sections/BentoGrid";
-import { ProcessSteps } from "@/components/sections/ProcessSteps";
-import { Calculator } from "@/components/sections/Calculator";
-import { Terminal } from "@/components/sections/Terminal";
-import { FAQ } from "@/components/sections/FAQ";
-
-export default function LandingPage() {
+export default function HomePage() {
   return (
-    <div className="bg-black min-h-screen text-white">
-      <Navbar />
-      <main>
-        <Hero />
-        <BentoGrid />
-        <ProcessSteps />
-        <Calculator />
-        <Terminal />
-        <FAQ />
-      </main>
+    <main className="space-y-32">
+      <Hero />
+      <BentoGrid />
+      <ProcessSteps />
+      <Calculator />
+      <FAQ />
       <Footer />
-    </div>
-  );
+    </main>
+  )
 }
