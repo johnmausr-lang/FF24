@@ -3,12 +3,16 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Box } from "lucide-react";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Фоновый градиент + лайм-акцент */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-dark via-black to-black opacity-90" />
+      {/* Частицы на весь экран */}
+      <ParticlesBackground />
+
+      {/* Фоновый градиент */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/50 via-black to-black" />
       <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-accent-lime/10 blur-[140px] rounded-full animate-pulse-slow" />
       <div className="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-accent-blue/20 blur-[120px] rounded-full" />
 
@@ -18,7 +22,6 @@ export const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          {/* Логотип с градиентным переливом */}
           <div className="inline-flex items-center gap-3 mb-8">
             <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter gradient-text">
               FF24
@@ -56,7 +59,6 @@ export const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Dashboard карточка */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
