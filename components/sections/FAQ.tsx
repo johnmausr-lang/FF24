@@ -1,45 +1,50 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { useState } from "react"
+import { motion } from "framer-motion"
 
-const faqs = [
-  { q: "Как быстро вы принимаете товар?", a: "В течение 24 часов с момента прибытия на склад. В 90% случаев — в день поставки." },
-  { q: "Работаете ли вы с браком?", a: "Да, мы проверяем каждую единицу товара. При обнаружении брака отправляем фотоотчет и изолируем товар." },
-  { q: "Какие маркетплейсы вы поддерживаете?", a: "Wildberries, Ozon и Яндекс Маркет по моделям FBO и FBS." },
-  { q: "Есть ли минимальный объем заказа?", a: "Мы работаем с любыми объемами, но минимальная стоимость обработки поставки — 1500 руб." }
-];
+const items = [
+  { q: "С какими маркетплейсами работаете?", a: "Ozon, Wildberries, Яндекс Маркет. Подстроим упаковку под требования." },
+  { q: "Как быстро можно начать?", a: "Обычно 1–2 дня после уточнения деталей и согласования процесса." },
+  { q: "Где находится склад?", a: "Лодочная д. 5 (курьеры) и Лодочная д. 7 (водители)." },
+  { q: "Как отправить заявку?", a: "Форма в конце страницы отправляет данные в Telegram-бот." },
+]
 
-export const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+export default function FAQ() {
+  const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section className="py-24 px-6 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-black italic uppercase mb-12 text-center">Частые вопросы</h2>
-      <div className="space-y-4">
-        {faqs.map((faq, i) => (
-          <div key={i} className="bg-card border border-border rounded-2xl overflow-hidden">
-            <button 
-              onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              className="w-full p-6 flex items-center justify-between text-left"
-            >
-              <span className="font-bold text-lg">{faq.q}</span>
-              <ChevronDown className={`transition-transform ${openIndex === i ? "rotate-180" : ""}`} />
-            </button>
-            <AnimatePresence>
-              {openIndex === i && (
-                <motion.div 
-                  initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }}
-                  className="overflow-hidden"
+    <section id="faq" className="container">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-6"
+      >
+        <div className="space-y-2">
+          <h2 className="text-3xl font-semibold tracking-tight">FAQ</h2>
+          <p className="text-slate-600">Частые вопросы.</p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white">
+          {items.map((it, idx) => {
+            const isOpen = open === idx
+            return (
+              <div key={it.q} className="border-b border-slate-100 last:border-b-0">
+                <button
+                  className="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-slate-50"
+                  onClick={() => setOpen(isOpen ? null : idx)}
                 >
-                  <p className="px-6 pb-6 text-muted-foreground">{faq.a}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </div>
+                  <div className="font-semibold">{it.q}</div>
+                  <div className="text-slate-400">{isOpen ? "—" : "+"}</div>
+                </button>
+                {isOpen && <div className="px-5 pb-5 text-sm text-slate-600">{it.a}</div>}
+              </div>
+            )
+          })}
+        </div>
+      </motion.div>
     </section>
-  );
-};
+  )
+}
