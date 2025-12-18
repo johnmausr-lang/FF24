@@ -1,69 +1,19 @@
-// app/layout.tsx
-import "./globals.css";
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import { ReactLenis } from "lenis/react";
-import { Suspense } from "react";
-import { LoadingScreen } from "@/components/LoadingScreen";
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-});
+import "@/app/globals.css"
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "FF24 | Фулфилмент Нового Поколения",
-  description: "Автоматизированная логистика для маркетплейсов. Приемка, упаковка и отгрузка за 24 часа.",
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  themeColor: "#000000",
-};
+  title: "FF24 — Фулфилмент для маркетплейсов",
+  description: "Приемка, хранение, упаковка и доставка товаров на маркетплейсы",
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className="scroll-smooth">
-      {/* Inline-стиль на html — самый приоритетный и мгновенный */}
-      <body 
-        className={`${inter.className} antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden min-h-screen`}
-        style={{ backgroundColor: '#000000', color: '#ffffff' }}
-      >
-        {/* Скрипт гарантирует, что даже если Tailwind опоздает — фон останется чёрным */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                if (typeof document !== 'undefined') {
-                  document.documentElement.style.backgroundColor = '#000000';
-                  document.body.style.backgroundColor = '#000000';
-                  document.body.style.color = '#ffffff';
-                  
-                  const root = document.documentElement;
-                  root.style.setProperty('--background', '240 10% 3.9%');
-                  root.style.setProperty('--foreground', '0 0% 98%');
-                  root.style.setProperty('--accent-DEFAULT', '217 91% 60%');
-                  root.style.setProperty('--card', '240 10% 3.9%');
-                  root.style.setProperty('--card-foreground', '0 0% 98%');
-                  root.style.setProperty('--border', '240 3.7% 15.9%');
-                }
-              })();
-            `,
-          }}
-        />
-
-        <ReactLenis root>
-          <Suspense fallback={<LoadingScreen />}>
-            {children}
-          </Suspense>
-        </ReactLenis>
-      </body>
+    <html lang="ru">
+      <body>{children}</body>
     </html>
-  );
+  )
 }
