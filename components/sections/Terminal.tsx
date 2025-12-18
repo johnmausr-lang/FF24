@@ -14,9 +14,10 @@ export const Terminal = () => {
 
   useEffect(() => {
     if (status === "idle") {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setStatus("typing");
       }, 500);
+      return () => clearTimeout(timeout);
     }
   }, [status]);
 
@@ -28,7 +29,8 @@ export const Terminal = () => {
         }, 80);
         return () => clearTimeout(timeout);
       } else {
-        setTimeout(() => setStatus("idle"), 1000);
+        const timeout = setTimeout(() => setStatus("idle"), 1000);
+        return () => clearTimeout(timeout);
       }
     }
   }, [typedText, status]);
@@ -94,9 +96,10 @@ export const Terminal = () => {
                   animate={{ opacity: 1 }}
                   className="text-accent-lime"
                 >
-                  > CONNECTION ESTABLISHED<br />
-                  > DATA TRANSMITTED SUCCESSFULLY<br />
-                  > MANAGER WILL CONTACT YOU SOON
+                  {/* Исправлено: экранирование символа > */}
+                  &gt; CONNECTION ESTABLISHED<br />
+                  &gt; DATA TRANSMITTED SUCCESSFULLY<br />
+                  &gt; MANAGER WILL CONTACT YOU SOON
                 </motion.div>
               )}
             </div>
