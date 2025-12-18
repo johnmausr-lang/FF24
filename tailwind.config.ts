@@ -12,17 +12,19 @@ const config: Config = {
     "border-accent-blue",
     "bg-accent-lime",
     "text-accent-lime",
+    "border-accent-lime",
     "shadow-neon",
     "shadow-neon-lime",
     "shadow-neon-sm",
+    "glow-pulse",
+    "glow-pulse-lime",
+    "gradient-text",
+    "gradient-border",
+    "gradient-border-thick",
     "animate-pulse",
     "animate-ping",
     "animate-bounce",
     "backdrop-blur-xl",
-    "gradient-text",
-    "glow-pulse",
-    "glow-pulse-lime",
-    "gradient-border",
     { pattern: /rounded-(xl|2xl|3xl|[2-4]rem)/ },
     { pattern: /(bg|text|border|shadow)-(accent-blue|accent-lime)/ },
   ],
@@ -32,11 +34,11 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          dark: "hsl(var(--primary-dark))",
+          dark: "hsl(var(--primary-dark))", // #1E1B4B
         },
         accent: {
-          blue: "hsl(var(--accent-blue))",
-          lime: "hsl(var(--accent-lime))",
+          blue: "hsl(var(--accent-blue))",   // #2563EB
+          lime: "hsl(var(--accent-lime))",   // #E0FF64
         },
         card: {
           DEFAULT: "hsl(var(--card))",
