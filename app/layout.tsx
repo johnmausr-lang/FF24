@@ -29,8 +29,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className="scroll-smooth">
-      <body className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden`}>
+    <html lang="ru" className="scroll-smooth bg-black text-white">
+      <head>
+        {/* Безопасный скрипт — применяется только на клиенте, убирает FOUC и консольную ошибку */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof document !== 'undefined') {
+                  document.documentElement.classList.add('bg-black', 'text-white');
+                  document.body.classList.add('bg-black', 'text-white');
+                  
+                  const root = document.documentElement;
+                  root.style.setProperty('--background', '240 10% 3.9%');
+                  root.style.setProperty('--foreground', '0 0% 98%');
+                  root.style.setProperty('--accent-DEFAULT', '217 91% 60%');
+                  root.style.setProperty('--card', '240 10% 3.9%');
+                  root.style.setProperty('--card-foreground', '0 0% 98%');
+                  root.style.setProperty('--border', '240 3.7% 15.9%');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
+
+      <body className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden min-h-screen`}>
         <ReactLenis root>
           <Suspense fallback={<LoadingScreen />}>
             {children}
