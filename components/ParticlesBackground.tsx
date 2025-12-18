@@ -62,8 +62,8 @@ export const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              width: 1920,   // заменяет старый area
-              height: 1080,  // заменяет старый area
+              width: 1920,
+              height: 1080,
             },
             value: 60,
           },
@@ -72,7 +72,7 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 1,
-              minimumValue: 0.1,
+              min: 0.1,  // ← исправлено: minimumValue → min
             },
           },
           shape: {
@@ -83,7 +83,7 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 3,
-              minimumValue: 0.1,
+              min: 0.1,  // ← исправлено: minimumValue → min
             },
           },
         },
