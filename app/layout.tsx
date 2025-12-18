@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className="scroll-smooth">
       <head>
-        {/* Фикс белого флэша на production */}
+        {/* Фикс белого флэша — работает на Vercel */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -58,10 +58,10 @@ export default function RootLayout({
         <ReactLenis
           root
           options={{
-            smoothWheel: true,
-            // smoothTouch: true, ← УДАЛЕНО — этой опции больше нет
-            normalizeWheel: true,
-            lerp: 0.1, // Плавность скролла (0.05 = очень плавно, 0.2 = быстрее)
+            lerp: 0.1,              // Основная плавность (меньше = плавнее)
+            wheelMultiplier: 1,     // Скорость скролла колесом
+            touchMultiplier: 1.5,   // Скорость на тач-устройствах (чуть быстрее для естественности)
+            // infinite: false,     // Бесконечный скролл (если нужно — включи)
           }}
         >
           <Suspense fallback={<LoadingScreen />}>
