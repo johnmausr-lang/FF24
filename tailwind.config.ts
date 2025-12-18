@@ -6,21 +6,41 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/sections/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [  // ← КЛЮЧЕВОЕ ДОБАВЛЕНИЕ!
+  safelist: [
+    // Все классы с accent-DEFAULT (фон, текст, бордер, тень)
+    "bg-accent-DEFAULT",
+    "text-accent-DEFAULT",
+    "border-accent-DEFAULT",
+    "shadow-neon",
+    "shadow-neon-sm",
+
+    // Анимации, которые ты используешь
+    "animate-pulse",
+    "animate-ping",
+    "animate-bounce",
+    "animate-pulse-soft",
+
+    // Backdrop и другие эффекты
+    "backdrop-blur-xl",
+    "backdrop-blur-md",
+
+    // Закругления, которые часто "выпадают" в production
+    "rounded-xl",
+    "rounded-2xl",
+    "rounded-3xl",
+    "rounded-[2.5rem]",
+    "rounded-[3rem]",
+    "rounded-[4rem]",
+
+    // Групповые ховеры (если используешь group-hover)
+    {
+      pattern: /group-hover:(scale|translate|opacity|bg|text|border)/,
+    },
+
+    // Любые динамические классы с accent
     {
       pattern: /(bg|text|border|shadow)-accent-DEFAULT/,
     },
-    {
-      pattern: /rounded-(xl|2xl|3xl|4rem)/,
-    },
-    {
-      pattern: /animate-(pulse|ping|bounce)/,
-    },
-    'shadow-neon',
-    'shadow-neon-sm',
-    'text-glow',
-    'backdrop-blur-xl',
-    // Добавь другие, если нужно (например, 'group-hover:*')
   ],
   theme: {
     extend: {
@@ -47,4 +67,5 @@ const config: Config = {
   },
   plugins: [require("tailwindcss-animate")],
 };
+
 export default config;
