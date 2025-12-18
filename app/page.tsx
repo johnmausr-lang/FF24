@@ -2,32 +2,33 @@
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-// Импорты из папки sections
-import { Hero } from "@/components/sections/Hero";
-import { BentoGrid } from "@/components/sections/BentoGrid";
+
+// Секции с улучшениями
+import { Hero } from "@/components/sections/Hero"; // с particles
+import { BentoGrid } from "@/components/sections/BentoGrid"; // с 3D-tilt
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
-import { Calculator } from "@/components/sections/Calculator";
+import { LeadForm } from "@/components/sections/LeadForm"; // новый лид-магнит вместо калькулятора
 import { Terminal } from "@/components/sections/Terminal";
 import { FAQ } from "@/components/sections/FAQ";
 
 export default function LandingPage() {
   return (
-    <div className="bg-black min-h-screen text-white selection:bg-accent-DEFAULT selection:text-black antialiased">
+    <div className="bg-black min-h-screen text-white selection:bg-[#E0FF64] selection:text-[#1E1B4B] antialiased">
       <Navbar />
       <main>
-        {/* 1. Главный экран */}
+        {/* 1. Hero с частицами и градиентным логотипом */}
         <Hero />
         
-        {/* 2. Сетка преимуществ */}
+        {/* 2. Преимущества с 3D-tilt карточками */}
         <BentoGrid />
         
-        {/* 3. Процесс (Конвейер) */}
+        {/* 3. Процесс (конвейер) */}
         <ProcessSteps />
         
-        {/* 4. Калькулятор стоимости */}
-        <Calculator />
+        {/* 4. Новый блок — персональное предложение (лид-форма) */}
+        <LeadForm />
         
-        {/* 5. Терминал (Карта + Форма) */}
+        {/* 5. Терминал с картой и формой */}
         <Terminal />
         
         {/* 6. FAQ */}
