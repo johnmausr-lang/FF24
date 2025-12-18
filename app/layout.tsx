@@ -2,7 +2,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ReactLenis } from "lenis/react"; // ← Правильный импорт из нового пакета
+import { ReactLenis } from "lenis/react"; //
 import { Suspense } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className="scroll-smooth">
       <head>
-        {/* Мгновенный фикс белого флэша */}
+        {/* Убираем белый флэш навсегда */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -61,7 +61,7 @@ export default function RootLayout({
             smoothWheel: true,
             smoothTouch: true,
             normalizeWheel: true,
-            lerp: 0.1, // Плавность скролла
+            lerp: 0.1,
           }}
         >
           <Suspense fallback={<LoadingScreen />}>
