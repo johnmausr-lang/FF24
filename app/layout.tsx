@@ -2,7 +2,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ReactLenis } from "@studio-freight/lenis";
+import { ReactLenis } from "@studio-freight/react-lenis";
 import { Suspense } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
@@ -31,16 +31,16 @@ export default function RootLayout({
   return (
     <html lang="ru" className="scroll-smooth">
       <head>
-        {/* Самый важный скрипт — применяется ДО любого рендера */}
+        {/* Критически важный скрипт — убирает белый флэш НАВСЕГДА */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                // Принудительно чёрный фон сразу
+                // Мгновенно чёрный фон
                 document.documentElement.style.backgroundColor = '#000000';
                 document.body.style.backgroundColor = '#000000';
                 
-                // Задаём все CSS-переменные мгновенно
+                // Задаём все Tailwind-переменные до рендера
                 const root = document.documentElement;
                 root.style.setProperty('--background', '240 10% 3.9%');
                 root.style.setProperty('--foreground', '0 0% 98%');
@@ -53,6 +53,7 @@ export default function RootLayout({
           }}
         />
       </head>
+
       <body
         className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden`}
       >
@@ -62,6 +63,7 @@ export default function RootLayout({
             smoothWheel: true,
             smoothTouch: true,
             normalizeWheel: true,
+            lerp: 0.1,
           }}
         >
           <Suspense fallback={<LoadingScreen />}>
