@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import type { Engine } from "@tsparticles/engine";
 
 export const ParticlesBackground = () => {
   const [init, setInit] = useState(false);
 
+  // Инициализация движка для v3
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
@@ -15,9 +17,7 @@ export const ParticlesBackground = () => {
     });
   }, []);
 
-  if (!init) {
-    return null;
-  }
+  if (!init) return null;
 
   return (
     <Particles
@@ -70,12 +70,13 @@ export const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              area: 800,
+              width: 1920,
+              height: 1080,
             },
             value: 60,
           },
           opacity: {
-            value: { min: 0.3, max: 0.8 },
+            value: { min: 0.1, max: 0.8 },
             animation: {
               enable: true,
               speed: 1,
