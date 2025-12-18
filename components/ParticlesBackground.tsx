@@ -28,7 +28,7 @@ export const ParticlesBackground = () => {
               mode: "repulse",
             },
             resize: {
-              enable: true, // Теперь объект с enable
+              enable: true,
             },
           },
           modes: {
@@ -55,12 +55,15 @@ export const ParticlesBackground = () => {
             direction: "none",
             random: false,
             straight: false,
-            outModes: "out",
+            outModes: {
+              default: "out",
+            },
           },
           number: {
             density: {
               enable: true,
-              area: 800,
+              width: 1920,   // заменяет старый area
+              height: 1080,  // заменяет старый area
             },
             value: 60,
           },
