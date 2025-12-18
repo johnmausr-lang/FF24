@@ -8,7 +8,7 @@ const features = [
     title: "Приёмка 24/7",
     desc: "Ваш товар попадает в систему сразу после разгрузки.",
     icon: <Clock className="text-accent-lime" />,
-    className: "md:col-span-2 md:row-span-1 bg-primary-dark/50 border-accent-lime/30 shadow-neon-lime glow-pulse-lime",
+    className: "md:col-span-2 md:row-span-1 bg-primary-dark/50 border-accent-lime/30 shadow-neon-lime",
   },
   {
     title: "Безопасность",
@@ -33,7 +33,7 @@ const features = [
     title: "Умная упаковка",
     desc: "Снижаем объёмный вес на 15-20% за счёт оптимизации тары.",
     icon: <Box className="text-accent-lime" />,
-    className: "md:col-span-1 md:row-span-1 border-accent-lime/50 shadow-neon-lime glow-pulse-lime",
+    className: "md:col-span-1 md:row-span-1 border-accent-lime/50 shadow-neon-lime",
   }
 ];
 
@@ -59,23 +59,37 @@ export const BentoGrid = () => {
           {features.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              whileHover={{ 
-                y: -12, 
-                scale: 1.03,
-                transition: { duration: 0.4 }
-              }}
-              className={`relative overflow-hidden p-10 rounded-[3rem] border backdrop-blur-sm flex flex-col gap-6 group ${item.className}`}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-accent-lime/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              transition={{ delay: i * 0.15, duration: 0.8 }}
               
+              // 3D-tilt эффект + micro-interactions
+              whileHover={{ 
+                scale: 1.05,
+                rotateY: 12,
+                rotateX: 8,
+                y: -15,
+                transition: { duration: 0.5, type: "spring", stiffness: 300 }
+              }}
+              whileTap={{ scale: 0.98 }}
+              
+              className={`relative overflow-hidden p-10 rounded-[3rem] border backdrop-blur-sm flex flex-col gap-6 group cursor-pointer perspective-1000 ${item.className} glow-pulse`}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* Фоновый градиент при hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/10 via-accent-lime/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-800 rounded-[3rem]" />
+              
+              {/* Свечение при hover */}
+              <div className="absolute inset-0 shadow-neon-lime opacity-0 group-hover:opacity-70 transition-opacity duration-700 rounded-[3rem]" />
+
               <div className="flex items-center gap-5 relative z-10">
-                <div className="p-4 rounded-3xl bg-black/50 border border-accent-lime/30 group-hover:border-accent-lime group-hover:scale-110 transition-all duration-500">
+                <motion.div 
+                  whileHover={{ scale: 1.2, rotate: 15 }}
+                  className="p-4 rounded-3xl bg-black/60 border border-accent-lime/40 group-hover:border-accent-lime group-hover:bg-accent-lime/10 transition-all duration-500"
+                >
                   {item.icon}
-                </div>
+                </motion.div>
                 <h3 className="text-3xl font-black italic uppercase tracking-tighter gradient-text">
                   {item.title}
                 </h3>
@@ -86,14 +100,14 @@ export const BentoGrid = () => {
               </p>
 
               {item.special === "chart" && (
-                <div className="mt-auto pt-8 flex items-end gap-2 h-32">
+                <div className="mt-auto pt-8 flex items-end gap-2 h-32 relative z-10">
                   {[45, 80, 55, 95, 70, 90].map((h, idx) => (
                     <motion.div 
                       key={idx}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${h}%` }}
                       transition={{ delay: 0.8 + (idx * 0.1), duration: 1.2 }}
-                      className="flex-1 bg-gradient-to-t from-accent-lime to-accent-blue rounded-t-lg border-t-4 border-accent-lime/50"
+                      className="flex-1 bg-gradient-to-t from-accent-lime to-accent-blue rounded-t-lg border-t-4 border-accent-lime/60"
                     />
                   ))}
                 </div>
