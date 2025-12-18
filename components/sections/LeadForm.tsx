@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link"; // Добавлен недостающий импорт
 import { Button } from "@/components/ui/button";
 import { Zap, Check, Mail, Phone, ArrowRight } from "lucide-react";
 
@@ -17,9 +18,12 @@ export const LeadForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Здесь будет POST на /api/send-tg (который у тебя уже есть)
-    console.log("Отправка:", formData);
+    // Здесь логика отправки (например, fetch на /api/send-tg)
+    console.log("Отправка данных:", formData);
+    
+    // Эмуляция успешной отправки
     setSubmitted(true);
+    setFormData({ phone: "", email: "" });
   };
 
   return (
@@ -133,7 +137,7 @@ export const LeadForm = () => {
                     </Button>
 
                     <p className="text-center text-foreground/50 text-sm">
-                      Нажимая кнопку, вы соглашаетесь с <Link href="#" className="underline hover:text-accent-lime">политикой конфиденциальности</Link>
+                      Нажимая кнопку, вы соглашаетесь с <Link href="/privacy" className="underline hover:text-accent-lime">политикой конфиденциальности</Link>
                     </p>
                   </motion.form>
                 ) : (
