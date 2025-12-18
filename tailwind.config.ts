@@ -4,8 +4,7 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    // Явно указываем путь к секциям, чтобы стили применились
-    "./components/sections/**/*.{js,ts,jsx,tsx,mdx}", 
+    "./components/sections/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -15,8 +14,18 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent-DEFAULT))",
         },
-        card: "hsl(var(--card))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
         border: "hsl(var(--border))",
+      },
+      boxShadow: {
+        'neon': '0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.1)',
+        'neon-sm': '0 0 15px rgba(37, 99, 235, 0.2)',
+      },
+      animation: {
+        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
     },
   },
