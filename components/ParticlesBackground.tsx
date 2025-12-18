@@ -72,7 +72,7 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 1,
-              min: 0.1,  // ← исправлено: minimumValue → min
+              minimumValue: 0.1,  // ← Правильно: minimumValue
             },
           },
           shape: {
@@ -83,7 +83,7 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 3,
-              min: 0.1,  // ← исправлено: minimumValue → min
+              minimumValue: 0.1,  // ← Правильно: minimumValue
             },
           },
         },
