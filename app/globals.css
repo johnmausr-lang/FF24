@@ -2,44 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --accent-DEFAULT: 217 91% 60%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --radius: 1.5rem;
-  }
+:root {
+  --background: 255 255 255;
+  --foreground: 15 23 42;
+  --primary: 79 70 229;
+  --accent: 99 102 241;
+  --radius: 10px;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-black text-white;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-}
-
-@layer utilities {
-  .shadow-neon {
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.1);
-  }
-  .shadow-neon-sm {
-    box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
-  }
-  .text-glow {
-    text-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
-  }
-}
-
-@keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-.animate-pulse-soft {
-  animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+body {
+  @apply bg-white text-slate-900 antialiased;
 }
