@@ -1,9 +1,10 @@
+// app/layout.tsx
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ReactLenis } from "@studio-freight/lenis";
-import { LoadingScreen } from "@/components/LoadingScreen";
 import { Suspense } from "react";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -29,28 +30,40 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className="scroll-smooth">
-      <head />
-      <body
-        className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black`}
-        style={{ backgroundColor: "#000000" }}
-      >
-        {/* Принудительно задаём CSS-переменные до загрузки Tailwind */}
+      <head>
+        {/* Самый важный скрипт — применяется ДО любого рендера */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                document.documentElement.style.setProperty('--background', '240 10% 3.9%');
-                document.documentElement.style.setProperty('--foreground', '0 0% 98%');
-                document.documentElement.style.setProperty('--accent-DEFAULT', '217 91% 60%');
-                document.documentElement.style.setProperty('--card', '240 10% 3.9%');
-                document.documentElement.style.setProperty('--card-foreground', '0 0% 98%');
-                document.documentElement.style.setProperty('--border', '240 3.7% 15.9%');
+                // Принудительно чёрный фон сразу
+                document.documentElement.style.backgroundColor = '#000000';
+                document.body.style.backgroundColor = '#000000';
+                
+                // Задаём все CSS-переменные мгновенно
+                const root = document.documentElement;
+                root.style.setProperty('--background', '240 10% 3.9%');
+                root.style.setProperty('--foreground', '0 0% 98%');
+                root.style.setProperty('--accent-DEFAULT', '217 91% 60%');
+                root.style.setProperty('--card', '240 10% 3.9%');
+                root.style.setProperty('--card-foreground', '0 0% 98%');
+                root.style.setProperty('--border', '240 3.7% 15.9%');
               })();
             `,
           }}
         />
-
-        <ReactLenis root options={{ smoothWheel: true, smoothTouch: true }}>
+      </head>
+      <body
+        className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden`}
+      >
+        <ReactLenis
+          root
+          options={{
+            smoothWheel: true,
+            smoothTouch: true,
+            normalizeWheel: true,
+          }}
+        >
           <Suspense fallback={<LoadingScreen />}>
             {children}
           </Suspense>
