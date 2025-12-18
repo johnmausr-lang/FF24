@@ -10,6 +10,14 @@
   --radius: 10px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-white text-slate-900 antialiased;
+}
+
+.container {
+  @apply mx-auto max-w-6xl px-6;
 }
