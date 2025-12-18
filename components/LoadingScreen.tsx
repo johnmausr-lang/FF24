@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
@@ -6,30 +7,40 @@ export const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let current = 0;
     const interval = setInterval(() => {
-      setProgress((p) => (p >= 100 ? 100 : p + Math.random() * 20));
-    }, 100);
+      current += Math.random() * 18 + 5;
+      if (current >= 100) {
+        setProgress(100);
+        clearInterval(interval);
+      } else {
+        setProgress(current);
+      }
+    }, 150);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <motion.div 
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-black flex items-center justify-center flex-col gap-6"
+    <motion.div
+      className="fixed inset-0 z-[100] bg-black flex items-center justify-center flex-col gap-8"
+      exit={{ opacity: 0, transition: { duration: 0.6, delay: 0.4 } }}
     >
       <div className="text-center">
-        <h1 className="text-5xl font-black italic tracking-tighter text-white">
-          FF<span className="text-accent-DEFAULT">24</span>
+        <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">
+          FF<span className="text-[#2563EB]">24</span>
         </h1>
-        <p className="text-[10px] text-slate-500 uppercase tracking-[0.4em] mt-2">Initializing System...</p>
+        <p className="text-sm text-slate-500 uppercase tracking-widest mt-6">System Boot Sequence</p>
       </div>
-      <div className="w-48 h-[2px] bg-white/5 rounded-full overflow-hidden">
-        <motion.div 
-          className="h-full bg-accent-DEFAULT shadow-[0_0_15px_#2563EB]"
-          style={{ width: `${progress}%` }}
+
+      <div className="w-80 h-1 bg-white/10 rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-[#2563EB] shadow-neon"
+          animate={{ width: `${progress}%` }}
+          transition={{ ease: "easeOut" }}
         />
       </div>
+
+      <p className="text-xs font-mono text-slate-600 tracking-widest">{Math.round(progress)}%</p>
     </motion.div>
   );
 };
