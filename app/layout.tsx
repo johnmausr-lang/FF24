@@ -2,28 +2,22 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
-// Подключаем современный шрифт
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const inter = Inter({ 
+  subsets: ["latin", "cyrillic"],
+  display: 'swap', 
+});
 
-// Настройки метаданных для SEO
 export const metadata: Metadata = {
-  title: "FF24 | Фулфилмент для маркетплейсов",
-  description: "Профессиональный фулфилмент для WB, Ozon и Яндекс Маркет. Заберем, упакуем и доставим ваш товар за 24 часа.",
-  keywords: ["фулфилмент", "маркетплейсы", "логистика", "склад", "FF24", "WB", "Ozon"],
-  authors: [{ name: "FF24 Team" }],
-  icons: {
-    icon: "/favicon.ico", // Убедитесь, что файл есть в папке public или удалите строку
-  },
+  title: "FF24 | Фулфилмент Нового Поколения",
+  description: "Автоматизированная логистика для маркетплейсов. Приемка, упаковка и отгрузка за 24 часа.",
+  manifest: "/manifest.json", // Необязательно, если нет файла
 };
 
-// Исправленная настройка Viewport для Next.js 14+ 
-// Это уберет ошибки при деплое на Vercel
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  userScalable: false,
-  themeColor: "#1A0B2E", // Цвет шапки в мобильных браузерах
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -33,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className="scroll-smooth">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} bg-black text-white antialiased selection:bg-accent-DEFAULT selection:text-black`}>
         {children}
       </body>
     </html>
