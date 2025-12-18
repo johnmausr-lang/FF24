@@ -1,43 +1,38 @@
 import * as React from "react"
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+type Variant = "default" | "outline" | "ghost"
+type Size = "default" | "lg" | "sm"
+
+const base =
+  "inline-flex items-center justify-center rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--primary))] disabled:opacity-50 disabled:pointer-events-none"
+const variants: Record<Variant, string> = {
+  default:
+    "bg-[rgb(var(--primary))] text-white hover:opacity-90 shadow-sm",
+  outline:
+    "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
+  ghost: "bg-transparent text-slate-900 hover:bg-slate-100",
+}
+const sizes: Record<Size, string> = {
+  default: "h-10 px-4 text-sm",
+  lg: "h-12 px-6 text-base",
+  sm: "h-9 px-3 text-sm",
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
-    // Базовые стили: центрирование, шрифты, переходы
-    const baseStyles = "inline-flex items-center justify-center rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-DEFAULT disabled:pointer-events-none disabled:opacity-50 active:scale-95"
-    
-    // Дизайн вариантов (используем ваши переменные из globals.css)
-    const variants = {
-      default: "bg-accent-DEFAULT text-black hover:bg-white shadow-neon hover:shadow-none",
-      outline: "border-2 border-accent-DEFAULT text-accent-DEFAULT hover:bg-accent-DEFAULT hover:text-black bg-transparent",
-      ghost: "hover:bg-white/10 text-white",
-      link: "text-accent-DEFAULT underline-offset-4 hover:underline",
-    }
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: Variant
+  size?: Size
+}
 
-    // Размеры
-    const sizes = {
-      default: "h-12 px-6 py-3",
-      sm: "h-9 px-4 text-xs",
-      lg: "h-16 px-10 text-lg",
-      icon: "h-12 w-12",
-    }
-
-    const combinedClassName = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className || ""}`
-
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className = "", variant = "default", size = "default", ...props }, ref) => {
     return (
       <button
         ref={ref}
-        className={combinedClassName}
+        className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
       />
     )
   }
 )
 Button.displayName = "Button"
-
-export { Button }
