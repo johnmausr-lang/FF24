@@ -31,39 +31,30 @@ export default function RootLayout({
   return (
     <html lang="ru" className="scroll-smooth">
       <head>
-        {/* Фикс белого флэша — работает на Vercel */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                document.documentElement.style.backgroundColor = '#000000';
-                document.body.style.backgroundColor = '#000000';
-                
-                const root = document.documentElement;
-                root.style.setProperty('--background', '240 10% 3.9%');
-                root.style.setProperty('--foreground', '0 0% 98%');
-                root.style.setProperty('--accent-DEFAULT', '217 91% 60%');
-                root.style.setProperty('--card', '240 10% 3.9%');
-                root.style.setProperty('--card-foreground', '0 0% 98%');
-                root.style.setProperty('--border', '240 3.7% 15.9%');
+                if (typeof document !== 'undefined') {
+                  document.documentElement.style.backgroundColor = '#000000';
+                  document.body.style.backgroundColor = '#000000';
+                  
+                  const root = document.documentElement;
+                  root.style.setProperty('--background', '240 10% 3.9%');
+                  root.style.setProperty('--foreground', '0 0% 98%');
+                  root.style.setProperty('--accent-DEFAULT', '217 91% 60%');
+                  root.style.setProperty('--card', '240 10% 3.9%');
+                  root.style.setProperty('--card-foreground', '0 0% 98%');
+                  root.style.setProperty('--border', '240 3.7% 15.9%');
+                }
               })();
             `,
           }}
         />
       </head>
 
-      <body
-        className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden`}
-      >
-        <ReactLenis
-          root
-          options={{
-            lerp: 0.1,              // Основная плавность (меньше = плавнее)
-            wheelMultiplier: 1,     // Скорость скролла колесом
-            touchMultiplier: 1.5,   // Скорость на тач-устройствах (чуть быстрее для естественности)
-            // infinite: false,     // Бесконечный скролл (если нужно — включи)
-          }}
-        >
+      <body className={`${inter.className} bg-black text-white antialiased selection:bg-[#2563EB] selection:text-black overflow-x-hidden`}>
+        <ReactLenis root>
           <Suspense fallback={<LoadingScreen />}>
             {children}
           </Suspense>
