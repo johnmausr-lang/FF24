@@ -1,10 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-// Импорты согласно вашей структуре в GitHub
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+// Импорты из папки sections
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
@@ -16,33 +14,25 @@ export default function LandingPage() {
   return (
     <div className="bg-black min-h-screen text-white selection:bg-accent-DEFAULT selection:text-black antialiased">
       <Navbar />
-
       <main>
+        {/* 1. Главный экран */}
         <Hero />
         
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <BentoGrid />
-        </motion.div>
-
+        {/* 2. Сетка преимуществ */}
+        <BentoGrid />
+        
+        {/* 3. Процесс (Конвейер) */}
         <ProcessSteps />
-
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <Calculator />
-        </motion.div>
-
+        
+        {/* 4. Калькулятор стоимости */}
+        <Calculator />
+        
+        {/* 5. Терминал (Карта + Форма) */}
         <Terminal />
         
+        {/* 6. FAQ */}
         <FAQ />
       </main>
-
       <Footer />
     </div>
   );
