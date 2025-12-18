@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    /* Наш фирменный синий неон (HSL) */
+    --accent-DEFAULT: 217 91% 60%;
+    
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    
+    --border: 240 3.7% 15.9%;
+    --radius: 1.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-black text-white;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  /* Тень для неоновых кнопок и карточек */
+  .shadow-neon {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 
+                0 0 40px rgba(37, 99, 235, 0.1);
+  }
+
+  .shadow-neon-sm {
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+  }
+
+  /* Текст с неоновым свечением */
+  .text-glow {
+    text-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+  }
+
+  /* Скрытие скроллбара для конвейерной ленты */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Анимация для карты и элементов терминала */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
