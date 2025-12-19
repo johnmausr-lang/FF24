@@ -25,52 +25,54 @@ export const ProcessSteps = () => {
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-black">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden px-6">
-        <div className="absolute top-24 left-6 md:left-20 z-10">
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
-          >
-            Процесс работы
-          </motion.h2>
-        </div>
-
-        <motion.div style={{ x }} className="flex gap-8">
-          {steps.map((step, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        <div className="container relative">
+          <div className="absolute top-24 left-0 z-10">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.1 }}
-              className="glass-card min-w-[380px] md:min-w-[480px] p-12 group relative"
+              className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
             >
-              <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors">
-                0{i + 1}
-              </div>
+              Процесс работы
+            </motion.h2>
+          </div>
 
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="mb-10">
-                  <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all">
-                    <div className="text-white/80 group-hover:text-accent-lime transition-colors">
-                      {step.icon}
-                    </div>
-                  </div>
+          <motion.div style={{ x }} className="flex gap-8 pt-48">
+            {steps.map((step, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.1 }}
+                className="glass-card min-w-[380px] md:min-w-[480px] p-12 group relative"
+              >
+                <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors">
+                  0{i + 1}
                 </div>
 
-                <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-6 text-white">
-                  {step.title}
-                </h3>
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="mb-10">
+                    <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all">
+                      <div className="text-white/80 group-hover:text-accent-lime transition-colors">
+                        {step.icon}
+                      </div>
+                    </div>
+                  </div>
 
-                <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
-                  {step.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                  <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-6 text-white">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
+                    {step.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
