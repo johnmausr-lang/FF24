@@ -38,7 +38,7 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Hover эффект для glass — прямые свойства вместо @apply */
+  /* Hover эффект для glass — прямые свойства */
   .glass-hover {
     transition: all 0.5s ease;
   }
@@ -48,33 +48,66 @@
     border-color: rgba(255, 255, 255, 0.15);
   }
 
-  /* Glass для Navbar и Footer */
+  /* Glass для Navbar и Footer — прямые свойства вместо @apply с opacity */
   .glass-nav {
-    @apply glass bg-white/4 border-b border-white/8;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   /* Glass карточки */
   .glass-card {
-    @apply glass rounded-[2rem] p-10 md:p-14 shadow-xl;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 2rem;
+    padding: 2.5rem 3.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 
   /* Кнопки — минималистичные стеклянные */
   .btn-glass {
-    @apply bg-white/8 hover:bg-white/15 border border-white/15 hover:border-white/25 text-white font-bold uppercase tracking-wider rounded-full px-10 py-5 transition-all duration-500 text-base md:text-lg;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 9999px;
+    padding: 1.25rem 2.5rem;
+    transition: all 0.5s ease;
+  }
+
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
   }
 
   .btn-glass-lime {
-    @apply bg-accent-lime/10 hover:bg-accent-lime/20 text-accent-lime border border-accent-lime/30 hover:border-accent-lime font-black rounded-full px-10 py-5 transition-all duration-500 text-base md:text-lg;
+    background: rgba(224, 255, 100, 0.1);
+    border: 1px solid rgba(224, 255, 100, 0.3);
+    color: #E0FF64;
+    font-weight: 900;
+    border-radius: 9999px;
+    padding: 1.25rem 2.5rem;
+    transition: all 0.5s ease;
+  }
+
+  .btn-glass-lime:hover {
+    background: rgba(224, 255, 100, 0.2);
+    border-color: #E0FF64;
   }
 }
 
 @layer utilities {
-  /* Мягкое свечение (меньше нагрузки) */
+  /* Мягкое свечение */
   .glow-lime {
     box-shadow: 0 0 20px rgba(224, 255, 100, 0.2);
   }
 
-  /* Градиентный текст (тонкий) */
+  /* Градиентный текст */
   .gradient-text {
     background: linear-gradient(90deg, #2563EB, #E0FF64);
     background-size: 200% 200%;
