@@ -40,6 +40,7 @@ export const BentoGrid = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
@@ -57,20 +58,20 @@ export const BentoGrid = () => {
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.15 }}
-              whileHover={{ y: -8 }}
+              transition={{ duration: 1.2, delay: i * 0.15, ease: "easeOut" }}
+              whileHover={{ y: -12, transition: { duration: 0.8, ease: "easeOut" } }}
               className="glass-card group"
             >
-              <div className="p-10 md:p-12 flex flex-col h-full text-center">
+              <div className="p-12 flex flex-col items-center text-center h-full">
                 <div className="mb-8">
-                  <div className="w-20 h-20 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all">
+                  <div className="w-20 h-20 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all duration-500 ease-out">
                     {item.icon}
                   </div>
                 </div>
                 <h3 className="text-3xl font-black italic uppercase mb-6 text-white">
                   {item.title}
                 </h3>
-                <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
+                <p className="text-white/70 text-lg leading-relaxed text-tight">
                   {item.desc}
                 </p>
 
@@ -81,7 +82,7 @@ export const BentoGrid = () => {
                         key={idx}
                         initial={{ height: 0 }}
                         whileInView={{ height: `${h}%` }}
-                        transition={{ delay: 0.5 + idx * 0.1 }}
+                        transition={{ delay: 0.5 + idx * 0.1, duration: 1.2, ease: "easeOut" }}
                         className="w-8 bg-gradient-to-t from-accent-lime/40 to-white/10 rounded-t-lg"
                       />
                     ))}
