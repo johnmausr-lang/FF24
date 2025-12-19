@@ -6,34 +6,34 @@ const TELEGRAM_LINK = "https://t.me/manager24ff";
 
 export const Footer = () => {
   return (
-    <footer className="bg-black/60 backdrop-blur-2xl border-t border-white/10 pt-20 pb-12 px-6">
+    <footer className="glass-nav pt-20 pb-12 px-6 mt-32">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
           <div className="text-center md:text-left">
-            <Link href="/" className="inline-block mb-8">
+            <Link href="/" className="inline-block mb-10">
               <div className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter">
                 <span className="gradient-text">FF</span>
-                <span className="text-accent-lime glow-pulse-lime">24</span>
+                <span className="text-accent-lime">24</span>
                 <span className="text-accent-blue">.</span>LK
               </div>
             </Link>
-            <p className="text-foreground/70 font-medium leading-relaxed max-w-md mx-auto md:mx-0">
+            <p className="text-foreground/70 font-medium text-lg leading-relaxed max-w-md mx-auto md:mx-0">
               Ваш технологичный партнёр в мире маркетплейсов. 
               Делаем логистику простой, прозрачной и быстрой.
             </p>
           </div>
 
           <div className="text-center">
-            <h4 className="font-black uppercase text-lg mb-8 tracking-widest text-accent-lime">Навигация</h4>
+            <h4 className="font-black uppercase text-lg mb-10 tracking-widest text-accent-lime">Навигация</h4>
             <ul className="space-y-6 text-foreground/60 font-bold text-base uppercase">
-              <li><Link href="#benefits" className="hover:text-accent-lime transition-colors glow-pulse-lime">Услуги</Link></li>
+              <li><Link href="#benefits" className="hover:text-accent-lime transition-colors">Услуги</Link></li>
               <li><Link href="#process" className="hover:text-accent-blue transition-colors">Процесс</Link></li>
-              <li><Link href="#lead" className="hover:text-accent-lime transition-colors glow-pulse-lime">Заявка</Link></li>
+              <li><Link href="#lead" className="hover:text-accent-lime transition-colors">Заявка</Link></li>
             </ul>
           </div>
 
           <div className="text-center md:text-right">
-            <h4 className="font-black uppercase text-lg mb-8 tracking-widest text-accent-lime">Контакты</h4>
+            <h4 className="font-black uppercase text-lg mb-10 tracking-widest text-accent-lime">Контакты</h4>
             <ul className="space-y-6 font-bold text-lg">
               <li>
                 <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="text-accent-lime hover:text-white transition-colors">
