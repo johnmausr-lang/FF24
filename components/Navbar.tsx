@@ -17,30 +17,31 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav">
-        <div className="container flex justify-between items-center h-16">
+      <nav className="fixed top-0 left-0 right-0 z-[100] glass-nav">
+        <div className="container flex justify-between items-center h-20">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-3xl font-black italic tracking-tighter"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-3xl font-black italic tracking-tighter cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <span className="gradient-text">FF</span>
             <span className="text-white">24</span>
           </motion.div>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className="btn-glass-secondary">
+              <a key={link.label} href={link.href} className="btn-glass-secondary !py-2 !px-5 text-xs">
                 {link.label}
               </a>
             ))}
-            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime">
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime !py-2.5 !px-6 !text-xs">
               Написать в Telegram
             </a>
           </div>
 
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden glass p-3 rounded-full">
-            <Menu size={28} className="text-white" />
+          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden glass p-3 rounded-full hover:border-accent-lime transition-colors">
+            <Menu size={24} className="text-white" />
           </button>
         </div>
       </nav>
@@ -48,41 +49,49 @@ export const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            exit={{ y: -100 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="fixed top-0 left-0 right-0 z-50 glass-menu pt-20 pb-12 px-6"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(60px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="fixed inset-0 z-[110] glass-menu flex flex-col justify-center px-6"
           >
-            <div className="container relative">
-              <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-0 glass p-3 rounded-full">
-                <X size={28} className="text-white" />
+            <div className="container relative h-full flex flex-col justify-center">
+              <button 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="absolute top-8 right-6 glass p-4 rounded-full border-white/20"
+              >
+                <X size={32} className="text-white" />
               </button>
 
-              <div className="text-center mb-12">
-                <span className="text-5xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
+              <div className="text-center mb-16">
+                <span className="text-6xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
               </div>
 
-              <div className="flex flex-col items-center gap-8">
-                {navLinks.map((link) => (
-                  <a
+              <div className="flex flex-col items-center gap-6">
+                {navLinks.map((link, i) => (
+                  <motion.a
                     key={link.label}
                     href={link.href}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="btn-glass-secondary w-full max-w-sm"
+                    className="btn-glass-secondary w-full max-w-sm text-lg py-5"
                   >
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <a
+                <motion.a
                   href={TELEGRAM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="btn-glass-lime w-full max-w-sm"
+                  className="btn-glass-lime w-full max-w-sm text-lg py-5"
                 >
                   Написать в Telegram
-                </a>
+                </motion.a>
               </div>
             </div>
           </motion.div>
