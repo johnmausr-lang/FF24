@@ -32,6 +32,7 @@ export const Testimonials = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
@@ -49,19 +50,19 @@ export const Testimonials = () => {
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.2 }}
-              whileHover={{ y: -8 }}
-              className="glass-card group p-10 md:p-12"
+              transition={{ duration: 1.2, delay: i * 0.2, ease: "easeOut" }}
+              whileHover={{ y: -12, transition: { duration: 0.8, ease: "easeOut" } }}
+              className="glass-card group p-12"
             >
-              <div className="flex gap-1 mb-8">
+              <div className="flex gap-1 mb-8 justify-center">
                 {[...Array(t.rating)].map((_, s) => (
                   <Star key={s} className="w-6 h-6 fill-accent-lime text-accent-lime" />
                 ))}
               </div>
-              <p className="text-white/90 text-lg mb-10 leading-relaxed text-contained">
+              <p className="text-white/90 text-lg mb-10 leading-relaxed text-tight">
                 "{t.text}"
               </p>
-              <div>
+              <div className="text-center">
                 <p className="font-black text-xl text-white">{t.name}</p>
                 <p className="text-white/60 text-sm">{t.role}</p>
               </div>
