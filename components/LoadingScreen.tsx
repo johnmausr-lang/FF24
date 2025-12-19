@@ -23,8 +23,8 @@ export const LoadingScreen = () => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] bg-black flex items-center justify-center flex-col gap-12"
-      exit={{ opacity: 0, transition: { duration: 0.8 } }}
+      className="fixed inset-0 z-[100] bg-black flex items-center justify-center flex-col gap-16"
+      exit={{ opacity: 0, transition: { duration: 1 } }}
     >
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -35,13 +35,17 @@ export const LoadingScreen = () => {
           <span className="gradient-text">FF</span>
           <span className="text-white">24</span>
         </h1>
+        <p className="text-white/60 text-xl md:text-3xl uppercase tracking-widest mt-8 font-medium">
+          Loading...
+        </p>
       </motion.div>
 
-      <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+      <div className="w-80 h-2 bg-white/10 rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-accent-lime"
+          className="h-full bg-gradient-to-r from-accent-blue to-accent-lime"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
+          transition={{ ease: "easeOut" }}
         />
       </div>
     </motion.div>
