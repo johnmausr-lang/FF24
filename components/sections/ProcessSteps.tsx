@@ -1,66 +1,71 @@
 "use client";
 
-import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Download, PackageCheck, Truck, ClipboardList, HardHat, CheckCircle2, Factory } from "lucide-react";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация в ЛК и передача ТЗ", icon: <ClipboardList /> },
-  { title: "Забор", desc: "Забираем товар от поставщика или из порта", icon: <Truck /> },
-  { title: "Приемка", desc: "Сверка артикулов и проверка на брак", icon: <HardHat /> },
-  { title: "Маркировка", desc: "Генерация и наклейка штрих-кодов по ТЗ", icon: <Factory /> },
-  { title: "Упаковка", desc: "Упаковка в короба или паллетирование", icon: <PackageCheck /> },
-  { title: "Отгрузка", desc: "Доставка на склад маркетплейса за 24ч", icon: <Download className="rotate-180" /> },
-  { title: "Финиш", desc: "Товар доступен к продаже на витрине", icon: <CheckCircle2 /> },
+  { title: "Заявка", desc: "Регистрация в ЛК и передача ТЗ", icon: <ClipboardList className="w-16 h-16" /> },
+  { title: "Забор", desc: "Забираем товар от поставщика или из порта", icon: <Truck className="w-16 h-16" /> },
+  { title: "Приемка", desc: "Сверка артикулов и проверка на брак", icon: <HardHat className="w-16 h-16" /> },
+  { title: "Маркировка", desc: "Генерация и наклейка штрих-кодов по ТЗ", icon: <Factory className="w-16 h-16" /> },
+  { title: "Упаковка", desc: "Упаковка в короба или паллетирование", icon: <PackageCheck className="w-16 h-16" /> },
+  { title: "Отгрузка", desc: "Доставка на склад маркетплейса за 24ч", icon: <Download className="w-16 h-16 rotate-180" /> },
+  { title: "Финиш", desc: "Товар доступен к продаже на витрине", icon: <CheckCircle2 className="w-16 h-16" /> },
 ];
 
 export const ProcessSteps = () => {
-  const targetRef = useRef<HTMLDivElement>(null);
+  const targetRef = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ["start end", "end start"],
   });
 
-  // Эффект горизонтального движения ленты
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-70%"]);
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-black">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <div className="absolute top-24 left-6 md:left-20">
-          <h2 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter">
-            Путь вашего <br /> <span className="text-accent-DEFAULT">товара</span>
-          </h2>
-          <div className="mt-4 flex items-center gap-2 text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">
-            <span className="w-8 h-[1px] bg-slate-500" /> Скролльте вниз
-          </div>
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl md:text-7xl font-black italic uppercase mb-8 gradient-text"
+          >
+            Процесс работы
+          </motion.h2>
         </div>
 
-        <motion.div style={{ x }} className="flex gap-8 px-20">
+        <motion.div style={{ x }} className="flex gap-8 px-6">
           {steps.map((step, i) => (
-            <div 
-              key={i} 
-              className="group relative flex flex-col justify-center min-w-[300px] md:min-w-[450px] aspect-video bg-card border border-white/5 rounded-[3rem] p-10 hover:border-accent-DEFAULT/50 transition-colors overflow-hidden"
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.1 }}
+              className="glass-card min-w-[380px] md:min-w-[480px] p-12 group"
             >
-              {/* Номер шага на фоне */}
-              <div className="absolute -bottom-10 -right-5 text-[12rem] font-black italic text-white/[0.02] group-hover:text-accent-DEFAULT/[0.05] transition-colors leading-none">
+              <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors">
                 0{i + 1}
               </div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 rounded-2xl bg-accent-DEFAULT/10 border border-accent-DEFAULT/20 flex items-center justify-center text-accent-DEFAULT mb-8 group-hover:scale-110 group-hover:bg-accent-DEFAULT group-hover:text-black transition-all duration-500">
-                  {step.icon}
+                <div className="w-24 h-24 rounded-3xl glass bg-white/10 border border-white/20 flex items-center justify-center mb-10 group-hover:border-accent-lime group-hover:bg-accent-lime/10 transition-all duration-500">
+                  <div className="text-accent-lime group-hover:scale-110 transition-transform">
+                    {step.icon}
+                  </div>
                 </div>
-                <h3 className="text-3xl font-black italic uppercase mb-4">{step.title}</h3>
-                <p className="text-slate-400 font-medium text-lg leading-relaxed max-w-[280px]">
+                <h3 className="text-4xl font-black italic uppercase mb-6">{step.title}</h3>
+                <p className="text-foreground/80 text-xl leading-relaxed">
                   {step.desc}
                 </p>
               </div>
 
-              {/* Соединительная линия (конвейер) */}
-              {i !== steps.length - 1 && (
-                <div className="absolute top-1/2 -right-4 w-8 h-[2px] bg-gradient-to-r from-accent-DEFAULT/50 to-transparent hidden md:block" />
+              {i < steps.length - 1 && (
+                <div className="absolute top-1/2 -right-12 w-24 h-1 bg-gradient-to-r from-accent-lime/50 to-transparent hidden md:block" />
               )}
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
