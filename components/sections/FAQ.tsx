@@ -2,48 +2,64 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
-  { q: "Как быстро вы принимаете товар?", a: "В течение 24 часов с момента прибытия на склад. В 90% случаев — в день поставки." },
-  { q: "Работаете ли вы с браком?", a: "Да, проверяем каждую единицу. При браке — фотоотчёт и изоляция товара." },
-  { q: "Какие маркетплейсы поддерживаете?", a: "Wildberries, Ozon, Яндекс.Маркет — по моделям FBO и FBS." },
-  { q: "Есть ли минимальный объём?", a: "Работаем с любыми объёмами. Минимальная стоимость обработки — 1500 ₽." },
+  {
+    q: "Сколько времени занимает приемка?",
+    a: "Стандартная приемка — 24 часа. Если товар прибыл до 14:00, в 90% случаев он будет оприходован в тот же день.",
+  },
+  {
+    q: "Как вы проверяете товар на брак?",
+    a: "Мы проводим визуальный осмотр упаковки каждой единицы. По запросу выполняем детальную проверку содержимого с фото-фиксацией.",
+  },
+  {
+    q: "Работаете ли вы с КИЗами (Честный Знак)?",
+    a: "Да, полностью работаем с маркировкой Честный Знак. Печатаем, наклеиваем и помогаем с документооборотом.",
+  },
+  {
+    q: "Есть ли страхование товара?",
+    a: "Да, мы несем полную материальную ответственность за сохранность вашего товара с момента подписания акта приемки.",
+  },
 ];
 
 export const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 sm:py-32 bg-black">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-black italic uppercase text-white">FAQ</h2>
+    <section className="py-32 bg-black">
+      <div className="container max-w-4xl">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">FAQ</h2>
+          <p className="text-white/40 uppercase tracking-[0.3em] font-bold text-sm">Ответы на критические вопросы</p>
         </div>
-        
-        <div className="max-w-4xl mx-auto space-y-4">
+
+        <div className="space-y-4">
           {faqs.map((faq, i) => (
-            <div key={i} className="glass-card overflow-hidden">
+            <div key={i} className="glass-card !rounded-2xl overflow-hidden border-white/5">
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full p-6 md:p-8 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
+                className="w-full p-8 flex items-center justify-between text-left group transition-all"
               >
-                <span className="text-lg md:text-xl font-bold text-white pr-4">
+                <span className={`text-xl font-bold uppercase tracking-tight transition-colors duration-500 ${openIndex === i ? 'text-accent-lime' : 'text-white'}`}>
                   {faq.q}
                 </span>
-                <ChevronDown className={`w-6 h-6 text-accent-lime transition-transform duration-300 ${openIndex === i ? 'rotate-180' : ''}`} />
+                <div className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all duration-500 ${openIndex === i ? 'bg-accent-lime text-black rotate-180' : 'text-white'}`}>
+                  {openIndex === i ? <Minus size={20} /> : <Plus size={20} />}
+                </div>
               </button>
+
               <AnimatePresence>
                 {openIndex === i && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="border-t border-white/5"
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <p className="p-6 md:p-8 text-white/60 leading-relaxed">
+                    <div className="px-8 pb-8 text-white/50 text-lg leading-relaxed border-t border-white/5 pt-6">
                       {faq.a}
-                    </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
