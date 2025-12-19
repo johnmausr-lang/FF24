@@ -11,8 +11,8 @@
     --accent-blue: 217 91% 60%;       /* #2563EB */
     --accent-lime: 78 100% 70%;       /* #E0FF64 */
     
-    --card: 0 0% 100%;               /* white */
-    --card-foreground: 240 10% 3.9%;  /* dark text */
+    --card: 0 0% 100%;                /* white для карточек */
+    --card-foreground: 240 10% 10%;   /* dark text */
     
     --border: 240 5% 90%;
     --radius: 1rem;
@@ -26,6 +26,7 @@
 
   body {
     @apply bg-black text-white overflow-x-hidden;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
@@ -44,7 +45,7 @@
     @apply bg-white text-slate-900 rounded-xl border border-slate-200 shadow-md p-8 md:p-12;
   }
 
-  /* Стеклянные акцентные карточки (для Bento и Process) */
+  /* Стеклянные акцентные карточки */
   .glass-card {
     @apply bg-white/6 backdrop-blur-3xl border border-white/12 rounded-3xl p-10 md:p-16 shadow-2xl;
   }
@@ -58,7 +59,6 @@
     @apply h-12 px-6 border border-slate-200 text-slate-900 rounded-lg font-semibold hover:bg-slate-50 transition flex items-center justify-center w-full sm:w-auto text-base;
   }
 
-  /* Стеклянная лайм кнопка */
   .btn-glass-lime {
     @apply h-12 px-6 bg-accent-lime/10 hover:bg-accent-lime/20 text-accent-lime border border-accent-lime/30 hover:border-accent-lime rounded-full font-bold transition flex items-center justify-center w-full sm:w-auto text-base;
   }
