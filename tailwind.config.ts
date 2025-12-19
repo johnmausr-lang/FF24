@@ -7,26 +7,21 @@ const config: Config = {
     "./components/sections/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
-    "bg-accent-blue",
-    "text-accent-blue",
-    "border-accent-blue",
-    "bg-accent-lime",
-    "text-accent-lime",
-    "border-accent-lime",
-    "shadow-neon",
-    "shadow-neon-lime",
-    "shadow-neon-sm",
+    "glass",
+    "glass-card",
+    "glass-card-hover",
+    "glass-nav",
+    "btn-glass",
+    "btn-glass-primary",
+    "btn-neon",
+    "gradient-text",
     "glow-pulse",
     "glow-pulse-lime",
-    "gradient-text",
+    "shadow-neon-lime",
     "gradient-border",
-    "gradient-border-thick",
-    "animate-pulse",
-    "animate-ping",
-    "animate-bounce",
-    "backdrop-blur-xl",
-    { pattern: /rounded-(xl|2xl|3xl|[2-4]rem)/ },
-    { pattern: /(bg|text|border|shadow)-(accent-blue|accent-lime)/ },
+    { pattern: /text-(accent-lime|accent-blue)/ },
+    { pattern: /border-(accent-lime|accent-blue)/ },
+    { pattern: /bg-(accent-lime|accent-blue)/ },
   ],
   theme: {
     extend: {
@@ -34,11 +29,11 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          dark: "hsl(var(--primary-dark))", // #1E1B4B
+          dark: "hsl(var(--primary-dark))",
         },
         accent: {
-          blue: "hsl(var(--accent-blue))",   // #2563EB
-          lime: "hsl(var(--accent-lime))",   // #E0FF64
+          blue: "hsl(var(--accent-blue))",
+          lime: "hsl(var(--accent-lime))",
         },
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -46,13 +41,13 @@ const config: Config = {
         },
         border: "hsl(var(--border))",
       },
-      boxShadow: {
-        neon: "0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.1)",
-        "neon-lime": "0 0 20px rgba(224, 255, 100, 0.4), 0 0 40px rgba(224, 255, 100, 0.2)",
-        "neon-sm": "0 0 15px rgba(37, 99, 235, 0.2)",
+      borderRadius: {
+        "2rem": "2rem",
+        "3rem": "3rem",
+        "4rem": "4rem",
       },
-      animation: {
-        "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      backdropBlur: {
+        "2xl": "40px",
       },
     },
   },
