@@ -16,13 +16,13 @@ export const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="text-center"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 1.2, ease: "easeOut" }}
+            transition={{ delay: 0.3, duration: 1.5, ease: "easeOut" }}
             className="mb-12"
           >
             <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-white">
@@ -36,8 +36,8 @@ export const Hero = () => {
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
-            className="text-4xl md:text-6xl font-black leading-tight mb-12 text-white text-tight"
+            transition={{ delay: 0.6, duration: 1.5, ease: "easeOut" }}
+            className="text-4xl md:text-6xl font-black leading-tight mb-12 text-white text-large"
           >
             Профессиональная логистика<br />
             для маркетплейсов
@@ -46,8 +46,8 @@ export const Hero = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.9, duration: 1.2, ease: "easeOut" }}
-            className="text-lg md:text-xl text-white/70 text-contained mb-16"
+            transition={{ delay: 0.9, duration: 1.5, ease: "easeOut" }}
+            className="text-lg md:text-xl text-white/70 text-contained mb-20"
           >
             Автоматизированный фулфилмент для серьёзного бизнеса. 
             Приёмка, маркировка, упаковка и доставка под полным контролем.
@@ -56,13 +56,13 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 1.2, ease: "easeOut" }}
+            transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-8 justify-center"
           >
-            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime">
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime btn-glass-large">
               Получить расчёт
             </a>
-            <a href="#benefits" className="btn-glass-secondary">
+            <a href="#benefits" className="btn-glass btn-glass-large">
               Наши услуги
             </a>
           </motion.div>
