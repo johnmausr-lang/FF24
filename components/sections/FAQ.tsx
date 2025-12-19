@@ -27,15 +27,15 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-24 sm:py-32 px-6">
+      <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-8 text-white">
+          <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
             Часто задаваемые вопросы
           </h2>
         </motion.div>
@@ -54,7 +54,7 @@ export const FAQ = () => {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full p-8 md:p-12 flex items-center justify-between text-left"
               >
-                <span className="text-2xl md:text-3xl font-black pr-8 text-white">
+                <span className="text-xl md:text-2xl font-black text-white pr-8">
                   {faq.q}
                 </span>
                 <motion.div
@@ -74,7 +74,7 @@ export const FAQ = () => {
                     transition={{ duration: 0.5 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-8 md:px-12 pb-12 text-white/70 text-lg leading-relaxed">
+                    <p className="px-8 md:px-12 pb-12 text-white/70 text-lg leading-relaxed text-contained">
                       {faq.a}
                     </p>
                   </motion.div>
