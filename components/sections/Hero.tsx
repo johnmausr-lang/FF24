@@ -16,23 +16,28 @@ export const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center"
         >
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-5xl sm:text-7xl font-black italic uppercase tracking-tighter mb-8 text-white"
+            transition={{ delay: 0.3, duration: 1.2, ease: "easeOut" }}
+            className="mb-12"
           >
-            FF<span className="text-accent-lime">24</span>
-          </motion.h1>
+            <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-white">
+              FF<span className="text-accent-lime">24</span>
+            </h1>
+            <p className="text-white/60 text-xl md:text-3xl uppercase tracking-widest mt-8 font-medium">
+              Фулфилмент премиум-класса
+            </p>
+          </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-3xl sm:text-5xl font-bold mb-12 text-white"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
+            className="text-4xl md:text-6xl font-black leading-tight mb-12 text-white text-tight"
           >
             Профессиональная логистика<br />
             для маркетплейсов
@@ -41,22 +46,23 @@ export const Hero = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="text-lg text-white/70 text-large mb-16"
+            transition={{ delay: 0.9, duration: 1.2, ease: "easeOut" }}
+            className="text-lg md:text-xl text-white/70 text-contained mb-16"
           >
-            Автоматизированный фулфилмент премиум-класса. Приёмка, маркировка, упаковка и доставка под полным контролем.
+            Автоматизированный фулфилмент для серьёзного бизнеса. 
+            Приёмка, маркировка, упаковка и доставка под полным контролем.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center"
+            transition={{ delay: 1.2, duration: 1.2, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row gap-8 justify-center"
           >
-            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime">
               Получить расчёт
             </a>
-            <a href="#benefits" className="btn-secondary">
+            <a href="#benefits" className="btn-glass-secondary">
               Наши услуги
             </a>
           </motion.div>
