@@ -54,7 +54,7 @@ export const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              value_area: 800, // правильный параметр для v3
+              area: 800,  // правильный параметр в v3
             },
             value: 40,
           },
