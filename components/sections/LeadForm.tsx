@@ -15,18 +15,18 @@ export const LeadForm = () => {
   };
 
   return (
-    <section id="lead" className="py-24">
+    <section id="lead" className="py-24 sm:py-32">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
             Получите персональный расчёт
           </h2>
-          <p className="text-white/70 text-lg text-contained">
+          <p className="text-white/70 text-lg md:text-xl text-contained">
             Менеджер подготовит предложение под ваш объём и маркетплейс за 24 часа
           </p>
         </motion.div>
@@ -35,23 +35,29 @@ export const LeadForm = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="card max-w-4xl mx-auto"
+          className="glass-card p-12 md:p-20 max-w-4xl mx-auto"
         >
           <AnimatePresence mode="wait">
             {!submitted ? (
-              <motion.div key="form" className="text-center p-8 md:p-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <motion.div key="form" className="text-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                   <div className="flex flex-col items-center gap-4">
-                    <Check className="w-10 h-10 text-accent-lime" />
-                    <p className="font-bold">Расчёт за 24 часа</p>
+                    <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
+                      <Check className="w-8 h-8 text-accent-lime" />
+                    </div>
+                    <p className="text-base md:text-lg font-bold text-white">Расчёт за 24 часа</p>
                   </div>
                   <div className="flex flex-col items-center gap-4">
-                    <Check className="w-10 h-10 text-accent-lime" />
-                    <p className="font-bold">Скидка 10% на первый месяц</p>
+                    <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
+                      <Check className="w-8 h-8 text-accent-lime" />
+                    </div>
+                    <p className="text-base md:text-lg font-bold text-white">Скидка 10% на первый месяц</p>
                   </div>
                   <div className="flex flex-col items-center gap-4">
-                    <Check className="w-10 h-10 text-accent-lime" />
-                    <p className="font-bold">Персональный менеджер</p>
+                    <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
+                      <Check className="w-8 h-8 text-accent-lime" />
+                    </div>
+                    <p className="text-base md:text-lg font-bold text-white">Персональный менеджер</p>
                   </div>
                 </div>
 
@@ -64,14 +70,15 @@ export const LeadForm = () => {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-32 h-32 rounded-full bg-accent-lime/20 mx-auto mb-8 flex items-center justify-center"
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className="w-40 h-40 rounded-full glass bg-accent-lime/10 border-4 border-accent-lime mx-auto mb-12 flex items-center justify-center"
                 >
-                  <Check className="w-16 h-16 text-accent-lime" />
+                  <Check className="w-20 h-20 text-accent-lime" />
                 </motion.div>
-                <h3 className="text-3xl font-bold mb-4">
+                <h3 className="text-4xl font-black uppercase mb-6 text-white">
                   Готово!
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-xl text-white/80">
                   Менеджер напишет вам в Telegram в ближайшее время
                 </p>
               </motion.div>
