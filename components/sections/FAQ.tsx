@@ -40,7 +40,7 @@ export const FAQ = () => {
           </h2>
         </motion.div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-4xl mx-auto">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
