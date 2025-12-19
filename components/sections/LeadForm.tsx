@@ -21,7 +21,7 @@ export const LeadForm = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
@@ -36,7 +36,7 @@ export const LeadForm = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="glass-card p-12 md:p-20 max-w-4xl mx-auto"
         >
           <AnimatePresence mode="wait">
@@ -63,7 +63,7 @@ export const LeadForm = () => {
                   </div>
                 </div>
 
-                <button onClick={handleClick} className="btn-glass-lime">
+                <button onClick={handleClick} className="btn-glass-lime btn-glass-large">
                   Написать в Telegram
                 </button>
               </motion.div>
@@ -72,7 +72,7 @@ export const LeadForm = () => {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, duration: 1.2 }}
+                  transition={{ type: "spring", stiffness: 200, duration: 1.5 }}
                   className="w-40 h-40 rounded-full glass bg-accent-lime/10 border-4 border-accent-lime mx-auto mb-12 flex items-center justify-center"
                 >
                   <Check className="w-20 h-20 text-accent-lime" />
