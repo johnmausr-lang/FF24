@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import { ShieldCheck, Zap, BarChart3, Clock, Globe, Box } from "lucide-react";
 
