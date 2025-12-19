@@ -11,19 +11,14 @@ export const ExitIntentPopup = () => {
 
   useEffect(() => {
     let mouseLeft = false;
-
     const handleMouseLeave = (e: MouseEvent) => {
       if (e.clientY <= 0 && !mouseLeft) {
         mouseLeft = true;
         setShow(true);
       }
     };
-
     document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, []);
 
   if (!show) return null;
@@ -38,33 +33,31 @@ export const ExitIntentPopup = () => {
         onClick={() => setShow(false)}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="glass-card max-w-lg w-full p-12 md:p-16 relative"
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          exit={{ scale: 0.9 }}
+          className="glass-card max-w-md w-full p-12 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={() => setShow(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
+            className="absolute top-6 right-6 text-white/70 hover:text-white"
           >
-            <X size={32} />
+            <X size={28} />
           </button>
 
           <div className="text-center">
-            <h3 className="text-4xl md:text-5xl font-black italic uppercase mb-8 text-white">
+            <h3 className="text-3xl md:text-4xl font-black uppercase mb-8 text-white">
               Не уходите без расчёта!
             </h3>
-            <p className="text-white/80 text-lg md:text-xl mb-12 leading-relaxed">
-              Получите персональное предложение со скидкой 10% на первый месяц<br />
-              и точный расчёт за 24 часа
+            <p className="text-white/80 text-lg mb-12">
+              Получите персональное предложение со скидкой 10% на первый месяц
             </p>
-
             <a
               href={TELEGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-glass-lime px-16 py-8 text-2xl md:text-3xl inline-block"
+              className="btn-glass-lime px-12 py-6 text-xl inline-block"
             >
               Написать в Telegram
             </a>
