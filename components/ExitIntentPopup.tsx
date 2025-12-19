@@ -2,90 +2,87 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Gift, ArrowRight } from "lucide-react";
 
 const TELEGRAM_LINK = "https://t.me/manager24ff";
 
 export const ExitIntentPopup = () => {
   const [show, setShow] = useState(false);
+  const [hasShown, setHasShown] = useState(false);
 
   useEffect(() => {
-    let mouseLeft = false;
-
     const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !mouseLeft) {
-        mouseLeft = true;
+      if (e.clientY <= 0 && !hasShown) {
         setShow(true);
+        setHasShown(true);
       }
     };
 
     document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  if (!show) return null;
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
+  }, [hasShown]);
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-6"
-        onClick={() => setShow(false)}
-      >
+      {show && (
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="glass-card max-w-lg w-full p-12 md:p-16 relative"
-          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-xl px-6"
+          onClick={() => setShow(false)}
         >
-          <button
-            onClick={() => setShow(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition"
+          <motion.div
+            initial={{ scale: 0.9, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 20, opacity: 0 }}
+            className="glass-card max-w-lg w-full p-10 md:p-16 relative overflow-hidden border-accent-lime/30"
+            onClick={(e) => e.stopPropagation()}
           >
-            <X size={32} />
-          </button>
-
-          <div className="text-center">
-            <motion.h3
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 1 }}
-              className="text-3xl md:text-4xl font-black italic uppercase mb-8 text-white"
+            {/* Декор фона */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent-lime/10 blur-[80px] rounded-full" />
+            
+            <button
+              onClick={() => setShow(false)}
+              className="absolute top-6 right-6 text-white/30 hover:text-accent-lime transition-colors"
             >
-              Не уходите без расчёта!
-            </motion.h3>
+              <X size={24} />
+            </button>
 
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5, duration: 1 }}
-              className="text-white/80 text-lg mb-12 text-tight"
-            >
-              Получите персональное предложение со скидкой 10% на первый месяц
-            </motion.p>
+            <div className="text-center relative z-10">
+              <div className="inline-flex w-20 h-20 rounded-3xl glass bg-accent-lime/10 items-center justify-center text-accent-lime mb-10">
+                <Gift size={40} />
+              </div>
 
-            <motion.a
-              href={TELEGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.7, duration: 1 }}
-              className="btn-glass-lime"
-            >
-              Написать в Telegram
-            </motion.a>
-          </div>
+              <h3 className="text-4xl md:text-5xl font-black italic uppercase mb-6 tracking-tighter">
+                Подождите!
+              </h3>
+              
+              <p className="text-white/60 text-lg mb-12 leading-relaxed">
+                Закрепите за собой <span className="text-white font-bold">скидку 10%</span> на первый месяц фулфилмента, просто написав нам «СТАРТ».
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <a 
+                  href={TELEGRAM_LINK} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn-glass-lime w-full group"
+                >
+                  Забрать скидку
+                  <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
+                </a>
+                <button 
+                  onClick={() => setShow(false)}
+                  className="text-white/20 hover:text-white/50 text-xs uppercase tracking-widest font-bold py-4 transition-colors"
+                >
+                  Я хочу платить полную стоимость
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 };
