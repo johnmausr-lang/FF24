@@ -16,24 +16,21 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav px-4 py-4 md:px-6 md:py-5">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav px-4 py-4 md:py-5">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Логотип */}
-        <motion.a 
-          href="/"
-          className="text-2xl md:text-4xl font-black italic tracking-tighter"
-        >
+        <motion.div className="text-3xl md:text-4xl font-black italic tracking-tighter">
           <span className="gradient-text">FF</span>
-          <span className="text-accent-lime">24</span>
-        </motion.a>
+          <span className="text-white">24</span>
+        </motion.div>
 
         {/* Десктоп меню */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-medium uppercase tracking-wider text-white/70 hover:text-white transition-colors"
+              className="text-sm font-medium uppercase tracking-widest text-white/70 hover:text-white transition-colors"
             >
               {link.label}
             </a>
@@ -42,7 +39,7 @@ export const Navbar = () => {
             href={TELEGRAM_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-glass-primary px-8 py-3 text-base"
+            className="btn-glass-lime px-10 py-4"
           >
             Написать в Telegram
           </a>
@@ -51,13 +48,13 @@ export const Navbar = () => {
         {/* Мобильный бургер */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden glass p-3 rounded-2xl"
+          className="md:hidden glass p-3 rounded-full"
         >
           <Menu size={24} className="text-white" />
         </button>
       </div>
 
-      {/* Мобильное меню — центрированное, стеклянное, компактное */}
+      {/* Мобильное меню — центрированное стекло */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -68,10 +65,10 @@ export const Navbar = () => {
             onClick={() => setMobileMenuOpen(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="glass-card w-full max-w-sm p-10 text-center"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="glass-card w-full max-w-sm p-12 text-center"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -81,7 +78,7 @@ export const Navbar = () => {
                 <X size={28} />
               </button>
 
-              <div className="mb-10">
+              <div className="mb-12">
                 <span className="text-5xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
               </div>
 
@@ -101,7 +98,7 @@ export const Navbar = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block btn-glass-primary px-12 py-6 text-xl mt-10"
+                  className="block btn-glass-lime px-12 py-6 text-xl"
                 >
                   Написать в Telegram
                 </a>
