@@ -2,87 +2,96 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Send, Sparkles } from "lucide-react";
 
 const TELEGRAM_LINK = "https://t.me/manager24ff";
 
 export const LeadForm = () => {
   const [submitted, setSubmitted] = useState(false);
 
-  const handleClick = () => {
+  const handleAction = () => {
     window.open(TELEGRAM_LINK, "_blank");
     setSubmitted(true);
   };
 
   return (
-    <section id="lead" className="py-24 sm:py-32 bg-black">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black italic uppercase mb-6 text-white leading-tight">
-            Получите персональный <span className="text-accent-lime">расчёт</span>
-          </h2>
-          <p className="text-white/70 text-base md:text-xl max-w-2xl mx-auto">
-            Менеджер подготовит предложение под ваш объём и маркетплейс за 24 часа
-          </p>
-        </motion.div>
-
+    <section id="lead" className="py-32 relative overflow-hidden">
+      <div className="absolute inset-0 bg-accent-lime/5 blur-[120px] rounded-full -translate-x-1/2 left-1/2 w-full max-w-4xl h-full" />
+      
+      <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.5 }}
-          className="max-w-4xl mx-auto"
+          className="glass-card max-w-5xl mx-auto overflow-hidden border-accent-lime/20"
         >
-          <AnimatePresence mode="wait">
-            {!submitted ? (
-              <motion.div 
-                key="form"
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="glass-card p-8 md:p-16 text-center border-accent-lime/20"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-                  <div className="flex items-center gap-4 justify-center sm:justify-start">
-                    <div className="w-12 h-12 rounded-full glass flex items-center justify-center shrink-0 border-accent-lime/30">
-                      <Check className="w-6 h-6 text-accent-lime" />
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="p-12 lg:p-20 bg-white/[0.02] border-r border-white/5">
+              <h2 className="text-5xl md:text-6xl font-black italic uppercase mb-8 tracking-tighter leading-none">
+                Готовы к <br/><span className="text-accent-lime">взлету?</span>
+              </h2>
+              <p className="text-white/60 text-xl mb-12 font-medium">
+                Оставьте заявку и получите персональный расчет стоимости за 24 часа + чек-лист по подготовке товара.
+              </p>
+              
+              <ul className="space-y-6">
+                {[
+                  "Скидка 10% на первый месяц",
+                  "Бесплатный аудит упаковки",
+                  "Личный менеджер в Telegram"
+                ].map((text, i) => (
+                  <li key={i} className="flex items-center gap-4 text-white font-bold uppercase tracking-wider text-sm">
+                    <div className="w-6 h-6 rounded-full bg-accent-lime flex items-center justify-center text-black">
+                      <Check size={14} strokeWidth={4} />
                     </div>
-                    <p className="text-white font-bold uppercase italic text-sm md:text-base">Экономия до 20%</p>
-                  </div>
-                  <div className="flex items-center gap-4 justify-center sm:justify-start">
-                    <div className="w-12 h-12 rounded-full glass flex items-center justify-center shrink-0 border-accent-lime/30">
-                      <Check className="w-6 h-6 text-accent-lime" />
-                    </div>
-                    <p className="text-white font-bold uppercase italic text-sm md:text-base">Персональный менеджер</p>
-                  </div>
-                </div>
+                    {text}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <button 
-                  onClick={handleClick} 
-                  className="btn-glass-lime w-full py-6 md:text-xl shadow-lg shadow-accent-lime/10"
-                >
-                  Написать в Telegram
-                </button>
-              </motion.div>
-            ) : (
-              <motion.div 
-                key="success" 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-12 md:p-20 text-center border-accent-lime"
-              >
-                <div className="w-24 h-24 rounded-full bg-accent-lime/10 border-2 border-accent-lime mx-auto mb-8 flex items-center justify-center">
-                  <Check className="w-12 h-12 text-accent-lime" />
-                </div>
-                <h3 className="text-3xl font-black uppercase mb-4 text-white">Система на связи</h3>
-                <p className="text-white/70">Ожидайте сообщение в Telegram в ближайшее время</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <div className="p-12 lg:p-20 flex flex-col justify-center items-center text-center">
+              <AnimatePresence mode="wait">
+                {!submitted ? (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="w-full"
+                  >
+                    <div className="mb-10 inline-flex items-center gap-2 text-accent-lime">
+                      <Sparkles className="animate-pulse" />
+                      <span className="font-black uppercase tracking-widest text-sm">Быстрый старт</span>
+                    </div>
+                    <button 
+                      onClick={handleAction}
+                      className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224,255,100,0.2)]"
+                    >
+                      Связаться в Telegram
+                      <Send className="ml-4 group-hover:rotate-12 transition-transform" />
+                    </button>
+                    <p className="mt-8 text-white/30 text-[10px] uppercase tracking-[0.2em] font-bold">
+                      Среднее время ответа: 15 минут
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center"
+                  >
+                    <div className="w-32 h-32 rounded-full bg-accent-lime flex items-center justify-center text-black mb-8 shadow-[0_0_80px_rgba(224,255,100,0.4)]">
+                      <Check size={60} strokeWidth={3} />
+                    </div>
+                    <h3 className="text-3xl font-black italic uppercase mb-4">Ждем вас!</h3>
+                    <p className="text-white/50">Мы уже открыли диалог в Telegram.</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
