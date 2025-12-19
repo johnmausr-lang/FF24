@@ -17,34 +17,39 @@ import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
 export default function LandingPage() {
   return (
-    <div className="bg-black min-h-screen text-white selection:bg-accent-lime selection:text-black antialiased">
-      {/* Навигация фиксирована сверху */}
+    <div className="relative min-h-screen bg-black text-white selection:bg-accent-lime selection:text-black antialiased">
+      
+      {/* Световая подложка (Mesh Gradient) */}
+      <div className="fixed inset-0 z-0 bg-mesh pointer-events-none" />
+
+      {/* Навигация поверх всего */}
       <Navbar />
       
-      <main>
-        {/* Первый экран с частицами */}
+      {/* Контентная часть */}
+      <main className="relative z-10">
+        {/* Главный экран */}
         <Hero />
         
-        {/* Сетка преимуществ */}
+        {/* Сетка преимуществ с карточками-стеклом */}
         <BentoGrid />
         
-        {/* Горизонтальный скролл этапов работы */}
+        {/* Горизонтальный процесс со световыми акцентами */}
         <ProcessSteps />
         
-        {/* Блок призыва к действию (Форма) */}
+        {/* Форма захвата (Терминал/Стекло) */}
         <LeadForm />
         
-        {/* Социальное доказательство (Отзывы) */}
+        {/* Социальное доказательство */}
         <Testimonials />
         
         {/* Ответы на вопросы */}
         <FAQ />
       </main>
 
-      {/* Подвал */}
+      {/* Футер */}
       <Footer />
 
-      {/* Глобальные интерактивные элементы */}
+      {/* Плавающие интерактивные элементы */}
       <FloatingTelegramButton />
       <ExitIntentPopup />
     </div>
