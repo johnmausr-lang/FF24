@@ -6,7 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
-import { LeadForm } from "@/components/sections/LeadForm"; // Единая форма
+import { LeadForm } from "@/components/sections/LeadForm";
+import { Testimonials } from "@/components/sections/Testimonials"; // Новый блок
 import { FAQ } from "@/components/sections/FAQ";
 
 export default function LandingPage() {
@@ -17,7 +18,8 @@ export default function LandingPage() {
         <Hero />
         <BentoGrid />
         <ProcessSteps />
-        <LeadForm /> {/* Одна мощная форма */}
+        <LeadForm />
+        <Testimonials /> {/* Отзывы после формы — повышает доверие */}
         <FAQ />
       </main>
       <Footer />
