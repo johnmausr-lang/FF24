@@ -32,6 +32,7 @@ export const ProcessSteps = () => {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
               className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
             >
               Процесс работы
@@ -45,16 +46,16 @@ export const ProcessSteps = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
+                transition={{ duration: 1.2, delay: i * 0.1, ease: "easeOut" }}
                 className="glass-card min-w-[380px] md:min-w-[480px] p-12 group relative"
               >
-                <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors">
+                <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors duration-500 ease-out">
                   0{i + 1}
                 </div>
 
-                <div className="relative z-10 flex flex-col h-full">
+                <div className="relative z-10 flex flex-col items-center text-center h-full">
                   <div className="mb-10">
-                    <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all">
+                    <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all duration-500 ease-out">
                       {step.icon}
                     </div>
                   </div>
@@ -63,7 +64,7 @@ export const ProcessSteps = () => {
                     {step.title}
                   </h3>
 
-                  <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
+                  <p className="text-white/70 text-lg leading-relaxed text-tight">
                     {step.desc}
                   </p>
                 </div>
