@@ -11,124 +11,62 @@
     --accent-blue: 217 91% 60%;       /* #2563EB */
     --accent-lime: 78 100% 70%;       /* #E0FF64 */
     
-    --card: 240 10% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;               /* white для карточек */
+    --card-foreground: 240 10% 3.9%;  /* dark для текста в карточках */
     
-    --border: 240 5% 20%;
-    --radius: 2rem;
+    --border: 240 5% 90%;            /* light border */
+    --radius: 1rem;
   }
-}
 
-@layer base {
   * {
-    @apply border-border;
+    @apply border-border box-border;
+    margin: 0;
+    padding: 0;
   }
+
   body {
-    @apply bg-black text-white;
+    @apply bg-black text-white overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 @layer components {
-  /* Основной glass эффект */
-  .glass {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+  .container {
+    @apply max-w-[1200px] mx-auto px-6 lg:px-12;
   }
 
-  /* Hover эффект для glass — прямые свойства */
-  .glass-hover {
-    transition: all 0.5s ease;
-  }
-
-  .glass-hover:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  /* Glass для Navbar и Footer */
+  /* Glass для Navbar/Footer */
   .glass-nav {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    @apply bg-white/5 backdrop-blur-3xl border-b border-white/10;
   }
 
-  /* Glass карточки — прямые свойства вместо arbitrary */
+  /* Белые карточки для контента (по ТЗ — bg-white) */
+  .card {
+    @apply bg-white text-slate-900 rounded-xl border border-slate-200 shadow-md p-8 md:p-12;
+  }
+
+  /* Стеклянные акцентные карточки */
   .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 3rem;
-    padding: 2.5rem 3.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    @apply bg-white/6 backdrop-blur-3xl border border-white/12 rounded-3xl p-10 md:p-16 shadow-2xl;
   }
 
-  /* Стекло для мобильного меню — более мутное */
-  .glass-menu {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Кнопки по ТЗ */
+  .btn-primary {
+    @apply h-12 px-6 bg-accent-lime text-black rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center text-base;
   }
 
-  /* Кнопки — минималистичные стеклянные */
-  .btn-glass {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    border-radius: 9999px;
-    padding: 1.25rem 2.5rem;
-    transition: all 0.5s ease;
+  .btn-secondary {
+    @apply h-12 px-6 border border-slate-200 text-slate-900 rounded-lg font-semibold hover:bg-slate-50 transition flex items-center justify-center text-base;
   }
 
-  .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
-  }
-
+  /* Кнопка в стекле (лайм) */
   .btn-glass-lime {
-    background: rgba(224, 255, 100, 0.1);
-    border: 1px solid rgba(224, 255, 100, 0.3);
-    color: #E0FF64;
-    font-weight: 900;
-    border-radius: 9999px;
-    padding: 1.25rem 2.5rem;
-    transition: all 0.5s ease;
-  }
-
-  .btn-glass-lime:hover {
-    background: rgba(224, 255, 100, 0.2);
-    border-color: #E0FF64;
+    @apply h-12 px-6 bg-accent-lime/10 hover:bg-accent-lime/20 text-accent-lime border border-accent-lime/30 hover:border-accent-lime rounded-full font-bold transition flex items-center justify-center text-base;
   }
 }
 
 @layer utilities {
-  /* Текст не выходит за рамки */
   .text-contained {
-    max-width: 680px;
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-  }
-
-  /* Градиентный текст */
-  .gradient-text {
-    background: linear-gradient(90deg, #2563EB, #E0FF64);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradient-shift 12s ease infinite;
-  }
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    @apply max-w-xl mx-auto text-center;
   }
 }
