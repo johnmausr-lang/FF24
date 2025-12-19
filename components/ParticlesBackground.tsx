@@ -21,49 +21,15 @@ export const ParticlesBackground = () => {
     <Particles
       id="tsparticles"
       options={{
-        background: {
-          color: { value: "transparent" },
-        },
+        background: { color: { value: "transparent" } },
         fpsLimit: 120,
-        interactivity: {
-          events: {
-            onHover: { enable: true, mode: "repulse" },
-            resize: { enable: true },
-          },
-          modes: {
-            repulse: { distance: 80, duration: 0.4 },
-          },
-        },
         particles: {
-          color: { value: ["#2563EB", "#E0FF64"] },
-          links: {
-            color: "#2563EB",
-            distance: 150,
-            enable: true,
-            opacity: 0.2,
-            width: 1,
-          },
-          move: {
-            enable: true,
-            speed: 1,
-            direction: "none",
-            random: false,
-            straight: false,
-            outModes: { default: "out" },
-          },
-          number: {
-            density: { enable: true },
-            value: 40,
-          },
-          opacity: {
-            value: { min: 0.2, max: 0.6 },
-            animation: { enable: true, speed: 0.5, sync: false },
-          },
-          shape: { type: "circle" },
-          size: {
-            value: { min: 1, max: 3 },
-            animation: { enable: true, speed: 2, sync: false },
-          },
+          color: { value: "#E0FF64" },
+          links: { color: "#E0FF64", distance: 150, enable: true, opacity: 0.1, width: 1 },
+          move: { enable: true, speed: 0.5 },
+          number: { density: { enable: true }, value: 30 },
+          opacity: { value: { min: 0.1, max: 0.3 } },
+          size: { value: { min: 1, max: 2 } },
         },
         detectRetina: true,
       }}
