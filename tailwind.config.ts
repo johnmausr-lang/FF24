@@ -11,14 +11,16 @@ const config: Config = {
     "glass-card",
     "glass-hover",
     "glass-nav",
+    "glass-menu",
     "btn-glass",
     "btn-glass-lime",
     "glow-lime",
     "gradient-text",
-    "gradient-border",
-    { pattern: /text-(accent-lime|accent-blue|white)/ },
-    { pattern: /border-(accent-lime|white)/ },
-    { pattern: /bg-(accent-lime|white)/ },
+    "text-contained",
+    "container",
+    { pattern: /text-(white|accent-lime)/ },
+    { pattern: /border-(white|accent-lime)/ },
+    { pattern: /bg-(white|accent-lime)/ },
   ],
   theme: {
     extend: {
@@ -26,11 +28,11 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          dark: "hsl(var(--primary-dark))", // #1E1B4B
+          dark: "hsl(var(--primary-dark))",
         },
         accent: {
-          blue: "hsl(var(--accent-blue))",   // #2563EB
-          lime: "hsl(var(--accent-lime))",   // #E0FF64
+          blue: "hsl(var(--accent-blue))",
+          lime: "hsl(var(--accent-lime))",
         },
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -38,8 +40,10 @@ const config: Config = {
         },
         border: "hsl(var(--border))",
       },
-      backdropBlur: {
-        xs: "2px",
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },
