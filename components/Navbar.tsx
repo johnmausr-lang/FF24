@@ -19,18 +19,22 @@ export const Navbar = () => {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 glass-nav">
         <div className="container flex justify-between items-center h-16">
-          <motion.div className="text-3xl font-black italic tracking-tighter">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-3xl font-black italic tracking-tighter"
+          >
             <span className="gradient-text">FF</span>
             <span className="text-white">24</span>
           </motion.div>
 
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className="text-white/70 hover:text-white font-medium uppercase tracking-wider text-sm transition">
+              <a key={link.label} href={link.href} className="btn-glass-secondary">
                 {link.label}
               </a>
             ))}
-            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime">
               Написать в Telegram
             </a>
           </div>
@@ -47,6 +51,7 @@ export const Navbar = () => {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             exit={{ y: -100 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="fixed top-0 left-0 right-0 z-50 glass-menu pt-20 pb-12 px-6"
           >
             <div className="container relative">
@@ -64,7 +69,7 @@ export const Navbar = () => {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="btn-secondary w-full max-w-sm"
+                    className="btn-glass-secondary w-full max-w-sm"
                   >
                     {link.label}
                   </a>
@@ -74,7 +79,7 @@ export const Navbar = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="btn-primary w-full max-w-sm"
+                  className="btn-glass-lime w-full max-w-sm"
                 >
                   Написать в Telegram
                 </a>
