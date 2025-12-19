@@ -20,121 +20,81 @@
   }
 
   body {
-    @apply bg-black text-white overflow-x-hidden;
+    @apply bg-black text-white antialiased overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
-    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer components {
   .container {
-    @apply w-full max-w-[1400px] mx-auto px-6 lg:px-12;
+    @apply max-w-[1300px] mx-auto px-6 lg:px-12;
   }
 
-  /* ТВОЁ ЖИДКОЕ СТЕКЛО + УЛУЧШЕННАЯ ГЛУБИНА */
+  /* Улучшенное Жидкое Стекло */
   .glass {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(25px) saturate(160%);
-    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 10px 0 rgba(255, 255, 255, 0.02);
-  }
-
-  /* ЧЕТКОЕ РАЗДЕЛЕНИЕ: ТЕМНОЕ И МУТНОЕ СТЕКЛО ДЛЯ НАВБАР И ФУТЕР */
-  .glass-nav, .glass-heavy {
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  /* МАКСИМАЛЬНО МУТНОЕ МЕНЮ */
-  .glass-menu {
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(60px);
-    -webkit-backdrop-filter: blur(60px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
-    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: #E0FF64;
-    box-shadow: 0 0 50px rgba(224, 255, 100, 0.15);
-    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(224, 255, 100, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+                inset 0 0 20px rgba(224, 255, 100, 0.05);
   }
 
-  /* ТВОИ КНОПКИ С ПОЛНЫМ ФУНКЦИОНАЛОМ */
+  /* Кнопки */
   .btn-glass-lime {
-    background: #E0FF64;
-    color: #1E1B4B;
-    font-weight: 900;
-    text-transform: uppercase;
-    font-style: italic;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1.25rem 2.5rem;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    border: 2px solid transparent;
-  }
-
-  @media (min-width: 640px) { .btn-glass-lime { width: auto; } }
-
-  .btn-glass-lime:hover {
-    background: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(224, 255, 100, 0.4);
+    @apply glass bg-accent-lime/10 text-accent-lime font-black uppercase tracking-widest 
+    px-10 py-6 rounded-full border-accent-lime/30 hover:bg-accent-lime hover:text-black 
+    transition-all duration-500 flex items-center justify-center text-sm md:text-base;
+    box-shadow: 0 0 30px rgba(224, 255, 100, 0.1);
   }
 
   .btn-glass-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1rem 2rem;
-    transition: all 0.5s ease-out;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    @apply glass bg-white/5 text-white/70 font-bold uppercase tracking-widest 
+    px-10 py-6 rounded-full border-white/10 hover:border-white/30 hover:text-white 
+    transition-all duration-500 flex items-center justify-center text-sm;
   }
 
-  @media (min-width: 640px) { .btn-glass-secondary { width: auto; } }
-
-  .btn-glass-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: white;
-  }
-
+  /* Типографика */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-blue;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-lime;
     background-size: 200% auto;
-    animation: shine 8s linear infinite;
+    animation: shine 5s linear infinite;
+  }
+
+  .text-outline-white {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
   }
 }
 
 @layer utilities {
-  @keyframes shine { to { background-position: 200% center; } }
-  .hide-scrollbar::-webkit-scrollbar { display: none; }
-  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-}
+  /* Тот самый Mesh, который "подсветит" сайт изнутри */
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(252, 100%, 18%, 0.15) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(78, 100%, 70%, 0.1) 0, transparent 50%),
+      radial-gradient(at 50% 100%, hsla(217, 91%, 60%, 0.1) 0, transparent 50%);
+    background-attachment: fixed;
+  }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #E0FF64; }
+  @keyframes shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
