@@ -1,56 +1,90 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { ClipboardList, Truck, HardHat, Factory, PackageCheck, Download, CheckCircle2 } from "lucide-react";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { 
+  ClipboardList, 
+  Truck, 
+  HardHat, 
+  Factory, 
+  PackageCheck, 
+  Download, 
+  CheckCircle2 
+} from "lucide-react";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация и передача ТЗ", icon: <ClipboardList /> },
-  { title: "Забор", desc: "Забираем товар у поставщика", icon: <Truck /> },
-  { title: "Приёмка", desc: "Сверка и проверка на брак", icon: <HardHat /> },
-  { title: "Маркировка", desc: "Наклейка штрих-кодов по ТЗ", icon: <Factory /> },
-  { title: "Упаковка", desc: "Оптимальная упаковка в короба", icon: <PackageCheck /> },
-  { title: "Отгрузка", desc: "Доставка на склад МП за 24ч", icon: <Download /> },
-  { title: "Финиш", desc: "Товар готов к продаже", icon: <CheckCircle2 /> },
+  { title: "Заявка", desc: "Регистрация и передача ТЗ", icon: <ClipboardList size={48} /> },
+  { title: "Забор", desc: "Забираем товар у поставщика", icon: <Truck size={48} /> },
+  { title: "Приёмка", desc: "Сверка и проверка на брак", icon: <HardHat size={48} /> },
+  { title: "Маркировка", desc: "Наклейка штрих-кодов по ТЗ", icon: <Factory size={48} /> },
+  { title: "Упаковка", desc: "Оптимальная упаковка в короба", icon: <PackageCheck size={48} /> },
+  { title: "Отгрузка", desc: "Доставка на склад МП за 24ч", icon: <Download size={48} className="rotate-180" /> },
+  { title: "Финиш", desc: "Товар готов к продаже", icon: <CheckCircle2 size={48} /> },
 ];
 
 export const ProcessSteps = () => {
-  return (
-    <section id="process" className="py-32 bg-black overflow-hidden border-y border-white/5">
-      <div className="container mb-24">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2 }}
-        >
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-6 tracking-tighter">
-            Семь шагов <span className="text-accent-lime">к идеалу</span>
-          </h2>
-          <p className="text-white/40 uppercase tracking-[0.4em] font-bold text-sm">Ваша логистика на автопилоте</p>
-        </motion.div>
-      </div>
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
 
-      <div className="flex overflow-x-auto hide-scrollbar px-6 md:px-[8%] gap-8 snap-x pb-12">
-        {steps.map((step, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-[320px] md:min-w-[420px] snap-center"
-          >
-            <div className="glass-card p-12 h-[400px] flex flex-col items-start relative group overflow-hidden">
-              <span className="text-9xl font-black italic text-white/5 absolute -bottom-4 -right-4 group-hover:text-accent-lime/10 transition-all duration-700 select-none">0{i+1}</span>
-              <div className="w-20 h-20 rounded-2xl glass flex items-center justify-center mb-10 text-accent-lime border-accent-lime/20 group-hover:border-accent-lime group-hover:scale-110 transition-all duration-700">
-                {React.cloneElement(step.icon as React.ReactElement, { size: 40 })}
+  // Управляем горизонтальным сдвигом
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
+
+  return (
+    <section id="process" ref={targetRef} className="relative h-[300vh] bg-black">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        {/* Фоновый градиент для подсветки стекла */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[50%] bg-accent-lime/5 blur-[120px] rounded-full" />
+
+        <div className="container mb-20 absolute top-20 left-1/2 -translate-x-1/2 z-20">
+          <h2 className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter">
+            Цикл <span className="text-accent-lime italic">FF24</span>
+          </h2>
+        </div>
+
+        <motion.div style={{ x }} className="flex gap-8 px-12 md:px-[10vw]">
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
+              className="relative min-w-[350px] md:min-w-[500px] h-[450px] rounded-[3rem] p-[2px] overflow-hidden group"
+            >
+              {/* Анимированная рамка (Border Glow) */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-accent-lime/20 group-hover:via-accent-lime/30 transition-all duration-700" />
+              
+              {/* Тело карточки — усиленное Жидкое Стекло */}
+              <div className="relative h-full w-full bg-white/[0.07] backdrop-blur-[50px] rounded-[3rem] p-12 flex flex-col justify-between border border-white/10">
+                <div className="flex justify-between items-start">
+                  <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center text-accent-lime group-hover:scale-110 group-hover:bg-accent-lime group-hover:text-black transition-all duration-500 shadow-[0_0_30px_rgba(224,255,100,0.1)]">
+                    {step.icon}
+                  </div>
+                  <span className="text-7xl font-black italic opacity-5 group-hover:opacity-10 transition-opacity">
+                    0{i + 1}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-4 text-white group-hover:text-accent-lime transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="text-white/50 text-xl font-medium leading-relaxed uppercase tracking-tight">
+                    {step.desc}
+                  </p>
+                </div>
+
+                {/* Индикатор прогресса внизу карточки */}
+                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ duration: 2, delay: 0.5 }}
+                    className="h-full bg-accent-lime shadow-[0_0_15px_#E0FF64]"
+                  />
+                </div>
               </div>
-              <h3 className="text-3xl font-black uppercase italic mb-6 relative z-10">{step.title}</h3>
-              <p className="text-white/50 text-lg leading-relaxed relative z-10 max-w-[280px]">{step.desc}</p>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
