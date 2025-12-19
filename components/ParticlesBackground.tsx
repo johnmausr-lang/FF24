@@ -20,58 +20,50 @@ export const ParticlesBackground = () => {
   return (
     <Particles
       id="tsparticles"
+      className="absolute inset-0 z-0"
       options={{
-        background: {
-          color: { value: "transparent" },
-        },
-        fpsLimit: 120,
+        background: { color: { value: "transparent" } },
+        fpsLimit: 60,
         interactivity: {
           events: {
-            onHover: { enable: true, mode: "repulse" },
+            onHover: { enable: true, mode: "grab" },
             resize: { enable: true },
           },
           modes: {
-            repulse: { distance: 100, duration: 0.4 },
+            grab: { distance: 200, links: { opacity: 0.2 } },
           },
         },
         particles: {
           color: { value: ["#2563EB", "#E0FF64"] },
           links: {
-            color: "#2563EB",
+            color: "#ffffff",
             distance: 150,
             enable: true,
-            opacity: 0.1,
+            opacity: 0.05,
             width: 1,
           },
           move: {
             enable: true,
-            speed: 0.8,
+            speed: 0.6,
             direction: "none",
-            random: false,
+            random: true,
             straight: false,
             outModes: { default: "out" },
           },
           number: {
-            density: {
-              enable: true,
-              width: 1920,
-              height: 1080,
-            },
-            value: 40,
+            density: { enable: true, width: 1920, height: 1080 },
+            value: 50,
           },
           opacity: {
-            value: { min: 0.1, max: 0.4 },
-            animation: { enable: true, speed: 0.5, sync: false },
+            value: { min: 0.1, max: 0.3 },
           },
           shape: { type: "circle" },
           size: {
             value: { min: 1, max: 3 },
-            animation: { enable: true, speed: 2, sync: false },
           },
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 -z-10"
     />
   );
 };
