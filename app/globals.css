@@ -7,10 +7,10 @@
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     
-    /* Основные цвета из логотипов */
-    --primary-dark: 252 100% 18%;
-    --accent-lime: 78 100% 70%;
-    --accent-blue: 217 91% 60%;
+    /* Цвета из официальных логотипов */
+    --primary-dark: 252 100% 18%;     /* #1E1B4B — тёмный индиго */
+    --accent-blue: 217 91% 60%;        /* #2563EB — неоновый синий */
+    --accent-lime: 78 100% 70%;        /* #E0FF64 — яркий лайм */
     
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -31,7 +31,7 @@
 }
 
 @layer utilities {
-  /* Неоновые тени (обновлённые) */
+  /* Неоновые тени */
   .shadow-neon {
     box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 
                 0 0 40px rgba(37, 99, 235, 0.1);
@@ -84,14 +84,14 @@
     }
   }
 
-  /* Градиентный перелив для букв/логотипа */
+  /* Градиентный перелив для текста (логотип, заголовки) */
   .gradient-text {
-    background: linear-gradient(90deg, #2563EB, #E0FF64, #2563EB);
-    background-size: 200% 200%;
+    background: linear-gradient(90deg, #1E1B4B, #2563EB, #E0FF64, #2563EB, #1E1B4B);
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: gradient-shift 6s ease infinite;
+    animation: gradient-shift 8s ease infinite;
   }
 
   @keyframes gradient-shift {
@@ -100,7 +100,7 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Градиентный бордер (как в трендах 2025) */
+  /* Градиентный бордер (для кнопок и карточек) */
   .gradient-border {
     position: relative;
     background: linear-gradient(45deg, #000, #000) padding-box,
@@ -112,4 +112,25 @@
   .gradient-border-thick {
     border-width: 4px;
   }
+
+  /* Улучшения для мобильных */
+  .mobile-text-balance {
+    text-wrap: balance;
+  }
+
+  /* Минимальные тач-цели */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Дополнительные анимации */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
