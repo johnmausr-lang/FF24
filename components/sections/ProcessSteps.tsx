@@ -1,77 +1,52 @@
 "use client";
 
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { ClipboardList, Truck, HardHat, Factory, PackageCheck, Download, CheckCircle2 } from "lucide-react";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация и передача ТЗ", icon: <ClipboardList className="w-16 h-16" /> },
-  { title: "Забор", desc: "Забираем товар у поставщика", icon: <Truck className="w-16 h-16" /> },
-  { title: "Приёмка", desc: "Сверка и проверка на брак", icon: <HardHat className="w-16 h-16" /> },
-  { title: "Маркировка", desc: "Наклейка штрих-кодов по ТЗ", icon: <Factory className="w-16 h-16" /> },
-  { title: "Упаковка", desc: "Оптимальная упаковка в короба", icon: <PackageCheck className="w-16 h-16" /> },
-  { title: "Отгрузка", desc: "Доставка на склад МП за 24ч", icon: <Download className="w-16 h-16 rotate-180" /> },
-  { title: "Финиш", desc: "Товар готов к продаже", icon: <CheckCircle2 className="w-16 h-16" /> },
+  { title: "Заявка", desc: "Регистрация и передача ТЗ", icon: <ClipboardList className="w-12 h-12 text-accent-lime" /> },
+  { title: "Забор", desc: "Забираем товар у поставщика", icon: <Truck className="w-12 h-12 text-accent-lime" /> },
+  { title: "Приёмка", desc: "Сверка и проверка на брак", icon: <HardHat className="w-12 h-12 text-accent-lime" /> },
+  { title: "Маркировка", desc: "Наклейка штрих-кодов по ТЗ", icon: <Factory className="w-12 h-12 text-accent-lime" /> },
+  { title: "Упаковка", desc: "Оптимальная упаковка в короба", icon: <PackageCheck className="w-12 h-12 text-accent-lime" /> },
+  { title: "Отгрузка", desc: "Доставка на склад МП за 24ч", icon: <Download className="w-12 h-12 text-accent-lime" /> },
+  { title: "Финиш", desc: "Товар готов к продаже", icon: <CheckCircle2 className="w-12 h-12 text-accent-lime" /> },
 ];
 
 export const ProcessSteps = () => {
-  const targetRef = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start end", "end start"],
-  });
-
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-70%"]);
-
   return (
-    <section ref={targetRef} className="relative h-[300vh] bg-black">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <div className="container relative">
-          <div className="absolute top-24 left-0 z-10">
-            <motion.h2
+    <section className="py-24">
+      <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Процесс работы
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
+              transition={{ delay: i * 0.1 }}
+              className="card text-center"
             >
-              Процесс работы
-            </motion.h2>
-          </div>
-
-          <motion.div style={{ x }} className="flex gap-8 pt-48">
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
-                className="glass-card min-w-[380px] md:min-w-[480px] p-12 group relative"
-              >
-                <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors">
-                  0{i + 1}
-                </div>
-
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="mb-10">
-                    <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all">
-                      <div className="text-white/80 group-hover:text-accent-lime transition-colors">
-                        {step.icon}
-                      </div>
-                    </div>
-                  </div>
-
-                  <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-6 text-white">
-                    {step.title}
-                  </h3>
-
-                  <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
-                    {step.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+              <div className="mb-6">
+                {step.icon}
+              </div>
+              <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
+              <p className="text-slate-600 text-base">
+                {step.desc}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
