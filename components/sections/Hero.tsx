@@ -14,7 +14,7 @@ export const Hero = () => {
       <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-accent-lime/5 blur-[140px] rounded-full" />
       <div className="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-accent-blue/10 blur-[120px] rounded-full" />
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+      <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="text-white/70 text-lg md:text-xl max-w-3xl mx-auto mb-16 font-medium leading-relaxed"
+            className="text-white/70 text-lg md:text-xl max-w-3xl mx-auto mb-16 font-medium leading-relaxed text-contained"
           >
             Автоматизированный фулфилмент для серьёзного бизнеса. 
             Приёмка, маркировка, упаковка и доставка под полным контролем.
@@ -65,13 +65,13 @@ export const Hero = () => {
               href={TELEGRAM_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-glass-lime px-12 py-6 text-xl md:text-2xl"
+              className="w-full sm:w-auto btn-glass-lime px-12 py-6 text-xl md:text-2xl"
             >
               Получить расчёт
             </a>
             <a
               href="#benefits"
-              className="btn-glass px-12 py-6 text-xl md:text-2xl"
+              className="w-full sm:w-auto btn-glass px-12 py-6 text-xl md:text-2xl"
             >
               Наши услуги
             </a>
