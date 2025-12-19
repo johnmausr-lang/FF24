@@ -9,19 +9,16 @@ const config: Config = {
   safelist: [
     "glass",
     "glass-card",
-    "glass-card-hover",
+    "glass-hover",
     "glass-nav",
     "btn-glass",
-    "btn-glass-primary",
-    "btn-neon",
+    "btn-glass-lime",
+    "glow-lime",
     "gradient-text",
-    "glow-pulse",
-    "glow-pulse-lime",
-    "shadow-neon-lime",
     "gradient-border",
-    { pattern: /text-(accent-lime|accent-blue)/ },
-    { pattern: /border-(accent-lime|accent-blue)/ },
-    { pattern: /bg-(accent-lime|accent-blue)/ },
+    { pattern: /text-(accent-lime|accent-blue|white)/ },
+    { pattern: /border-(accent-lime|white)/ },
+    { pattern: /bg-(accent-lime|white)/ },
   ],
   theme: {
     extend: {
@@ -29,11 +26,11 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          dark: "hsl(var(--primary-dark))",
+          dark: "hsl(var(--primary-dark))", // #1E1B4B
         },
         accent: {
-          blue: "hsl(var(--accent-blue))",
-          lime: "hsl(var(--accent-lime))",
+          blue: "hsl(var(--accent-blue))",   // #2563EB
+          lime: "hsl(var(--accent-lime))",   // #E0FF64
         },
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -41,13 +38,8 @@ const config: Config = {
         },
         border: "hsl(var(--border))",
       },
-      borderRadius: {
-        "2rem": "2rem",
-        "3rem": "3rem",
-        "4rem": "4rem",
-      },
       backdropBlur: {
-        "2xl": "40px",
+        xs: "2px",
       },
     },
   },
