@@ -32,7 +32,7 @@
     @apply max-w-[1200px] mx-auto px-6 lg:px-12;
   }
 
-  /* Премиум жидкое стекло — прямые свойства */
+  /* Премиум жидкое стекло */
   .glass {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(40px);
@@ -41,119 +41,42 @@
   }
 
   .glass-nav {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    @apply glass bg-white/5 border-b border-white/10;
   }
 
   .glass-menu {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    @apply glass bg-white/8 backdrop-blur-3xl border border-white/20;
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 3rem;
-    padding: 3rem 5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    @apply glass rounded-[3rem] p-10 md:p-16 shadow-2xl border border-white/15;
   }
 
-  /* Кнопки в рамке жидкого стекла — прямые свойства */
+  /* Кнопки — логичные размеры, в рамке стекла */
   .btn-glass {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1.5rem 3rem;
-    transition: all 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-
-  @media (min-width: 640px) {
-    .btn-glass {
-      width: auto;
-    }
-  }
-
-  .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
+    @apply glass bg-white/8 hover:bg-white/12 border border-white/20 hover:border-white/30 text-white font-bold uppercase tracking-wider rounded-full px-10 py-5 transition-all duration-500 ease-out flex items-center justify-center w-full sm:w-auto text-base;
   }
 
   .btn-glass-lime {
-    background: rgba(224, 255, 100, 0.1);
-    border: 1px solid rgba(224, 255, 100, 0.3);
-    color: #E0FF64;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1.5rem 3rem;
-    transition: all 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    @apply glass bg-accent-lime/10 hover:bg-accent-lime/20 text-accent-lime border border-accent-lime/30 hover:border-accent-lime font-black rounded-full px-10 py-5 transition-all duration-500 ease-out flex items-center justify-center w-full sm:w-auto text-base;
   }
 
-  @media (min-width: 640px) {
-    .btn-glass-lime {
-      width: auto;
-    }
+  .btn-glass-large {
+    @apply glass bg-accent-lime/10 hover:bg-accent-lime/20 text-accent-lime border border-accent-lime/30 hover:border-accent-lime font-black rounded-full px-16 py-8 transition-all duration-500 ease-out flex items-center justify-center w-full sm:w-auto text-xl md:text-2xl;
   }
 
-  .btn-glass-lime:hover {
-    background: rgba(224, 255, 100, 0.2);
-    border-color: #E0FF64;
-  }
-
-  .btn-glass-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1.5rem 3rem;
-    transition: all 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-
-  @media (min-width: 640px) {
-    .btn-glass-secondary {
-      width: auto;
-    }
-  }
-
-  .btn-glass-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
+  .btn-glass-small {
+    @apply glass bg-white/8 hover:bg-white/12 border border-white/20 hover:border-white/30 text-white font-bold uppercase tracking-wider rounded-full px-8 py-4 transition-all duration-500 ease-out flex items-center justify-center w-full sm:w-auto text-sm;
   }
 }
 
 @layer utilities {
   .text-contained {
-    @apply max-w-3xl mx-auto text-center;
+    @apply max-w-xl mx-auto text-center leading-relaxed;
   }
 
-  .text-tight {
-    @apply max-w-xl mx-auto text-center;
+  .text-large {
+    @apply max-w-3xl mx-auto text-center leading-relaxed;
   }
 
   .gradient-text {
