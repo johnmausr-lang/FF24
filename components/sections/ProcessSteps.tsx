@@ -27,17 +27,17 @@ export const ProcessSteps = () => {
     <section ref={targetRef} className="relative h-[300vh] bg-black">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <div className="container relative">
-          <div className="absolute top-24 left-0 z-10">
-            <motion.h2
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="text-center mb-20 absolute top-24 left-0 right-0 z-10"
+          >
+            <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white">
               Процесс работы
-            </motion.h2>
-          </div>
+            </h2>
+          </motion.div>
 
           <motion.div style={{ x }} className="flex gap-8 pt-48">
             {steps.map((step, i) => (
@@ -46,14 +46,14 @@ export const ProcessSteps = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1.2, delay: i * 0.1, ease: "easeOut" }}
-                className="glass-card min-w-[380px] md:min-w-[480px] p-12 group relative"
+                transition={{ duration: 1.5, delay: i * 0.1, ease: "easeOut" }}
+                className="glass-card min-w-[380px] md:min-w-[480px] group relative flex-shrink-0"
               >
                 <div className="absolute -top-8 -left-8 text-9xl font-black italic text-white/5 group-hover:text-accent-lime/10 transition-colors duration-500 ease-out">
                   0{i + 1}
                 </div>
 
-                <div className="relative z-10 flex flex-col items-center text-center h-full">
+                <div className="relative z-10 flex flex-col items-center text-center h-full p-12">
                   <div className="mb-10">
                     <div className="w-24 h-24 rounded-3xl glass bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-accent-lime transition-all duration-500 ease-out">
                       {step.icon}
@@ -64,7 +64,7 @@ export const ProcessSteps = () => {
                     {step.title}
                   </h3>
 
-                  <p className="text-white/70 text-lg leading-relaxed text-tight">
+                  <p className="text-white/70 text-lg leading-relaxed text-tight flex-grow">
                     {step.desc}
                   </p>
                 </div>
