@@ -7,51 +7,47 @@ const features = [
   {
     title: "Приёмка 24/7",
     desc: "Ваш товар попадает в систему сразу после разгрузки.",
-    icon: <Clock className="text-accent-lime" />,
-    className: "md:col-span-2 md:row-span-1 bg-primary-dark/50 border-accent-lime/30 shadow-neon-lime",
+    icon: <Clock className="w-12 h-12 text-accent-lime" />,
   },
   {
     title: "Безопасность",
-    desc: "100% материальная ответственность.",
-    icon: <ShieldCheck className="text-accent-blue" />,
-    className: "md:col-span-1 md:row-span-1 bg-primary-dark/30 border-accent-blue/30 shadow-neon",
+    desc: "100% материальная ответственность и страховка.",
+    icon: <ShieldCheck className="w-12 h-12 text-accent-blue" />,
   },
   {
     title: "Аналитика",
-    desc: "Отчёты в реальном времени в вашем Telegram.",
-    icon: <BarChart3 className="text-accent-lime" />,
-    className: "md:col-span-1 md:row-span-2 flex-col justify-between gradient-border",
-    special: "chart"
+    desc: "Отчёты в реальном времени прямо в ваш Telegram.",
+    icon: <BarChart3 className="w-12 h-12 text-accent-lime" />,
+    special: "chart",
   },
   {
     title: "Все маркетплейсы",
-    desc: "WB, Ozon, Яндекс Маркет — работаем по всем моделям.",
-    icon: <Globe className="text-accent-blue" />,
-    className: "md:col-span-2 md:row-span-1 bg-primary-dark/40 border-accent-blue/20",
+    desc: "Wildberries, Ozon, Яндекс.Маркет — работаем по FBO и FBS.",
+    icon: <Globe className="w-12 h-12 text-accent-blue" />,
   },
   {
     title: "Умная упаковка",
-    desc: "Снижаем объёмный вес на 15-20% за счёт оптимизации тары.",
-    icon: <Box className="text-accent-lime" />,
-    className: "md:col-span-1 md:row-span-1 border-accent-lime/50 shadow-neon-lime",
-  }
+    desc: "Снижаем объёмный вес на 15–20% за счёт оптимизации.",
+    icon: <Box className="w-12 h-12 text-accent-lime" />,
+  },
 ];
 
 export const BentoGrid = () => {
   return (
-    <section id="benefits" className="py-32 px-6 bg-black relative overflow-hidden">
+    <section id="benefits" className="py-32 px-6 relative">
       <div className="max-w-7xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20 text-center"
+          transition={{ duration: 1 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-6 gradient-text">
-            Технологии <span className="text-accent-lime text-glow-lime">эффективности</span>
+          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-8 gradient-text">
+            Технологии <span className="text-accent-lime">эффективности</span>
           </h2>
-          <p className="text-foreground/70 font-medium text-xl max-w-3xl mx-auto">
-            Мы не просто склад. Мы — IT-инфраструктура, которая масштабирует ваш бизнес на маркетплейсах.
+          <p className="text-foreground/70 text-xl md:text-2xl font-medium max-w-4xl mx-auto">
+            Мы не просто склад — мы IT-инфраструктура, которая масштабирует ваш бизнес.
           </p>
         </motion.div>
 
@@ -62,56 +58,43 @@ export const BentoGrid = () => {
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.8 }}
-              
-              // 3D-tilt эффект + micro-interactions
+              transition={{ duration: 0.8, delay: i * 0.15, ease: "easeOut" }}
               whileHover={{ 
-                scale: 1.05,
-                rotateY: 12,
-                rotateX: 8,
-                y: -15,
-                transition: { duration: 0.5, type: "spring", stiffness: 300 }
+                y: -10, 
+                scale: 1.02,
+                transition: { duration: 0.6, ease: "easeOut" }
               }}
-              whileTap={{ scale: 0.98 }}
-              
-              className={`relative overflow-hidden p-10 rounded-[3rem] border backdrop-blur-sm flex flex-col gap-6 group cursor-pointer perspective-1000 ${item.className} glow-pulse`}
-              style={{ transformStyle: "preserve-3d" }}
+              className="glass-card group relative overflow-hidden"
             >
-              {/* Фоновый градиент при hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/10 via-accent-lime/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-800 rounded-[3rem]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-lime/5 to-accent-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               
-              {/* Свечение при hover */}
-              <div className="absolute inset-0 shadow-neon-lime opacity-0 group-hover:opacity-70 transition-opacity duration-700 rounded-[3rem]" />
-
-              <div className="flex items-center gap-5 relative z-10">
-                <motion.div 
-                  whileHover={{ scale: 1.2, rotate: 15 }}
-                  className="p-4 rounded-3xl bg-black/60 border border-accent-lime/40 group-hover:border-accent-lime group-hover:bg-accent-lime/10 transition-all duration-500"
-                >
-                  {item.icon}
-                </motion.div>
-                <h3 className="text-3xl font-black italic uppercase tracking-tighter gradient-text">
+              <div className="relative z-10 p-10 md:p-12 flex flex-col h-full">
+                <div className="mb-8">
+                  <div className="w-20 h-20 rounded-3xl glass bg-white/10 border border-white/20 flex items-center justify-center group-hover:border-accent-lime transition-all duration-500">
+                    {item.icon}
+                  </div>
+                </div>
+                <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-6 tracking-tighter">
                   {item.title}
                 </h3>
-              </div>
-              
-              <p className="text-foreground/80 text-lg font-medium relative z-10 leading-relaxed">
-                {item.desc}
-              </p>
+                <p className="text-foreground/80 text-lg leading-relaxed flex-grow">
+                  {item.desc}
+                </p>
 
-              {item.special === "chart" && (
-                <div className="mt-auto pt-8 flex items-end gap-2 h-32 relative z-10">
-                  {[45, 80, 55, 95, 70, 90].map((h, idx) => (
-                    <motion.div 
-                      key={idx}
-                      initial={{ height: 0 }}
-                      whileInView={{ height: `${h}%` }}
-                      transition={{ delay: 0.8 + (idx * 0.1), duration: 1.2 }}
-                      className="flex-1 bg-gradient-to-t from-accent-lime to-accent-blue rounded-t-lg border-t-4 border-accent-lime/60"
-                    />
-                  ))}
-                </div>
-              )}
+                {item.special === "chart" && (
+                  <div className="mt-12 flex items-end gap-3 h-32">
+                    {[40, 75, 50, 90, 65, 85].map((h, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ height: 0 }}
+                        whileInView={{ height: `${h}%` }}
+                        transition={{ delay: 0.5 + idx * 0.1, duration: 1 }}
+                        className="flex-1 bg-gradient-to-t from-accent-lime/60 to-accent-blue/60 rounded-t-lg"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
