@@ -26,8 +26,8 @@ const testimonials = [
 
 export const Testimonials = () => {
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-24 sm:py-32 px-6">
+      <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -35,10 +35,10 @@ export const Testimonials = () => {
           transition={{ duration: 1 }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-8 text-white">
+          <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
             Что говорят <span className="text-accent-lime">наши клиенты</span>
           </h2>
-          <p className="text-white/70 text-xl md:text-2xl font-medium">
+          <p className="text-white/70 text-lg md:text-xl font-medium text-contained mx-auto">
             250+ селлеров уже доверяют нам свою логистику
           </p>
         </motion.div>
@@ -52,14 +52,14 @@ export const Testimonials = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.2 }}
               whileHover={{ y: -8, transition: { duration: 0.6 } }}
-              className="glass-card glass-hover group p-10 md:p-12"
+              className="glass-card group p-10 md:p-12"
             >
               <div className="flex gap-1 mb-8">
                 {[...Array(t.rating)].map((_, s) => (
                   <Star key={s} className="w-6 h-6 fill-accent-lime text-accent-lime" />
                 ))}
               </div>
-              <p className="text-white/90 text-lg mb-10 leading-relaxed">
+              <p className="text-white/90 text-lg mb-10 leading-relaxed text-contained">
                 "{t.text}"
               </p>
               <div>
