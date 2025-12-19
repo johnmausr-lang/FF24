@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+
+const TELEGRAM_LINK = "https://t.me/manager24ff";
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,11 +12,11 @@ export const Navbar = () => {
   const navLinks = [
     { label: "Услуги", href: "#benefits" },
     { label: "Процесс", href: "#process" },
-    { label: "Заявка", href: "#lead" }, // вместо калькулятора
+    { label: "Заявка", href: "#lead" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-accent-lime/10 px-6 py-5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-2xl border-b border-white/10 px-6 py-5">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Логотип */}
         <motion.a 
@@ -29,7 +30,7 @@ export const Navbar = () => {
         </motion.a>
 
         {/* Десктоп меню */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -39,52 +40,54 @@ export const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <Button 
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-accent-lime text-primary-dark hover:bg-white shadow-neon-lime glow-pulse-lime gradient-border-thick rounded-full px-8 py-4 font-black uppercase text-sm tracking-wider"
+          <a
+            href={TELEGRAM_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-neon px-10 py-5 text-lg"
           >
-            Связаться
-          </Button>
+            Написать в Telegram
+          </a>
         </div>
 
-        {/* Мобильное меню (гамбургер) */}
+        {/* Мобильный гамбургер */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden text-accent-lime"
         >
-          {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+          {mobileMenuOpen ? <X size={36} /> : <Menu size={36} />}
         </button>
       </div>
 
-      {/* Мобильное меню панель */}
+      {/* Мобильное меню */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-accent-lime/20 py-8 px-6"
+            exit={{ opacity: 0, y: -30 }}
+            className="md:hidden absolute top-full left-0 right-0 glass bg-black/90 backdrop-blur-2xl border-b border-white/10 py-10 px-6"
           >
-            <div className="flex flex-col gap-8 items-center">
+            <div className="flex flex-col gap-10 items-center">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-black uppercase tracking-widest text-accent-lime glow-pulse-lime"
+                  className="text-3xl font-black uppercase tracking-widest text-accent-lime glow-pulse-lime"
                 >
                   {link.label}
                 </a>
               ))}
-              <Button 
-                onClick={() => {
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                  setMobileMenuOpen(false);
-                }}
-                className="bg-accent-lime text-primary-dark shadow-neon-lime glow-pulse-lime gradient-border-thick rounded-full px-12 py-6 text-xl font-black uppercase"
+              <a
+                href={TELEGRAM_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="btn-neon px-16 py-8 text-2xl"
               >
-                Связаться
-              </Button>
+                Написать в Telegram
+              </a>
             </div>
           </motion.div>
         )}
