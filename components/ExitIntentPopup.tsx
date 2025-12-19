@@ -36,14 +36,11 @@ export const ExitIntentPopup = () => {
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.9 }}
-          className="glass-card max-w-md w-full p-12 relative"
+          className="glass-card max-w-lg w-full p-12 relative"
           onClick={(e) => e.stopPropagation()}
         >
-          <button
-            onClick={() => setShow(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white"
-          >
-            <X size={28} />
+          <button onClick={() => setShow(false)} className="absolute top-6 right-6 text-white/70 hover:text-white">
+            <X size={32} />
           </button>
 
           <div className="text-center">
@@ -53,12 +50,7 @@ export const ExitIntentPopup = () => {
             <p className="text-white/80 text-lg mb-12">
               Получите персональное предложение со скидкой 10% на первый месяц
             </p>
-            <a
-              href={TELEGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-glass-lime px-12 py-6 text-xl inline-block"
-            >
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary">
               Написать в Telegram
             </a>
           </div>
