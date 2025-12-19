@@ -16,23 +16,24 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav px-6 py-5">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav px-4 py-4 md:px-6 md:py-5">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Логотип в стеклянной рамке на мобильных */}
-        <motion.div className="flex items-center gap-4">
-          <div className="glass p-3 rounded-2xl hidden md:block">
-            <span className="text-3xl md:text-4xl font-black italic tracking-tighter gradient-text">FF24</span>
-          </div>
-          <span className="text-3xl md:text-4xl font-black italic tracking-tighter gradient-text md:hidden">FF24</span>
-        </motion.div>
+        {/* Логотип */}
+        <motion.a 
+          href="/"
+          className="text-2xl md:text-4xl font-black italic tracking-tighter"
+        >
+          <span className="gradient-text">FF</span>
+          <span className="text-accent-lime">24</span>
+        </motion.a>
 
         {/* Десктоп меню */}
-        <div className="hidden md:flex items-center gap-12">
+        <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-bold uppercase tracking-widest text-white/70 hover:text-accent-lime transition-colors"
+              className="text-sm font-medium uppercase tracking-wider text-white/70 hover:text-white transition-colors"
             >
               {link.label}
             </a>
@@ -41,7 +42,7 @@ export const Navbar = () => {
             href={TELEGRAM_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-glass-primary px-10 py-5 text-lg"
+            className="btn-glass-primary px-8 py-3 text-base"
           >
             Написать в Telegram
           </a>
@@ -50,47 +51,47 @@ export const Navbar = () => {
         {/* Мобильный бургер */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden glass p-4 rounded-2xl"
+          className="md:hidden glass p-3 rounded-2xl"
         >
-          <Menu size={28} className="text-white" />
+          <Menu size={24} className="text-white" />
         </button>
       </div>
 
-      {/* Мобильное центрированное меню */}
+      {/* Мобильное меню — центрированное, стеклянное, компактное */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 glass bg-black/80 backdrop-blur-2xl flex items-center justify-center px-6"
+            className="fixed inset-0 z-50 glass bg-black/90 backdrop-blur-2xl flex items-center justify-center px-6"
             onClick={() => setMobileMenuOpen(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="glass-card w-full max-w-md p-12 text-center"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="glass-card w-full max-w-sm p-10 text-center"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="absolute top-6 right-6 text-white/70 hover:text-white"
               >
-                <X size={32} />
+                <X size={28} />
               </button>
 
-              <div className="mb-12">
-                <span className="text-6xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
+              <div className="mb-10">
+                <span className="text-5xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
               </div>
 
-              <div className="space-y-10">
+              <div className="space-y-8">
                 {navLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-3xl font-black uppercase tracking-widest text-white hover:text-accent-lime transition-colors"
+                    className="block text-2xl font-bold uppercase tracking-wide text-white hover:text-accent-lime transition-colors"
                   >
                     {link.label}
                   </a>
@@ -100,7 +101,7 @@ export const Navbar = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block btn-glass-primary px-16 py-8 text-2xl mt-12"
+                  className="block btn-glass-primary px-12 py-6 text-xl mt-10"
                 >
                   Написать в Telegram
                 </a>
