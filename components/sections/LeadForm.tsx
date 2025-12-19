@@ -21,6 +21,7 @@ export const LeadForm = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
@@ -35,6 +36,7 @@ export const LeadForm = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="glass-card p-12 md:p-20 max-w-4xl mx-auto"
         >
           <AnimatePresence mode="wait">
@@ -45,23 +47,23 @@ export const LeadForm = () => {
                     <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
                       <Check className="w-8 h-8 text-accent-lime" />
                     </div>
-                    <p className="text-base md:text-lg font-bold text-white">Расчёт за 24 часа</p>
+                    <p className="text-base md:text-lg font-bold text-white text-tight">Расчёт за 24 часа</p>
                   </div>
                   <div className="flex flex-col items-center gap-4">
                     <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
                       <Check className="w-8 h-8 text-accent-lime" />
                     </div>
-                    <p className="text-base md:text-lg font-bold text-white">Скидка 10% на первый месяц</p>
+                    <p className="text-base md:text-lg font-bold text-white text-tight">Скидка 10% на первый месяц</p>
                   </div>
                   <div className="flex flex-col items-center gap-4">
                     <div className="w-16 h-16 rounded-full glass bg-white/10 border border-white/20 flex items-center justify-center">
                       <Check className="w-8 h-8 text-accent-lime" />
                     </div>
-                    <p className="text-base md:text-lg font-bold text-white">Персональный менеджер</p>
+                    <p className="text-base md:text-lg font-bold text-white text-tight">Персональный менеджер</p>
                   </div>
                 </div>
 
-                <button onClick={handleClick} className="btn-primary">
+                <button onClick={handleClick} className="btn-glass-lime">
                   Написать в Telegram
                 </button>
               </motion.div>
@@ -70,7 +72,7 @@ export const LeadForm = () => {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200 }}
+                  transition={{ type: "spring", stiffness: 200, duration: 1.2 }}
                   className="w-40 h-40 rounded-full glass bg-accent-lime/10 border-4 border-accent-lime mx-auto mb-12 flex items-center justify-center"
                 >
                   <Check className="w-20 h-20 text-accent-lime" />
@@ -78,7 +80,7 @@ export const LeadForm = () => {
                 <h3 className="text-4xl font-black uppercase mb-6 text-white">
                   Готово!
                 </h3>
-                <p className="text-xl text-white/80">
+                <p className="text-xl text-white/80 text-tight">
                   Менеджер напишет вам в Telegram в ближайшее время
                 </p>
               </motion.div>
