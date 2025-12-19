@@ -26,19 +26,18 @@ const testimonials = [
 
 export const Testimonials = () => {
   return (
-    <section className="py-24 sm:py-32 px-6">
+    <section className="py-24">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
-            Что говорят <span className="text-accent-lime">наши клиенты</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Что говорят наши клиенты
           </h2>
-          <p className="text-white/70 text-lg md:text-xl font-medium text-contained mx-auto">
+          <p className="text-white/70 text-lg text-contained">
             250+ селлеров уже доверяют нам свою логистику
           </p>
         </motion.div>
@@ -47,24 +46,23 @@ export const Testimonials = () => {
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 60 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.2 }}
-              whileHover={{ y: -8, transition: { duration: 0.6 } }}
-              className="glass-card group p-10 md:p-12"
+              transition={{ delay: i * 0.1 }}
+              className="card"
             >
-              <div className="flex gap-1 mb-8">
+              <div className="flex gap-1 mb-6">
                 {[...Array(t.rating)].map((_, s) => (
-                  <Star key={s} className="w-6 h-6 fill-accent-lime text-accent-lime" />
+                  <Star key={s} className="w-5 h-5 fill-accent-lime text-accent-lime" />
                 ))}
               </div>
-              <p className="text-white/90 text-lg mb-10 leading-relaxed text-contained">
+              <p className="text-slate-700 text-base mb-8">
                 "{t.text}"
               </p>
               <div>
-                <p className="font-black text-xl text-white">{t.name}</p>
-                <p className="text-white/60 text-sm">{t.role}</p>
+                <p className="font-bold">{t.name}</p>
+                <p className="text-slate-600 text-sm">{t.role}</p>
               </div>
             </motion.div>
           ))}
