@@ -24,99 +24,83 @@
   body {
     @apply bg-black text-white overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
+  /* Исправленный контейнер для идеальной симметрии */
   .container {
-    @apply max-w-[1200px] mx-auto px-6 lg:px-12;
+    @apply w-full max-w-[1240px] mx-auto px-6 lg:px-12;
   }
 
-  /* Премиум жидкое стекло — прямые свойства */
+  /* Премиум жидкое стекло */
   .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .glass-nav {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-menu {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 3rem;
-    padding: 3rem 5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Кнопки — прямые свойства */
-  .btn-glass {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 9999px;
-    padding: 1.5rem 3rem;
-    transition: all 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #E0FF64;
+    box-shadow: 0 0 40px rgba(224, 255, 100, 0.1);
+    transform: translateY(-4px);
   }
 
-  @media (min-width: 640px) {
-    .btn-glass {
-      width: auto;
-    }
+  /* Текст с градиентом */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-blue;
+    background-size: 200% auto;
+    animation: shine 8s linear infinite;
   }
 
-  .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
-  }
-
+  /* Кнопки с адаптацией ширины */
   .btn-glass-lime {
-    background: rgba(224, 255, 100, 0.1);
-    border: 1px solid rgba(224, 255, 100, 0.3);
-    color: #E0FF64;
+    background: #E0FF64;
+    color: #1E1B4B;
     font-weight: 900;
     text-transform: uppercase;
+    font-style: italic;
     letter-spacing: 0.05em;
     border-radius: 9999px;
     padding: 1.5rem 3rem;
-    transition: all 0.5s ease-out;
-    display: flex;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 100%; /* На мобилках на всю ширину */
+    border: 2px solid transparent;
   }
 
   @media (min-width: 640px) {
     .btn-glass-lime {
-      width: auto;
+      width: auto; /* На десктопе по размеру текста */
     }
   }
 
   .btn-glass-lime:hover {
-    background: rgba(224, 255, 100, 0.2);
-    border-color: #E0FF64;
+    background: #ffffff;
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(224, 255, 100, 0.4);
   }
 
   .btn-glass-secondary {
@@ -127,9 +111,9 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-radius: 9999px;
-    padding: 1.5rem 3rem;
+    padding: 1.25rem 2.5rem;
     transition: all 0.5s ease-out;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -143,36 +127,54 @@
 
   .btn-glass-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: white;
   }
 
-  .btn-glass-large {
-    padding: 2rem 4rem;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+  /* Утилиты для текста */
+  .text-contained {
+    @apply max-w-[600px] mx-auto break-words;
+  }
+
+  .text-glow-lime {
+    text-shadow: 0 0 20px rgba(224, 255, 100, 0.5);
   }
 }
 
 @layer utilities {
-  .text-contained {
-    @apply max-w-3xl mx-auto text-center leading-relaxed;
+  @keyframes shine {
+    to { background-position: 200% center; }
   }
 
-  .text-tight {
-    @apply max-w-xl mx-auto text-center leading-relaxed;
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.4; filter: blur(100px); }
+    50% { opacity: 0.7; filter: blur(130px); }
   }
 
-  .gradient-text {
-    background: linear-gradient(90deg, #2563EB, #E0FF64);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradient-shift 15s ease infinite;
+  .glow-pulse-lime {
+    animation: glow-pulse 6s ease-in-out infinite;
   }
 
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  /* Фикс для предотвращения горизонтального скролла от анимаций */
+  .prevent-overflow {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E0FF64;
 }
