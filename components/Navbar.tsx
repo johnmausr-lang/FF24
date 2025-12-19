@@ -20,7 +20,7 @@ export const Navbar = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 glass-nav">
         <div className="container flex justify-between items-center h-16">
           <motion.div className="text-3xl font-black italic tracking-tighter">
-            <span className="text-accent-lime">FF</span>
+            <span className="gradient-text">FF</span>
             <span className="text-white">24</span>
           </motion.div>
 
@@ -35,7 +35,7 @@ export const Navbar = () => {
             </a>
           </div>
 
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden">
+          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden glass p-3 rounded-full">
             <Menu size={28} className="text-white" />
           </button>
         </div>
@@ -50,12 +50,12 @@ export const Navbar = () => {
             className="fixed top-0 left-0 right-0 z-50 glass-menu pt-20 pb-12 px-6"
           >
             <div className="container relative">
-              <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-0">
+              <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-0 glass p-3 rounded-full">
                 <X size={28} className="text-white" />
               </button>
 
               <div className="text-center mb-12">
-                <span className="text-5xl font-black italic uppercase tracking-tighter text-accent-lime">FF24</span>
+                <span className="text-5xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
               </div>
 
               <div className="flex flex-col items-center gap-8">
@@ -64,7 +64,7 @@ export const Navbar = () => {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-2xl font-bold uppercase tracking-wide text-white hover:text-accent-lime transition"
+                    className="btn-secondary w-full max-w-sm"
                   >
                     {link.label}
                   </a>
