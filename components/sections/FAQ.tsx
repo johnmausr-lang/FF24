@@ -18,20 +18,16 @@ const faqs = [
     a: "Wildberries, Ozon, Яндекс.Маркет — по моделям FBO и FBS.",
   },
   {
-    q: "Есть ли минимальный объём заказа?",
-    a: "Работаем с любыми объёмами. Минимальная стоимость обработки поставки — 1500 ₽.",
-  },
-  {
-    q: "Как получить расчёт?",
-    a: "Напишите в Telegram @manager24ff — менеджер сделает персональный расчёт за 24 часа.",
+    q: "Есть ли минимальный объём?",
+    a: "Работаем с любыми объёмами. Минимальная стоимость обработки — 1500 ₽.",
   },
 ];
 
 export const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-32 px-6 relative">
+    <section className="py-32 px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -39,8 +35,8 @@ export const FAQ = () => {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-8 gradient-text">
-            Частые вопросы
+          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-8 text-white">
+            Часто задаваемые вопросы
           </h2>
         </motion.div>
 
@@ -56,14 +52,16 @@ export const FAQ = () => {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full p-8 md:p-10 flex items-center justify-between text-left"
+                className="w-full p-8 md:p-12 flex items-center justify-between text-left"
               >
-                <span className="text-2xl md:text-3xl font-black pr-8">{faq.q}</span>
+                <span className="text-2xl md:text-3xl font-black pr-8 text-white">
+                  {faq.q}
+                </span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <ChevronDown className="w-8 h-8 text-accent-lime" />
+                  <ChevronDown className="w-8 h-8 text-white/70 group-hover:text-accent-lime transition-colors" />
                 </motion.div>
               </button>
 
@@ -73,10 +71,10 @@ export const FAQ = () => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    transition={{ duration: 0.5 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-8 md:px-10 pb-10 text-foreground/80 text-lg leading-relaxed">
+                    <p className="px-8 md:px-12 pb-12 text-white/70 text-lg leading-relaxed">
                       {faq.a}
                     </p>
                   </motion.div>
