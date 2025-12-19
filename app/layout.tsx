@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import { ReactLenis } from "lenis/react";
 import { Suspense } from "react";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { ExitIntentPopup } from "@/components/ExitIntentPopup"; // Попап при выходе
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
+import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -39,8 +40,11 @@ export default function RootLayout({
           </Suspense>
         </ReactLenis>
 
-        {/* Exit-intent попап — работает на всей сайте */}
+        {/* Exit-intent попап при попытке уйти */}
         <ExitIntentPopup />
+
+        {/* Плавающая кнопка Telegram в правом нижнем углу */}
+        <FloatingTelegramButton />
       </body>
     </html>
   );
