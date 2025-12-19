@@ -1,16 +1,20 @@
+// app/layout.tsx
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { ReactLenis } from "lenis/react";
+import { Suspense } from "react";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { ExitIntentPopup } from "@/components/ExitIntentPopup"; // Попап при выходе
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin", "cyrillic"],
-  display: 'swap', 
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "FF24 | Фулфилмент Нового Поколения",
   description: "Автоматизированная логистика для маркетплейсов. Приемка, упаковка и отгрузка за 24 часа.",
-  manifest: "/manifest.json", // Необязательно, если нет файла
 };
 
 export const viewport: Viewport = {
@@ -27,8 +31,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className="scroll-smooth">
-      <body className={`${inter.className} bg-black text-white antialiased selection:bg-accent-DEFAULT selection:text-black`}>
-        {children}
+      <head />
+      <body className={`${inter.className} bg-black text-white antialiased selection:bg-[#E0FF64] selection:text-[#1E1B4B] overflow-x-hidden min-h-screen`}>
+        <ReactLenis root>
+          <Suspense fallback={<LoadingScreen />}>
+            {children}
+          </Suspense>
+        </ReactLenis>
+
+        {/* Exit-intent попап — работает на всей сайте */}
+        <ExitIntentPopup />
       </body>
     </html>
   );
