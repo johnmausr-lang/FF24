@@ -27,15 +27,15 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-24 sm:py-32 px-6">
+    <section className="py-24">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-6xl font-black italic uppercase mb-8 text-white">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Часто задаваемые вопросы
           </h2>
         </motion.div>
@@ -48,20 +48,20 @@ export const FAQ = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card group"
+              className="card"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full p-8 md:p-12 flex items-center justify-between text-left"
+                className="w-full p-8 flex items-center justify-between text-left"
               >
-                <span className="text-xl md:text-2xl font-black text-white pr-8">
+                <span className="text-xl font-bold text-slate-900 pr-8">
                   {faq.q}
                 </span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <ChevronDown className="w-8 h-8 text-white/70 group-hover:text-accent-lime transition-colors" />
+                  <ChevronDown className="w-6 h-6 text-slate-900" />
                 </motion.div>
               </button>
 
@@ -74,7 +74,7 @@ export const FAQ = () => {
                     transition={{ duration: 0.5 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-8 md:px-12 pb-12 text-white/70 text-lg leading-relaxed text-contained">
+                    <p className="px-8 pb-8 text-slate-700">
                       {faq.a}
                     </p>
                   </motion.div>
