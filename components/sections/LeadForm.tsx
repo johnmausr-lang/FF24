@@ -35,7 +35,7 @@ export const LeadForm = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="glass-card p-12 md:p-20"
+          className="glass-card p-12 md:p-20 max-w-4xl mx-auto"
         >
           <AnimatePresence mode="wait">
             {!submitted ? (
