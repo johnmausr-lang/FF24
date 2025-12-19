@@ -32,7 +32,7 @@
     @apply max-w-[1200px] mx-auto px-6 lg:px-12;
   }
 
-  /* Премиум жидкое стекло — высокое качество */
+  /* Премиум жидкое стекло */
   .glass {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(40px);
@@ -48,12 +48,11 @@
     @apply glass bg-white/8 backdrop-blur-3xl border border-white/20;
   }
 
-  /* Стеклянные карточки — премиум качество */
   .glass-card {
     @apply glass rounded-[3rem] p-12 md:p-20 shadow-2xl border border-white/15;
   }
 
-  /* Кнопки в рамке жидкого стекла — по всему сайту */
+  /* Кнопки в рамке жидкого стекла */
   .btn-glass {
     @apply glass bg-white/8 hover:bg-white/12 border border-white/20 hover:border-white/30 text-white font-bold uppercase tracking-wider rounded-full px-12 py-6 transition-all duration-500 ease-out flex items-center justify-center w-full sm:w-auto text-base md:text-lg;
   }
