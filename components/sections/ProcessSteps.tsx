@@ -31,7 +31,7 @@ export const ProcessSteps = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white"
+            className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white"
           >
             Процесс работы
           </motion.h2>
@@ -60,11 +60,11 @@ export const ProcessSteps = () => {
                   </div>
                 </div>
 
-                <h3 className="text-4xl md:text-5xl font-black italic uppercase mb-6 text-white">
+                <h3 className="text-3xl md:text-4xl font-black italic uppercase mb-6 text-white">
                   {step.title}
                 </h3>
 
-                <p className="text-white/70 text-xl leading-relaxed flex-grow">
+                <p className="text-white/70 text-lg leading-relaxed text-contained flex-grow">
                   {step.desc}
                 </p>
               </div>
