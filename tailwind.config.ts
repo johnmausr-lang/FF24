@@ -6,22 +6,6 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/sections/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    "glass",
-    "glass-card",
-    "glass-hover",
-    "glass-nav",
-    "glass-menu",
-    "btn-glass",
-    "btn-glass-lime",
-    "glow-lime",
-    "gradient-text",
-    "text-contained",
-    "container",
-    { pattern: /text-(white|accent-lime)/ },
-    { pattern: /border-(white|accent-lime)/ },
-    { pattern: /bg-(white|accent-lime)/ },
-  ],
   theme: {
     extend: {
       colors: {
@@ -34,10 +18,6 @@ const config: Config = {
           blue: "hsl(var(--accent-blue))",
           lime: "hsl(var(--accent-lime))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
         border: "hsl(var(--border))",
       },
       borderRadius: {
@@ -45,8 +25,33 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      backgroundImage: {
+        "glass-gradient": "linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01))",
+      },
+      animation: {
+        "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "shine": "shine 8s linear infinite",
+      },
+      keyframes: {
+        shine: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+      },
     },
   },
+  safelist: [
+    "glass",
+    "glass-nav",
+    "glass-card",
+    "glass-menu",
+    "glass-heavy",
+    "btn-glass-lime",
+    "btn-glass-secondary",
+    "gradient-text",
+    "container",
+  ],
   plugins: [require("tailwindcss-animate")],
 };
 
