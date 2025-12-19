@@ -58,7 +58,7 @@ export const Hero = () => {
             transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center items-center"
           >
-            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime w-full sm:w-auto text-center">
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime">
               Получить расчёт
             </a>
           </motion.div>
