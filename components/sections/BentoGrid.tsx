@@ -36,13 +36,7 @@ export const BentoGrid = () => {
   return (
     <section id="benefits" className="py-32 bg-black relative">
       <div className="container">
-        <motion.div className="mb-20">
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-6 tracking-tighter">
-            Почему выбирают <span className="text-accent-lime">FF24</span>
-          </h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((item, i) => (
             <motion.div
               key={i}
@@ -51,7 +45,7 @@ export const BentoGrid = () => {
               viewport={{ once: true }}
               className={`relative glass-card p-10 flex flex-col justify-between group overflow-hidden ${item.grid}`}
             >
-              {/* Видео внутри каждой карточки */}
+              {/* ВИДЕО SERVICE-BG ДЛЯ ВНУТРЕННЕГО КОНТЕНТА */}
               <GlassVideo 
                 src="/videos/service-bg.webm" 
                 opacity={0.3} 
@@ -70,13 +64,17 @@ export const BentoGrid = () => {
               {item.special === "chart" && (
                 <div className="mt-12 flex items-end gap-2 h-24 relative z-10">
                   {[40, 70, 45, 90, 65, 80].map((h, idx) => (
-                    <div key={idx} style={{ height: `${h}%` }} className="flex-1 bg-accent-lime/40 rounded-t-sm" />
+                    <div 
+                      key={idx} 
+                      style={{ height: `${h}%` }} 
+                      className="flex-1 bg-accent-lime/40 rounded-t-sm group-hover:bg-accent-lime transition-all duration-700"
+                    />
                   ))}
                 </div>
               )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
