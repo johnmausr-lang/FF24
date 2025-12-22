@@ -32,7 +32,7 @@
     @apply max-w-[1300px] mx-auto px-6 lg:px-12;
   }
 
-  /* --- СТЕКЛО (Улучшенное Жидкое Стекло) --- */
+  /* Улучшенное Жидкое Стекло */
   .glass {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(30px);
@@ -42,13 +42,13 @@
   }
 
   .glass-card {
+    @apply relative overflow-hidden border border-white/10;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Фикс для Safari: обрезка видео по радиусу */
+    /* Фикс для Safari */
     mask-image: radial-gradient(white, black);
     -webkit-mask-image: -webkit-radial-gradient(white, black);
   }
@@ -60,7 +60,7 @@
                 inset 0 0 20px rgba(224, 255, 100, 0.05);
   }
 
-  /* --- КНОПКИ --- */
+  /* Кнопки */
   .btn-glass-lime {
     @apply glass bg-accent-lime/10 text-accent-lime font-black uppercase tracking-widest 
     px-10 py-6 rounded-full border-accent-lime/30 hover:bg-accent-lime hover:text-black 
@@ -74,7 +74,7 @@
     transition-all duration-500 flex items-center justify-center text-sm;
   }
 
-  /* --- ТИПОГРАФИКА --- */
+  /* Типографика */
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-lime;
     background-size: 200% auto;
@@ -88,7 +88,6 @@
 }
 
 @layer utilities {
-  /* Тот самый Mesh, который "подсветит" сайт изнутри */
   .bg-mesh {
     background-image: 
       radial-gradient(at 0% 0%, hsla(252, 100%, 18%, 0.15) 0, transparent 50%), 
@@ -97,7 +96,7 @@
     background-attachment: fixed;
   }
 
-  /* Оптимизация для видео под стеклом */
+  /* Для плавной работы видео под блюром */
   .backdrop-transform {
     transform: translateZ(0);
     backface-visibility: hidden;
