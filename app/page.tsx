@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
@@ -11,18 +12,24 @@ import { LeadForm } from "@/components/sections/LeadForm";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 
-// Интерактивные компоненты UI (Проверьте, что они лежат в src/components/ui/ или components/ui/)
-import { ExitIntentPopup } from "@/components/ui/ExitIntentPopup"; 
-import { LoadingScreen } from "@/components/ui/LoadingScreen";
-import { ParticlesBackground } from "@/components/ui/ParticlesBackground";
+// Интерактив и компоненты удержания (Исправленные пути)
+import { ExitIntentPopup } from "@/components/ExitIntentPopup"; 
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-accent-lime selection:text-black antialiased overflow-x-hidden">
-      <LoadingScreen />
       
-      {/* Глобальный фон */}
-      <div className="fixed inset-0 z-0 bg-mesh pointer-events-none opacity-40" />
+      {/* Экран загрузки */}
+      <AnimatePresence mode="wait">
+        <LoadingScreen key="loader" />
+      </AnimatePresence>
+
+      {/* Глобальный фон Mesh Gradient */}
+      <div className="fixed inset-0 z-0 bg-mesh pointer-events-none opacity-40 backdrop-transform" />
+
+      {/* Частицы на фоне */}
       <ParticlesBackground />
 
       <Navbar />
@@ -31,7 +38,12 @@ export default function LandingPage() {
         <Hero />
         <BentoGrid />
         <ProcessSteps />
-        <LeadForm />
+        
+        <section className="relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-accent-lime/30 to-transparent" />
+          <LeadForm />
+        </section>
+        
         <Testimonials />
         <FAQ />
       </main>
@@ -40,7 +52,7 @@ export default function LandingPage() {
       <ExitIntentPopup />
 
       {/* Эффект шума */}
-      <div className="fixed inset-0 z-[99] pointer-events-none opacity-[0.02] bg-[url('/noise.png')] mix-blend-overlay" />
+      <div className="fixed inset-0 z-[99] pointer-events-none opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay" />
     </div>
   );
 }
