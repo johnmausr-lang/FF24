@@ -1,78 +1,52 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 import { GlassVideo } from "@/components/ui/GlassVideo";
 
-const testimonials = [
-  {
-    name: "Александр В.",
-    role: "Seller WB (Оборот 12 млн/мес)",
-    text: "Перешел в FF24 после проблем на старом складе. Здесь всё четко: приемка день в день, никаких потерь. Личный менеджер всегда на связи.",
-    rating: 5
-  },
-  {
-    name: "Елена М.",
-    role: "Бренд одежды (Ozon)",
-    text: "Идеальная упаковка. За счет их оптимизации коробов снизили логистические затраты на 15%. Для одежды это критично.",
-    rating: 5
-  },
-  {
-    name: "Игорь Д.",
-    role: "Электроника (FBS)",
-    text: "Система уведомлений в телеграм — это спасение. Вижу каждый шаг своего товара. Рекомендую профессионалам.",
-    rating: 5
-  }
-];
-
 export const Testimonials = () => {
+  const [reviews, setReviews] = useState([
+    { author: "Александр В.", text: "Отличный фулфилмент! Маркировка Честным Знаком прошла без ошибок.", rating: 5, date: "12.12.2024" },
+    { author: "Мария С.", text: "Скорость отгрузки впечатляет, товар на WB появился через день.", rating: 5, date: "10.12.2024" },
+    { author: "Дмитрий", text: "Работаем по FBS, забор товара всегда вовремя. Рекомендую.", rating: 5, date: "08.12.2024" },
+  ]);
+
   return (
-    <section className="py-32 bg-black relative overflow-hidden">
-      <div className="container">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-          <div className="max-w-2xl">
-            <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">
-              Голоса <span className="text-accent-lime text-outline-white">Лидеров</span>
-            </h2>
-            <p className="text-white/40 uppercase tracking-[0.3em] font-bold text-sm">Нам доверяют 500+ активных селлеров</p>
-          </div>
-        </div>
+    <section className="relative py-40 bg-black overflow-hidden min-h-screen flex flex-col justify-center">
+      {/* Внутреннее видео фона для сервисных секций */}
+      <GlassVideo 
+        src="/videos/service-bg.webm" 
+        opacity={0.2} 
+      />
+
+      <div className="container relative z-10">
+        <h2 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter mb-20 text-right">
+          ОТЗЫВЫ / <span className="text-accent-lime">CLIENTS</span>
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <motion.div
+          {reviews.map((rev, i) => (
+            <motion.div 
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="relative min-h-[400px] rounded-[3rem] p-[2px] overflow-hidden group"
+              whileHover={{ y: -10 }}
+              className="glass-card p-10 relative overflow-hidden group"
             >
-              {/* Видео-фон для карточки отзыва */}
-              <GlassVideo 
-                src="/videos/service-bg.webm" 
-                opacity={0.15} 
-                blur="blur-[30px]" 
-                overlayColor="bg-black/60"
-              />
+              <Quote className="absolute -top-4 -right-4 text-white/5 group-hover:text-accent-lime/10 transition-colors" size={120} />
               
-              <div className="relative z-10 h-full w-full bg-white/[0.03] backdrop-blur-[40px] rounded-[3rem] p-10 flex flex-col border border-white/5 group-hover:border-accent-lime/30 transition-colors duration-500">
-                <Quote className="absolute top-8 right-8 text-white/5 group-hover:text-accent-lime/20 transition-colors duration-700" size={80} />
-                
-                <div className="flex gap-1 mb-8">
-                  {[...Array(t.rating)].map((_, idx) => (
-                    <Star key={idx} size={16} className="fill-accent-lime text-accent-lime" />
-                  ))}
-                </div>
+              <div className="flex gap-1 mb-6">
+                {[...Array(5)].map((_, s) => (
+                  <Star key={s} size={14} className={s < rev.rating ? "fill-accent-lime text-accent-lime" : "text-white/10"} />
+                ))}
+              </div>
 
-                <p className="text-xl text-white/80 leading-relaxed italic mb-10 relative z-10">
-                  "{t.text}"
-                </p>
+              <p className="text-white/60 text-sm italic uppercase leading-relaxed mb-8 relative z-10">
+                "{rev.text}"
+              </p>
 
-                <div className="mt-auto">
-                  <p className="text-white font-black uppercase tracking-wider">{t.name}</p>
-                  <p className="text-accent-lime/60 text-xs font-bold uppercase tracking-widest mt-1">{t.role}</p>
-                </div>
+              <div className="flex justify-between items-center border-t border-white/5 pt-6">
+                <span className="font-bold uppercase tracking-tighter text-accent-lime">{rev.author}</span>
+                <span className="text-[10px] font-mono text-white/20 uppercase">{rev.date}</span>
               </div>
             </motion.div>
           ))}
