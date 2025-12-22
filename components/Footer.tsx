@@ -14,18 +14,19 @@ export const Footer = () => {
 
   return (
     <footer className="relative mt-20 border-t border-white/10 overflow-hidden">
-      {/* Мягкая подсветка футера сверху */}
+      {/* Световой акцент на верхней границе */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-accent-lime/50 to-transparent" />
       
-      <div className="glass bg-white/[0.02] backdrop-blur-3xl pt-24 pb-12">
+      {/* Слой стекла с усиленным блюром */}
+      <div className="glass bg-white/[0.02] backdrop-blur-3xl pt-24 pb-12 backdrop-transform">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
             
-            {/* Блок Лого и Описание */}
+            {/* Блок Лого */}
             <div className="md:col-span-5 flex flex-col items-center md:items-start">
               <Link href="/" className="inline-block mb-10 group">
                 <div className="text-6xl md:text-7xl font-black italic uppercase tracking-tighter leading-none">
-                  <span className="gradient-text">FF</span>
+                  <span className="gradient-text transition-all duration-500 group-hover:brightness-125">FF</span>
                   <span className="text-white group-hover:text-accent-lime transition-colors duration-500">24</span>
                 </div>
               </Link>
@@ -76,14 +77,19 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Копирайт и юридическая инфа */}
+          {/* Нижняя панель с защитой от 404 */}
           <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.5em] text-white/20">
             <div>
               © 2025 FF24 FULFILLMENT. ALL RIGHTS RESERVED.
             </div>
             <div className="flex gap-12">
-              <Link href="/privacy" className="hover:text-white transition-colors">Политика</Link>
-              <Link href="/terms" className="hover:text-white transition-colors">Оферта</Link>
+              {/* prefetch={false} отключает попытку Next.js загрузить несуществующие файлы */}
+              <Link href="/privacy" prefetch={false} className="hover:text-white transition-colors">
+                Политика
+              </Link>
+              <Link href="/terms" prefetch={false} className="hover:text-white transition-colors">
+                Оферта
+              </Link>
             </div>
           </div>
         </div>
