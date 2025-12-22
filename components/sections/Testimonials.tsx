@@ -28,27 +28,34 @@ const testimonials = [
 export const Testimonials = () => {
   return (
     <section className="py-32 bg-black relative overflow-hidden">
-      <div className="container">
+      {/* ФОН СЕКЦИИ */}
+      <GlassVideo 
+        src="/videos/service-bg.webm" 
+        opacity={0.2} 
+        playbackRate={0.4}
+      />
+
+      <div className="container relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
             <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">
-              Голоса <span className="text-accent-lime text-outline-white">Лидеров</span>
+              Голоса <span className="text-accent-lime">рынка</span>
             </h2>
-            <p className="text-white/40 uppercase tracking-[0.3em] font-bold text-sm">Нам доверяют 500+ активных селлеров</p>
+            <p className="text-white/40 text-lg uppercase tracking-widest font-bold">Те, кто уже масштабировался с нами</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="relative min-h-[400px] rounded-[3rem] p-[2px] overflow-hidden group"
+              className="relative h-[400px] rounded-[3rem] p-[2px] overflow-hidden group"
             >
-              {/* Видео-фон для карточки отзыва */}
+              {/* ВИДЕО ВНУТРИ КАРТОЧКИ */}
               <GlassVideo 
                 src="/videos/service-bg.webm" 
                 opacity={0.15} 
