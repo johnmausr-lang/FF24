@@ -1,3 +1,4 @@
+// sections/Hero.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -10,7 +11,6 @@ const TELEGRAM_LINK = "https://t.me/manager24ff";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
-      {/* Видео-подложка для Hero */}
       <GlassVideo 
         src="/videos/hero-bg.webm" 
         opacity={0.5} 
@@ -18,10 +18,10 @@ export const Hero = () => {
       />
       
       <ParticlesBackground />
-
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black z-[5]" />
 
       <div className="container relative z-10">
+        {/* Контент остается без изменений */}
         <div className="flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -34,9 +34,7 @@ export const Hero = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-lime opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-lime"></span>
               </span>
-              <span className="text-white/60 text-xs font-black uppercase tracking-[0.3em]">
-                System Status: Active
-              </span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">System Online: Ready for Scale</span>
             </div>
 
             <h1 className="text-7xl md:text-[120px] font-black italic uppercase tracking-tighter leading-none mb-6">
@@ -67,9 +65,6 @@ export const Hero = () => {
             <a href={TELEGRAM_LINK} target="_blank" className="btn-glass-lime group">
               Запустить процесс
               <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" size={24} />
-            </a>
-            <a href="#benefits" className="btn-glass-secondary">
-              Изучить услуги
             </a>
           </motion.div>
         </div>
