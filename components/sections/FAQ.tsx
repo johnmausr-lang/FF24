@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { GlassVideo } from "@/components/ui/GlassVideo";
 
 const faqs = [
   {
@@ -27,8 +28,16 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 bg-black">
-      <div className="container max-w-4xl">
+    <section className="py-32 bg-black relative overflow-hidden">
+      {/* Общий видео-фон для всей секции FAQ */}
+      <GlassVideo 
+        src="/videos/process-bg.webm" 
+        opacity={0.1} 
+        blur="blur-[100px]" 
+        overlayColor="bg-black/80"
+      />
+
+      <div className="container max-w-4xl relative z-10">
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">FAQ</h2>
           <p className="text-white/40 uppercase tracking-[0.3em] font-bold text-sm">Ответы на критические вопросы</p>
@@ -36,7 +45,7 @@ export const FAQ = () => {
 
         <div className="space-y-4">
           {faqs.map((faq, i) => (
-            <div key={i} className="glass-card !rounded-2xl overflow-hidden border-white/5">
+            <div key={i} className="glass-card !rounded-2xl overflow-hidden border-white/5 backdrop-blur-xl">
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full p-8 flex items-center justify-between text-left group transition-all"
