@@ -13,8 +13,15 @@
     --radius: 3rem;
   }
 
-  html { scroll-behavior: smooth; }
-  * { @apply border-border box-border; margin: 0; padding: 0; }
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border box-border;
+    margin: 0;
+    padding: 0;
+  }
 
   body {
     @apply bg-black text-white antialiased overflow-x-hidden;
@@ -24,8 +31,11 @@
 }
 
 @layer components {
-  .container { @apply max-w-[1300px] mx-auto px-6 lg:px-12; }
+  .container {
+    @apply max-w-[1300px] mx-auto px-6 lg:px-12;
+  }
 
+  /* Улучшенное Жидкое Стекло */
   .glass {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(30px);
@@ -33,30 +43,90 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
+  /* Основной стиль карточек в проекте */
   .glass-card {
     @apply relative overflow-hidden border border-white/10;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border-radius: var(--radius);
     transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
   }
 
+  .glass-card:hover {
+    border-color: rgba(224, 255, 100, 0.4);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Анимированный градиентный текст */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-lime;
+    background-size: 200% auto;
+    animation: shine 5s linear infinite;
+  }
+
+  /* Контурный текст для акцентов */
   .text-outline-white {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     color: transparent;
   }
+
+  /* Стили для кнопок в стиле Lime */
+  .btn-glass-lime {
+    @apply flex items-center justify-center bg-accent-lime text-black font-black uppercase italic tracking-tighter transition-all duration-300;
+    border-radius: calc(var(--radius) / 2);
+  }
+  
+  .btn-glass-lime:hover {
+    @apply bg-white scale-[1.02];
+    box-shadow: 0 0 30px rgba(224, 255, 100, 0.4);
+  }
 }
 
 @layer utilities {
+  /* Сетка-градиент для фона */
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(252, 100%, 18%, 0.15) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(78, 100%, 70%, 0.1) 0, transparent 50%),
+      radial-gradient(at 50% 100%, hsla(217, 91%, 60%, 0.1) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Для корректной работы 3D и блюра в браузерах */
+  .backdrop-transform {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: backdrop-filter;
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Свечение для рельсов и элементов */
+  .conveyor-glow {
+    box-shadow: 0 0 30px rgba(224, 255, 100, 0.2);
+  }
+
+  /* Маскировка краев для плавного исчезновения контента */
   .mask-edges {
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   }
 
+  /* Утилита для фиксации перспективы в 3D */
   .perspective-fix {
     transform: translateZ(0);
     backface-visibility: hidden;
   }
 
-  ::-webkit-scrollbar { display: none; }
+  /* Скрытие системного скроллбара */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Кастомные кейфреймы, если Tailwind их не подхватил */
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
