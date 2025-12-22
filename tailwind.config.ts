@@ -30,7 +30,8 @@ const config: Config = {
         "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "float": "float 6s ease-in-out infinite",
         "shine": "shine 5s linear infinite",
-        "conveyor-flow": "conveyor-flow 20s linear infinite",
+        "conveyor-loop": "conveyor-loop 20s linear infinite",
+        "spin-slow": "spin 10s linear infinite",
       },
       keyframes: {
         float: {
@@ -42,7 +43,7 @@ const config: Config = {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
-        "conveyor-flow": {
+        "conveyor-loop": {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
@@ -52,7 +53,6 @@ const config: Config = {
         "3xl": "60px",
         "4xl": "80px",
       },
-      // Добавлено для управления трансформациями из JS
       transformOrigin: {
         'left-center': '0% 50%',
       }
