@@ -1,120 +1,115 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import {
   ClipboardList, Truck, HardHat, Factory,
-  PackageCheck, Download, CheckCircle2
+  PackageCheck, Download, CheckCircle2, Settings
 } from "lucide-react";
 import { GlassVideo } from "@/components/ui/GlassVideo";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация ТЗ", icon: <ClipboardList size={32} /> },
-  { title: "Забор", desc: "Логистика", icon: <Truck size={32} /> },
-  { title: "Приёмка", desc: "Контроль брака", icon: <HardHat size={32} /> },
-  { title: "Маркировка", desc: "Честный Знак", icon: <Factory size={32} /> },
-  { title: "Упаковка", desc: "Подготовка", icon: <PackageCheck size={32} /> },
-  { title: "Отгрузка", desc: "Склад МП", icon: <Download size={32} className="rotate-180" /> },
-  { title: "Финиш", desc: "Готов к продаже", icon: <CheckCircle2 size={32} /> },
+  { title: "Заявка", desc: "Регистрация ТЗ", icon: <ClipboardList size={24} /> },
+  { title: "Забор", desc: "Логистика", icon: <Truck size={24} /> },
+  { title: "Приёмка", desc: "Контроль брака", icon: <HardHat size={24} /> },
+  { title: "Маркировка", desc: "Честный Знак", icon: <Factory size={24} /> },
+  { title: "Упаковка", desc: "Подготовка", icon: <PackageCheck size={24} /> },
+  { title: "Отгрузка", desc: "Склад МП", icon: <Download size={24} className="rotate-180" /> },
+  { title: "Финиш", desc: "Готов к продаже", icon: <CheckCircle2 size={24} /> },
 ];
 
+// Дублируем шаги для бесшовной зацикленной анимации
+const doubledSteps = [...steps, ...steps];
+
 export const ProcessSteps = () => {
-  const targetRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 35,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  // Движение всей ленты конвейера
-  const xTransform = useTransform(smoothProgress, [0, 1], ["0%", "-75%"]);
-
   return (
-    <section id="process" ref={targetRef} className="relative h-[500vh] bg-black overflow-hidden">
-      <div className="sticky top-0 h-screen flex flex-col justify-center">
+    <section id="process" className="relative py-32 bg-black overflow-hidden h-[850px] flex flex-col justify-center">
+      
+      {/* Заголовок секции */}
+      <div className="container relative z-40 mb-20">
+        <h2 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter">
+          КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
+        </h2>
+      </div>
+
+      {/* Основная 3D конструкция */}
+      <div className="relative w-full perspective-[2000px]">
         
-        {/* Заголовок секции */}
-        <div className="container relative z-40 mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter"
-          >
-            КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
-          </motion.h2>
+        {/* Корпус станины конвейера */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[110%] h-[320px] z-10">
+          {/* Верхняя стеклянная грань */}
+          <div className="absolute inset-0 bg-white/[0.03] rounded-[3rem] border-t border-white/10 backdrop-blur-sm" />
+          
+          {/* Нижняя техническая панель с неоновой линией */}
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-black/60 border-b border-accent-lime/20 rounded-b-[3rem] flex items-center px-24">
+             <div className="w-full h-[2px] bg-accent-lime/10 relative overflow-hidden">
+                <motion.div 
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 w-1/4 bg-accent-lime shadow-[0_0_15px_#E0FF64]" 
+                />
+             </div>
+          </div>
+
+          {/* Декоративные вращающиеся элементы (ролики) */}
+          <div className="absolute left-12 top-1/2 -translate-y-1/2 opacity-20 animate-spin-slow">
+             <Settings size={80} className="text-accent-lime" />
+          </div>
         </div>
 
-        {/* Конструкция конвейера */}
-        <div className="relative w-full h-[500px] flex items-center">
-          
-          {/* Основная станина конвейера (черная база) */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-40 bg-white/[0.02] border-y border-white/5 backdrop-blur-sm z-10" />
-
-          {/* Светящиеся рельсы (как на картинке) */}
-          <div className="absolute inset-x-0 top-[40%] h-px bg-accent-lime/20 z-20 shadow-[0_0_20px_rgba(224,255,100,0.2)]" />
-          <div className="absolute inset-x-0 top-[60%] h-px bg-accent-lime/20 z-20 shadow-[0_0_20px_rgba(224,255,100,0.2)]" />
-          
-          {/* Динамическая линия движения */}
-          <motion.div 
-            style={{ scaleX: smoothProgress }}
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-accent-lime z-30 origin-left shadow-[0_0_30px_#E0FF64]" 
-          />
-
-          {/* Лента с карточками */}
-          <motion.div 
-            style={{ x: xTransform }} 
-            className="flex gap-12 px-[10vw] relative z-40 mt-[-50px]"
-          >
-            {steps.map((step, i) => (
-              <motion.div
+        {/* Движущаяся лента с карточками */}
+        <div className="relative z-30 flex overflow-hidden py-16 mask-fade-side">
+          <div className="flex gap-10 animate-conveyor-loop hover:pause-anim">
+            {doubledSteps.map((step, i) => (
+              <div
                 key={i}
-                className="relative min-w-[280px] md:min-w-[320px] h-[380px] group"
+                className="relative min-w-[320px] h-[380px] group transition-transform duration-700"
               >
-                {/* Стеклянная подставка под карточку */}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-2/3 h-4 bg-accent-lime/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Свечение под блоком */}
+                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-accent-lime/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                <div className="relative h-full w-full rounded-2xl p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-md hover:border-accent-lime/50 transition-all duration-500 group-hover:-translate-y-4">
-                  {/* Видео внутри каждой детали конвейера */}
+                <div className="relative h-full w-full rounded-3xl p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-2xl group-hover:border-accent-lime/40 group-hover:-translate-y-6 transition-all duration-500">
+                  
+                  {/* Заглушка для видео (предотвращает пустой блок при 404) */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-lime/5 to-transparent" />
+                  
+                  {/* Фоновое видео */}
                   <GlassVideo 
                     src="/videos/process-bg.webm" 
-                    opacity={0.1} 
-                    blur="blur-[20px]" 
+                    opacity={0.05} 
+                    blur="blur-[15px]" 
                   />
                   
-                  <div className="relative z-10 p-8 h-full flex flex-col">
-                    <div className="w-16 h-16 rounded-xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-6 border border-accent-lime/20">
-                      {step.icon}
+                  <div className="relative z-10 p-10 h-full flex flex-col justify-between">
+                    <div>
+                      <div className="w-14 h-14 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-8 border border-accent-lime/20">
+                        {step.icon}
+                      </div>
+                      <span className="text-[10px] font-bold text-accent-lime/30 uppercase tracking-[0.4em]">Step_Auto_0{i % 7 + 1}</span>
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter mt-2">{step.title}</h3>
+                      <p className="text-white/40 text-xs uppercase mt-3 leading-relaxed tracking-wide">{step.desc}</p>
                     </div>
-                    
-                    <div className="mb-4">
-                      <span className="text-xs font-bold text-accent-lime/40 uppercase tracking-[0.3em]">Этап 0{i + 1}</span>
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter mt-1">{step.title}</h3>
-                    </div>
-                    
-                    <p className="text-white/40 text-sm uppercase leading-snug">
-                      {step.desc}
-                    </p>
 
-                    <div className="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
-                      <div className="w-2 h-2 rounded-full bg-accent-lime animate-pulse" />
-                      <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest transition-colors group-hover:text-accent-lime/60">System Active</span>
+                    <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                       <span className="text-[9px] font-mono text-accent-lime/40 uppercase">Status: Online</span>
+                       <div className="w-1.5 h-1.5 rounded-full bg-accent-lime animate-pulse shadow-[0_0_8px_#E0FF64]" />
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-
-        {/* Фоновые элементы для объема */}
-        <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-accent-lime/5 to-transparent pointer-events-none" />
       </div>
+
+      <style jsx>{`
+        .mask-fade-side {
+          mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+        .pause-anim {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 };
