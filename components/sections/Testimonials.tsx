@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { GlassVideo } from "@/components/ui/GlassVideo";
 
 const testimonials = [
   {
@@ -26,7 +27,7 @@ const testimonials = [
 
 export const Testimonials = () => {
   return (
-    <section className="py-32 bg-black relative">
+    <section className="py-32 bg-black relative overflow-hidden">
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
@@ -45,23 +46,33 @@ export const Testimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="glass-card p-10 relative group"
+              className="relative min-h-[400px] rounded-[3rem] p-[2px] overflow-hidden group"
             >
-              <Quote className="absolute top-8 right-8 text-white/5 group-hover:text-accent-lime/20 transition-colors duration-700" size={80} />
+              {/* Видео-фон для карточки отзыва */}
+              <GlassVideo 
+                src="/videos/service-bg.webm" 
+                opacity={0.15} 
+                blur="blur-[30px]" 
+                overlayColor="bg-black/60"
+              />
               
-              <div className="flex gap-1 mb-8">
-                {[...Array(t.rating)].map((_, idx) => (
-                  <Star key={idx} size={16} className="fill-accent-lime text-accent-lime" />
-                ))}
-              </div>
+              <div className="relative z-10 h-full w-full bg-white/[0.03] backdrop-blur-[40px] rounded-[3rem] p-10 flex flex-col border border-white/5 group-hover:border-accent-lime/30 transition-colors duration-500">
+                <Quote className="absolute top-8 right-8 text-white/5 group-hover:text-accent-lime/20 transition-colors duration-700" size={80} />
+                
+                <div className="flex gap-1 mb-8">
+                  {[...Array(t.rating)].map((_, idx) => (
+                    <Star key={idx} size={16} className="fill-accent-lime text-accent-lime" />
+                  ))}
+                </div>
 
-              <p className="text-xl text-white/80 leading-relaxed italic mb-10 relative z-10">
-                "{t.text}"
-              </p>
+                <p className="text-xl text-white/80 leading-relaxed italic mb-10 relative z-10">
+                  "{t.text}"
+                </p>
 
-              <div className="mt-auto">
-                <p className="text-white font-black uppercase tracking-wider">{t.name}</p>
-                <p className="text-accent-lime/60 text-xs font-bold uppercase tracking-widest mt-1">{t.role}</p>
+                <div className="mt-auto">
+                  <p className="text-white font-black uppercase tracking-wider">{t.name}</p>
+                  <p className="text-accent-lime/60 text-xs font-bold uppercase tracking-widest mt-1">{t.role}</p>
+                </div>
               </div>
             </motion.div>
           ))}
