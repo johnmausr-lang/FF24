@@ -2,22 +2,31 @@
 
 import { useRef, useEffect, useState } from "react";
 
+// Описываем интерфейс пропсов для TypeScript
+interface GlassVideoProps {
+  src: string;
+  blur?: string;
+  opacity?: number;
+  overlayColor?: string;
+  playbackRate?: number;
+}
+
 export const GlassVideo = ({
   src,
   blur = "blur-[60px]",
   opacity = 0.4,
   overlayColor = "bg-black/40",
   playbackRate = 0.6,
-}) => {
+}: GlassVideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = playbackRate;
-      // Принудительный запуск, если автоплей заблокирован
+      // Принудительный запуск с обработкой ошибки
       videoRef.current.play().catch(() => {
-        console.log("Autoplay blocked or video error");
+        console.warn("Video autoplay was prevented");
       });
     }
   }, [playbackRate, src]);
@@ -37,6 +46,7 @@ export const GlassVideo = ({
         }`}
         style={{ opacity: opacity }}
       />
+      {/* Слой размытия и наложения цвета */}
       <div className={`absolute inset-0 z-10 ${blur} ${overlayColor} backdrop-transform`} />
     </div>
   );
