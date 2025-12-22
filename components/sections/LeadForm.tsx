@@ -20,9 +20,9 @@ export const LeadForm = () => {
       <div className="container relative z-10">
         <motion.div className="glass-card max-w-5xl mx-auto overflow-hidden relative border-accent-lime/20">
           
-          {/* Видео-фон только для формы */}
+          {/* SERVICE-BG ДЛЯ ВНУТРЕННЕГО БЛОКА */}
           <GlassVideo 
-            src="/videos/process-bg.webm" 
+            src="/videos/service-bg.webm" 
             opacity={0.4} 
             overlayColor="bg-black/60"
           />
@@ -32,8 +32,8 @@ export const LeadForm = () => {
               <h2 className="text-5xl md:text-6xl font-black italic uppercase mb-8 tracking-tighter">
                 Готовы к <br/><span className="text-accent-lime">взлету?</span>
               </h2>
-              <p className="text-white/60 text-xl mb-12">
-                Оставьте заявку и получите персональный расчет стоимости за 24 часа.
+              <p className="text-white/50 text-lg uppercase tracking-wide leading-relaxed">
+                Нажмите кнопку ниже, чтобы перейти в Telegram и получить индивидуальный расчет стоимости за 15 минут.
               </p>
             </div>
 
@@ -47,7 +47,7 @@ export const LeadForm = () => {
                     </div>
                     <button 
                       onClick={handleAction}
-                      className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224,255,100,0.3)]"
+                      className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224, 255, 100, 0.3)]"
                     >
                       Связаться в Telegram
                       <Send className="ml-4 group-hover:rotate-12 transition-transform" />
