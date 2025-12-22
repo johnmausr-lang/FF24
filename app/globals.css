@@ -22,6 +22,8 @@
   body {
     @apply bg-black text-white antialiased overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -30,7 +32,7 @@
     @apply max-w-[1300px] mx-auto px-6 lg:px-12;
   }
 
-  /* Улучшенное Жидкое Стекло */
+  /* --- СТЕКЛО (Улучшенное Жидкое Стекло) --- */
   .glass {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(30px);
@@ -46,6 +48,9 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Фикс для Safari: обрезка видео по радиусу */
+    mask-image: radial-gradient(white, black);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
   }
 
   .glass-card:hover {
@@ -55,7 +60,7 @@
                 inset 0 0 20px rgba(224, 255, 100, 0.05);
   }
 
-  /* Кнопки */
+  /* --- КНОПКИ --- */
   .btn-glass-lime {
     @apply glass bg-accent-lime/10 text-accent-lime font-black uppercase tracking-widest 
     px-10 py-6 rounded-full border-accent-lime/30 hover:bg-accent-lime hover:text-black 
@@ -69,7 +74,7 @@
     transition-all duration-500 flex items-center justify-center text-sm;
   }
 
-  /* Типографика */
+  /* --- ТИПОГРАФИКА --- */
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-lime;
     background-size: 200% auto;
@@ -90,6 +95,13 @@
       radial-gradient(at 100% 0%, hsla(78, 100%, 70%, 0.1) 0, transparent 50%),
       radial-gradient(at 50% 100%, hsla(217, 91%, 60%, 0.1) 0, transparent 50%);
     background-attachment: fixed;
+  }
+
+  /* Оптимизация для видео под стеклом */
+  .backdrop-transform {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: backdrop-filter;
   }
 
   @keyframes shine {
