@@ -2,11 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  ClipboardList, Truck, HardHat, Factory,
-  PackageCheck, Download, CheckCircle2, Settings
+import { 
+  ClipboardList, Truck, HardHat, Factory, 
+  PackageCheck, Download, CheckCircle2, Settings 
 } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
 
 const steps = [
   { title: "Заявка", desc: "Регистрация ТЗ", icon: <ClipboardList size={24} /> },
@@ -18,81 +17,75 @@ const steps = [
   { title: "Финиш", desc: "Готов к продаже", icon: <CheckCircle2 size={24} /> },
 ];
 
-// Дублируем шаги для бесшовной зацикленной анимации
 const doubledSteps = [...steps, ...steps];
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative py-32 bg-black overflow-hidden h-[850px] flex flex-col justify-center">
+    <section id="process" className="relative py-32 bg-black overflow-hidden h-[900px] flex flex-col justify-center">
       
-      {/* Заголовок секции */}
-      <div className="container relative z-40 mb-20">
+      <div className="container relative z-40 mb-24">
         <h2 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter">
           КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
         </h2>
       </div>
 
-      {/* Основная 3D конструкция */}
-      <div className="relative w-full perspective-[2000px]">
+      {/* КОНСТРУКЦИЯ КОНВЕЙЕРА С ПЕРСПЕКТИВОЙ */}
+      <div className="relative w-full" style={{ perspective: '2000px' }}>
         
-        {/* Корпус станины конвейера */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[110%] h-[320px] z-10">
-          {/* Верхняя стеклянная грань */}
-          <div className="absolute inset-0 bg-white/[0.03] rounded-[3rem] border-t border-white/10 backdrop-blur-sm" />
+        {/* Станина конвейера (Корпус) */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[115%] h-[350px] z-10">
+          {/* Верхняя стеклянная плоскость под углом */}
+          <div className="absolute inset-0 bg-white/[0.03] border-t border-white/10 rounded-[4rem] transform rotate-x-12 shadow-[0_-20px_50px_rgba(255,255,255,0.02)]" />
           
-          {/* Нижняя техническая панель с неоновой линией */}
-          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-black/60 border-b border-accent-lime/20 rounded-b-[3rem] flex items-center px-24">
+          {/* Боковая панель с неоновым рельсом (как на фото) */}
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-black/40 to-black/80 border-b border-accent-lime/30 rounded-b-[4rem] flex items-center px-32">
              <div className="w-full h-[2px] bg-accent-lime/10 relative overflow-hidden">
                 <motion.div 
                   animate={{ x: ["-100%", "200%"] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 w-1/4 bg-accent-lime shadow-[0_0_15px_#E0FF64]" 
+                  className="absolute inset-0 w-1/3 bg-accent-lime shadow-[0_0_25px_#E0FF64]" 
                 />
              </div>
           </div>
 
-          {/* Декоративные вращающиеся элементы (ролики) */}
-          <div className="absolute left-12 top-1/2 -translate-y-1/2 opacity-20 animate-spin-slow">
-             <Settings size={80} className="text-accent-lime" />
+          {/* Технические детали (шестерни) */}
+          <div className="absolute left-16 top-1/2 -translate-y-1/2 opacity-20">
+             <Settings className="animate-spin-slow text-accent-lime" size={100} />
           </div>
         </div>
 
-        {/* Движущаяся лента с карточками */}
-        <div className="relative z-30 flex overflow-hidden py-16 mask-fade-side">
-          <div className="flex gap-10 animate-conveyor-loop hover:pause-anim">
+        {/* ЛЕНТА С КАРТОЧКАМИ */}
+        <div className="relative z-30 flex overflow-hidden py-20 mask-edges">
+          <div className="flex gap-12 animate-conveyor-loop hover:pause">
             {doubledSteps.map((step, i) => (
               <div
                 key={i}
-                className="relative min-w-[320px] h-[380px] group transition-transform duration-700"
+                className="relative min-w-[340px] h-[400px] group transition-all duration-700"
               >
-                {/* Свечение под блоком */}
-                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-accent-lime/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Эффект тени на ленте */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-2/3 h-12 bg-accent-lime/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                <div className="relative h-full w-full rounded-3xl p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-2xl group-hover:border-accent-lime/40 group-hover:-translate-y-6 transition-all duration-500">
+                <div className="relative h-full w-full rounded-[2.5rem] p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-2xl group-hover:border-accent-lime/50 group-hover:-translate-y-8 transition-all duration-500">
                   
-                  {/* Заглушка для видео (предотвращает пустой блок при 404) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-lime/5 to-transparent" />
-                  
-                  {/* Фоновое видео */}
-                  <GlassVideo 
-                    src="/videos/process-bg.webm" 
-                    opacity={0.05} 
-                    blur="blur-[15px]" 
-                  />
+                  {/* Внутренний градиент (вместо видео для избежания 404) */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-lime/[0.03] to-transparent" />
                   
                   <div className="relative z-10 p-10 h-full flex flex-col justify-between">
                     <div>
-                      <div className="w-14 h-14 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-8 border border-accent-lime/20">
+                      <div className="w-16 h-16 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-8 border border-accent-lime/20 shadow-inner">
                         {step.icon}
                       </div>
-                      <span className="text-[10px] font-bold text-accent-lime/30 uppercase tracking-[0.4em]">Step_Auto_0{i % 7 + 1}</span>
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter mt-2">{step.title}</h3>
-                      <p className="text-white/40 text-xs uppercase mt-3 leading-relaxed tracking-wide">{step.desc}</p>
+                      <span className="text-[10px] font-bold text-accent-lime/40 uppercase tracking-[0.4em]">Step_Auto_0{i % 7 + 1}</span>
+                      <h3 className="text-3xl font-black italic uppercase tracking-tighter mt-2">{step.title}</h3>
+                      <p className="text-white/40 text-xs uppercase mt-3 leading-relaxed tracking-wider">{step.desc}</p>
                     </div>
 
                     <div className="pt-6 border-t border-white/5 flex items-center justify-between">
-                       <span className="text-[9px] font-mono text-accent-lime/40 uppercase">Status: Online</span>
-                       <div className="w-1.5 h-1.5 rounded-full bg-accent-lime animate-pulse shadow-[0_0_8px_#E0FF64]" />
+                       <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-accent-lime animate-pulse shadow-[0_0_10px_#E0FF64]" />
+                          <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest">Active_Node</span>
+                       </div>
+                       <Settings size={14} className="text-white/10 animate-spin-slow" />
                     </div>
                   </div>
                 </div>
@@ -103,11 +96,14 @@ export const ProcessSteps = () => {
       </div>
 
       <style jsx>{`
-        .mask-fade-side {
+        .mask-edges {
           mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
-        .pause-anim {
+        .pause:hover {
           animation-play-state: paused;
+        }
+        .rotate-x-12 {
+          transform: rotateX(15deg);
         }
       `}</style>
     </section>
