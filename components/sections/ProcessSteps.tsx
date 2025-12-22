@@ -21,71 +21,73 @@ const doubledSteps = [...steps, ...steps];
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative py-32 bg-black overflow-hidden h-[900px] flex flex-col justify-center">
+    <section id="process" className="relative py-40 bg-black overflow-hidden h-[1000px] flex flex-col justify-center">
       
-      <div className="container relative z-40 mb-24">
-        <h2 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter">
-          КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
+      <div className="container relative z-50 mb-32">
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter">
+          ЛИНИЯ <span className="text-accent-lime">FF24</span>
         </h2>
       </div>
 
-      {/* КОНСТРУКЦИЯ КОНВЕЙЕРА С ПЕРСПЕКТИВОЙ */}
-      <div className="relative w-full" style={{ perspective: '2000px' }}>
+      {/* 3D КОНТЕЙНЕР ПЕРСПЕКТИВЫ */}
+      <div className="relative w-full perspective-3000 preserve-3d">
         
-        {/* Станина конвейера (Корпус) */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[115%] h-[350px] z-10">
-          {/* Верхняя стеклянная плоскость под углом */}
-          <div className="absolute inset-0 bg-white/[0.03] border-t border-white/10 rounded-[4rem] transform rotate-x-12 shadow-[0_-20px_50px_rgba(255,255,255,0.02)]" />
+        {/* Станина конвейера (Корпус с глубиной) */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-[400px] z-10 preserve-3d rotate-x-25">
           
-          {/* Боковая панель с неоновым рельсом (как на фото) */}
-          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-black/40 to-black/80 border-b border-accent-lime/30 rounded-b-[4rem] flex items-center px-32">
-             <div className="w-full h-[2px] bg-accent-lime/10 relative overflow-hidden">
-                <motion.div 
-                  animate={{ x: ["-100%", "200%"] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 w-1/3 bg-accent-lime shadow-[0_0_25px_#E0FF64]" 
-                />
-             </div>
+          {/* Боковая "толстая" грань (дает объем корпусу) */}
+          <div className="absolute -bottom-10 left-0 w-full h-20 bg-gradient-to-b from-white/10 to-transparent border-x border-white/5" />
+          
+          {/* Верхняя панель станины */}
+          <div className="absolute inset-0 bg-white/[0.02] border border-white/10 rounded-[5rem] shadow-[0_40px_100px_rgba(0,0,0,0.9)]" />
+          
+          {/* Светящийся неоновый рельс */}
+          <div className="absolute bottom-10 left-0 w-full h-[2px] bg-accent-lime/20 flex items-center">
+             <motion.div 
+               animate={{ x: ["-100%", "200%"] }}
+               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+               className="w-1/3 h-full bg-accent-lime shadow-[0_0_40px_#E0FF64]" 
+             />
           </div>
 
-          {/* Технические детали (шестерни) */}
-          <div className="absolute left-16 top-1/2 -translate-y-1/2 opacity-20">
-             <Settings className="animate-spin-slow text-accent-lime" size={100} />
+          {/* Механические детали (Шестерни) */}
+          <div className="absolute left-20 top-1/2 -translate-y-1/2 opacity-10">
+             <Settings className="animate-spin-slow text-accent-lime" size={120} />
           </div>
         </div>
 
-        {/* ЛЕНТА С КАРТОЧКАМИ */}
-        <div className="relative z-30 flex overflow-hidden py-20 mask-edges">
-          <div className="flex gap-12 animate-conveyor-loop hover:pause">
+        {/* ЛЕНТА С ПАРЯЩИМИ КАРТОЧКАМИ */}
+        <div className="relative z-30 flex overflow-hidden py-24 mask-edges-heavy rotate-x-25 preserve-3d">
+          <div className="flex gap-16 animate-conveyor-loop hover:pause">
             {doubledSteps.map((step, i) => (
               <div
                 key={i}
-                className="relative min-w-[340px] h-[400px] group transition-all duration-700"
+                className="relative min-w-[360px] h-[460px] group preserve-3d"
               >
-                {/* Эффект тени на ленте */}
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-2/3 h-12 bg-accent-lime/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Тень под каждой карточкой на ленте */}
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-black/60 blur-xl group-hover:bg-accent-lime/10 transition-colors" />
                 
-                <div className="relative h-full w-full rounded-[2.5rem] p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-2xl group-hover:border-accent-lime/50 group-hover:-translate-y-8 transition-all duration-500">
+                <div className="relative h-full w-full rounded-[3rem] p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-3xl group-hover:border-accent-lime/50 group-hover:-translate-y-10 transition-all duration-700">
                   
-                  {/* Внутренний градиент (вместо видео для избежания 404) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-lime/[0.03] to-transparent" />
+                  {/* Заглушка градиентом вместо видео (убирает 404) */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
                   
-                  <div className="relative z-10 p-10 h-full flex flex-col justify-between">
+                  <div className="relative z-10 p-12 h-full flex flex-col justify-between">
                     <div>
-                      <div className="w-16 h-16 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-8 border border-accent-lime/20 shadow-inner">
+                      <div className="w-20 h-20 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-10 border border-accent-lime/20 shadow-inner">
                         {step.icon}
                       </div>
-                      <span className="text-[10px] font-bold text-accent-lime/40 uppercase tracking-[0.4em]">Step_Auto_0{i % 7 + 1}</span>
-                      <h3 className="text-3xl font-black italic uppercase tracking-tighter mt-2">{step.title}</h3>
-                      <p className="text-white/40 text-xs uppercase mt-3 leading-relaxed tracking-wider">{step.desc}</p>
+                      <span className="text-[10px] font-bold text-accent-lime/30 uppercase tracking-[0.5em]">SYSTEM_STEP_0{i % 7 + 1}</span>
+                      <h3 className="text-4xl font-black italic uppercase tracking-tighter mt-3">{step.title}</h3>
+                      <p className="text-white/40 text-sm uppercase mt-4 leading-relaxed tracking-wide">{step.desc}</p>
                     </div>
 
-                    <div className="pt-6 border-t border-white/5 flex items-center justify-between">
-                       <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-accent-lime animate-pulse shadow-[0_0_10px_#E0FF64]" />
-                          <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest">Active_Node</span>
+                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-accent-lime animate-pulse shadow-[0_0_10px_#E0FF64]" />
+                          <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest transition-colors group-hover:text-accent-lime/60">Node_Active</span>
                        </div>
-                       <Settings size={14} className="text-white/10 animate-spin-slow" />
+                       <Settings size={18} className="text-white/5 animate-spin-slow" />
                     </div>
                   </div>
                 </div>
@@ -96,14 +98,11 @@ export const ProcessSteps = () => {
       </div>
 
       <style jsx>{`
-        .mask-edges {
-          mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        .mask-edges-heavy {
+          mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
         }
         .pause:hover {
           animation-play-state: paused;
-        }
-        .rotate-x-12 {
-          transform: rotateX(15deg);
         }
       `}</style>
     </section>
