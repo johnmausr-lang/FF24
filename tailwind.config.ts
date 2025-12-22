@@ -4,7 +4,7 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/sections/**/*.{js,ts,jsx,tsx,mdx}",
+    "./sections/**/*.{js,ts,jsx,tsx,mdx}", // Убедись, что путь к твоим секциям указан верно
   ],
   theme: {
     extend: {
@@ -25,32 +25,42 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      backgroundImage: {
-        "glass-gradient": "linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01))",
-      },
+      // Добавили кастомные анимации для видео-подложек
       animation: {
-        "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "shine": "shine 8s linear infinite",
+        "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "float": "float 6s ease-in-out infinite",
+        "shine": "shine 5s linear infinite",
       },
       keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
         shine: {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
       },
+      // Настройка блюра для экстремального стекла
+      backdropBlur: {
+        xs: "2px",
+        "3xl": "60px",
+        "4xl": "80px",
+      },
     },
   },
+  // Добавляем safelist, чтобы Tailwind не удалял наши динамические классы стекла
   safelist: [
-    "glass",
-    "glass-nav",
-    "glass-card",
-    "glass-menu",
-    "glass-heavy",
-    "btn-glass-lime",
-    "btn-glass-secondary",
-    "gradient-text",
-    "container",
+    "blur-[40px]",
+    "blur-[60px]",
+    "blur-[80px]",
+    "bg-black/20",
+    "bg-black/40",
+    "bg-black/60",
+    "opacity-30",
+    "opacity-40",
+    "opacity-50",
   ],
   plugins: [require("tailwindcss-animate")],
 };
