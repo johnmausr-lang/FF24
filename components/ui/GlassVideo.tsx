@@ -12,7 +12,7 @@ interface GlassVideoProps {
 export const GlassVideo = ({ 
   src, 
   opacity = 0.4, 
-  blur = "blur-md", 
+  blur = "backdrop-blur-2xl", 
   overlayColor = "bg-black/40" 
 }: GlassVideoProps) => {
   return (
@@ -22,7 +22,7 @@ export const GlassVideo = ({
         muted
         loop
         playsInline
-        className={`w-full h-full object-cover transition-opacity duration-1000`}
+        className="w-full h-full object-cover transition-opacity duration-1000"
         style={{ opacity }}
       >
         <source src={src} type="video/webm" />
