@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // Указываем пути ко всем файлам проекта
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -31,8 +30,8 @@ const config: Config = {
         "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "float": "float 6s ease-in-out infinite",
         "shine": "shine 5s linear infinite",
-        "conveyor-loop": "conveyor-loop 40s linear infinite", // Плавное движение ленты
-        "spin-slow": "spin 12s linear infinite", // Вращение технических элементов
+        "conveyor-loop": "conveyor-loop 30s linear infinite",
+        "spin-slow": "spin 12s linear infinite",
       },
       keyframes: {
         float: {
@@ -46,7 +45,7 @@ const config: Config = {
         },
         "conveyor-loop": {
           "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" }, // Важно для бесшовности
+          "100%": { transform: "translateX(-50%)" },
         },
       },
       backdropBlur: {
@@ -54,17 +53,23 @@ const config: Config = {
         "3xl": "60px",
         "4xl": "80px",
       },
+      transformOrigin: {
+        'left-center': '0% 50%',
+      },
+      // Добавлена плавная кривая Безье для 3D переходов
+      transitionTimingFunction: {
+        'conveyor': 'cubic-bezier(0.2, 1, 0.3, 1)',
+      }
     },
   },
-  // Safelist предотвращает удаление динамических классов при сборке
   safelist: [
     "blur-[20px]", "blur-[40px]", "blur-[60px]", "blur-[80px]", "blur-[100px]",
     "bg-black/20", "bg-black/40", "bg-black/60", "bg-black/80",
     "opacity-10", "opacity-15", "opacity-20", "opacity-30", "opacity-40", "opacity-50", "opacity-60",
+    "origin-left",
   ],
   plugins: [
     require("tailwindcss-animate"),
-    // Добавляем поддержку 3D перспективы и поворотов
     function ({ addUtilities }: any) {
       addUtilities({
         '.perspective-3000': {
