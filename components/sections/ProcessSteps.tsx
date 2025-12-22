@@ -1,108 +1,95 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import { 
   ClipboardList, Truck, HardHat, Factory, 
-  PackageCheck, Download, CheckCircle2, Settings 
+  PackageCheck, Download, CheckCircle2 
 } from "lucide-react";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация ТЗ", icon: <ClipboardList size={24} /> },
-  { title: "Забор", desc: "Логистика", icon: <Truck size={24} /> },
-  { title: "Приёмка", desc: "Контроль брака", icon: <HardHat size={24} /> },
-  { title: "Маркировка", desc: "Честный Знак", icon: <Factory size={24} /> },
-  { title: "Упаковка", desc: "Подготовка", icon: <PackageCheck size={24} /> },
-  { title: "Отгрузка", desc: "Склад МП", icon: <Download size={24} className="rotate-180" /> },
-  { title: "Финиш", desc: "Готов к продаже", icon: <CheckCircle2 size={24} /> },
+  { title: "Заявка", desc: "Регистрация и передача ТЗ" },
+  { title: "Забор", desc: "Забираем товар у поставщика" },
+  { title: "Приёмка", desc: "Сверка и проверка на брак" },
+  { title: "Маркировка", desc: "Наклейка штрих-кодов по ТЗ" },
+  { title: "Упаковка", desc: "Оптимальная упаковка в короба" },
+  { title: "Отгрузка", desc: "Доставка на склад МП за 24ч" },
+  { title: "Финиш", desc: "Товар готов к продаже" },
 ];
 
-const doubledSteps = [...steps, ...steps];
+const doubledSteps = [...steps, ...steps, ...steps]; // для бесконечности
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative py-40 bg-black overflow-hidden h-[1000px] flex flex-col justify-center">
-      
-      <div className="container relative z-50 mb-32">
-        <h2 className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter">
-          ЛИНИЯ <span className="text-accent-lime">FF24</span>
-        </h2>
+    <section id="process" className="relative py-32 bg-black overflow-hidden">
+      <div className="container relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="text-center text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white mb-20"
+        >
+          КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
+        </motion.h2>
       </div>
 
-      {/* 3D КОНТЕЙНЕР ПЕРСПЕКТИВЫ */}
-      <div className="relative w-full perspective-3000 preserve-3d">
-        
-        {/* Станина конвейера (Корпус с глубиной) */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-[400px] z-10 preserve-3d rotate-x-25">
-          
-          {/* Боковая "толстая" грань (дает объем корпусу) */}
-          <div className="absolute -bottom-10 left-0 w-full h-20 bg-gradient-to-b from-white/10 to-transparent border-x border-white/5" />
-          
-          {/* Верхняя панель станины */}
-          <div className="absolute inset-0 bg-white/[0.02] border border-white/10 rounded-[5rem] shadow-[0_40px_100px_rgba(0,0,0,0.9)]" />
-          
-          {/* Светящийся неоновый рельс */}
-          <div className="absolute bottom-10 left-0 w-full h-[2px] bg-accent-lime/20 flex items-center">
-             <motion.div 
-               animate={{ x: ["-100%", "200%"] }}
-               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-               className="w-1/3 h-full bg-accent-lime shadow-[0_0_40px_#E0FF64]" 
-             />
-          </div>
+      {/* 3D Конвейер */}
+      <div className="relative perspective-2000">
+        <div className="rotate-x-15 translate-z-0">
+          {/* Лента конвейера */}
+          <div className="relative h-32 md:h-48 overflow-hidden">
+            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black to-transparent opacity-70" />
+            <div className="absolute inset-x-0 bottom-4 h-4 bg-accent-lime/30 blur-xl animate-pulse" />
+            <div className="absolute inset-x-0 bottom-6 h-1 bg-accent-lime shadow-[0_0_40px_#E0FF64] animate-conveyor" />
 
-          {/* Механические детали (Шестерни) */}
-          <div className="absolute left-20 top-1/2 -translate-y-1/2 opacity-10">
-             <Settings className="animate-spin-slow text-accent-lime" size={120} />
-          </div>
-        </div>
-
-        {/* ЛЕНТА С ПАРЯЩИМИ КАРТОЧКАМИ */}
-        <div className="relative z-30 flex overflow-hidden py-24 mask-edges-heavy rotate-x-25 preserve-3d">
-          <div className="flex gap-16 animate-conveyor-loop hover:pause">
-            {doubledSteps.map((step, i) => (
-              <div
-                key={i}
-                className="relative min-w-[360px] h-[460px] group preserve-3d"
-              >
-                {/* Тень под каждой карточкой на ленте */}
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-black/60 blur-xl group-hover:bg-accent-lime/10 transition-colors" />
-                
-                <div className="relative h-full w-full rounded-[3rem] p-[1px] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-3xl group-hover:border-accent-lime/50 group-hover:-translate-y-10 transition-all duration-700">
-                  
-                  {/* Заглушка градиентом вместо видео (убирает 404) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-                  
-                  <div className="relative z-10 p-12 h-full flex flex-col justify-between">
-                    <div>
-                      <div className="w-20 h-20 rounded-2xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-10 border border-accent-lime/20 shadow-inner">
-                        {step.icon}
-                      </div>
-                      <span className="text-[10px] font-bold text-accent-lime/30 uppercase tracking-[0.5em]">SYSTEM_STEP_0{i % 7 + 1}</span>
-                      <h3 className="text-4xl font-black italic uppercase tracking-tighter mt-3">{step.title}</h3>
-                      <p className="text-white/40 text-sm uppercase mt-4 leading-relaxed tracking-wide">{step.desc}</p>
-                    </div>
-
-                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
-                       <div className="flex items-center gap-3">
-                          <div className="w-2 h-2 rounded-full bg-accent-lime animate-pulse shadow-[0_0_10px_#E0FF64]" />
-                          <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest transition-colors group-hover:text-accent-lime/60">Node_Active</span>
-                       </div>
-                       <Settings size={18} className="text-white/5 animate-spin-slow" />
-                    </div>
+            {/* Карточки на конвейере */}
+            <div className="flex gap-8 animate-conveyor-slow">
+              {doubledSteps.map((step, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card min-w-[300px] md:min-w-[380px] flex-shrink-0 group"
+                  whileHover={{ y: -20, scale: 1.05, transition: { duration: 0.6 } }}
+                >
+                  <div className="p-10 text-center">
+                    <h3 className="text-2xl md:text-3xl font-black uppercase mb-4 text-white">
+                      {step.title}
+                    </h3>
+                    <p className="text-white/70 text-base md:text-lg text-tight">
+                      {step.desc}
+                    </p>
                   </div>
-                </div>
-              </div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        .mask-edges-heavy {
-          mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+        @keyframes conveyor {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        .pause:hover {
-          animation-play-state: paused;
+
+        @keyframes conveyor-slow {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+
+        .animate-conveyor {
+          animation: conveyor 20s linear infinite;
+        }
+
+        .animate-conveyor-slow {
+          animation: conveyor-slow 60s linear infinite;
+        }
+
+        .perspective-2000 {
+          perspective: 2000px;
+        }
+
+        .rotate-x-15 {
+          transform: rotateX(15deg);
         }
       `}</style>
     </section>
