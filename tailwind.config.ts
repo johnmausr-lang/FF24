@@ -4,7 +4,8 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./sections/**/*.{js,ts,jsx,tsx,mdx}", // Убедись, что путь к твоим секциям указан верно
+    "./sections/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -25,7 +26,6 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      // Добавили кастомные анимации для видео-подложек
       animation: {
         "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "float": "float 6s ease-in-out infinite",
@@ -42,7 +42,6 @@ const config: Config = {
           "100%": { backgroundPosition: "0% 50%" },
         },
       },
-      // Настройка блюра для экстремального стекла
       backdropBlur: {
         xs: "2px",
         "3xl": "60px",
@@ -50,7 +49,6 @@ const config: Config = {
       },
     },
   },
-  // Добавляем safelist, чтобы Tailwind не удалял наши динамические классы стекла
   safelist: [
     "blur-[40px]",
     "blur-[60px]",
@@ -58,9 +56,12 @@ const config: Config = {
     "bg-black/20",
     "bg-black/40",
     "bg-black/60",
+    "opacity-10",
+    "opacity-20",
     "opacity-30",
     "opacity-40",
     "opacity-50",
+    "opacity-60",
   ],
   plugins: [require("tailwindcss-animate")],
 };
