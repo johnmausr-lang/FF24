@@ -8,23 +8,26 @@ const faqs = [
   { q: "Сколько времени занимает приемка?", a: "Стандартная приемка — 24 часа. Если товар прибыл до 14:00, в 90% случаев он будет оприходован в тот же день." },
   { q: "Как вы проверяете товар на брак?", a: "Мы проводим визуальный осмотр каждой единицы. По запросу выполняем детальную проверку с фото-фиксацией." },
   { q: "Работаете ли вы с КИЗами?", a: "Да, работаем с маркировкой Честный Знак: печать, наклейка и передача данных в систему." },
-  { q: "Есть ли страхование товара?", a: "Мы несем полную материальную ответственность за товар с момента подписания акта приемки." }
+  { q: "Где вы находитесь?", a: "Наш склад расположен по адресу: ул. Лавочкина, 23, стр. 4, Москва. Удобный подъезд для любого транспорта." }
 ];
 
 export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 bg-black">
+    <section className="py-32 bg-transparent">
       <div className="container flex flex-col items-center">
-        {/* Центрированный заголовок */}
-        <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-20 tracking-tighter text-center">
+        <motion.h2 
+          initial={{ filter: "blur(10px)", opacity: 0 }}
+          whileInView={{ filter: "blur(0px)", opacity: 1 }}
+          className="text-5xl md:text-7xl font-black italic uppercase mb-20 tracking-tighter text-center"
+        >
           Критические <span className="text-accent-lime">вопросы</span>
-        </h2>
+        </motion.h2>
 
         <div className="w-full max-w-4xl space-y-4">
           {faqs.map((faq, i) => (
-            <div key={i} className="border-b border-white/10">
+            <div key={i} className="border-b border-white/10 bg-white/[0.01] backdrop-blur-sm rounded-2xl px-6">
               <button 
                 onClick={() => setOpenIndex(openIndex === i ? null : i)} 
                 className="w-full py-8 flex items-center justify-between text-left group transition-all"
@@ -32,7 +35,7 @@ export const FAQ = () => {
                 <span className={`text-xl md:text-2xl font-bold uppercase tracking-tight transition-colors ${openIndex === i ? 'text-accent-lime' : 'text-white'}`}>
                   {faq.q}
                 </span>
-                <div className={`p-2 rounded-full transition-all ${openIndex === i ? 'bg-accent-lime text-black rotate-180' : 'text-white/20'}`}>
+                <div className={`p-2 rounded-full transition-all ${openIndex === i ? 'bg-accent-lime text-black' : 'text-white/20'}`}>
                   {openIndex === i ? <Minus size={24} /> : <Plus size={24} />}
                 </div>
               </button>
