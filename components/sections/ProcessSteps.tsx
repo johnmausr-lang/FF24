@@ -8,8 +8,7 @@ import {
   Html, 
   Float, 
   ContactShadows, 
-  PerspectiveCamera,
-  MeshTransmissionMaterial 
+  PerspectiveCamera 
 } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -22,21 +21,20 @@ const steps = [
 ];
 
 function Model() {
-  // Загружаем модель по пути из вашей структуры
+  // Путь подтвержден по скриншотам: /models/conveyor.glb
   const { scene } = useGLTF("/models/conveyor.glb");
   
   useMemo(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        // Сделали металл светлее (было #020202), чтобы он не пропадал в тени
+        // Делаем металл светлее (#2a2a2a), чтобы он не сливался с фоном
         mesh.material = new THREE.MeshStandardMaterial({
           color: "#2a2a2a", 
           metalness: 0.9,
           roughness: 0.1,
         });
 
-        // Подсветка неоновых линий
         const name = child.name.toLowerCase();
         if (name.includes("light") || name.includes("neon") || name.includes("glow")) {
           mesh.material = new THREE.MeshStandardMaterial({
@@ -49,14 +47,8 @@ function Model() {
     });
   }, [scene]);
 
-  return (
-    <primitive 
-      object={scene} 
-      scale={5.5} 
-      position={[0, -2.5, 0]} 
-      rotation={[0, 0, 0]} // Конвейер стоит прямо вдоль оси Z
-    />
-  );
+  // Конвейер стоит прямо вдоль оси Z для корректного отображения
+  return <primitive object={scene} scale={5.5} position={[0, -2.5, 0]} rotation={[0, 0, 0]} />;
 }
 
 function StepCard({ data, index }: { data: any, index: number }) {
@@ -67,7 +59,7 @@ function StepCard({ data, index }: { data: any, index: number }) {
       const time = state.clock.getElapsedTime();
       const speed = 1.4;
       const offset = index * 6;
-      // Движение карточек СТРОГО вдоль конвейера по оси Z
+      // Карточки едут строго вдоль линии конвейера (по оси Z)
       let zPos = ((time * speed + offset) % 30) - 15; 
       group.current.position.set(0, 1.6, zPos);
     }
@@ -78,7 +70,7 @@ function StepCard({ data, index }: { data: any, index: number }) {
       <Float speed={2.5} rotationIntensity={0.1} floatIntensity={0.5}>
         <mesh>
           <boxGeometry args={[3.5, 2, 0.05]} />
-          {/* Стеклянный материал карточки */}
+          {/* Используем физический материал для эффекта стекла */}
           <meshPhysicalMaterial 
             transmission={1} 
             thickness={0.5} 
@@ -103,7 +95,7 @@ function StepCard({ data, index }: { data: any, index: number }) {
 export const ProcessSteps = () => {
   const [mounted, setMounted] = useState(false);
 
-  // Исправляем ошибку гидратации: рендерим Canvas только после монтирования в браузере
+  // Решаем проблему "пустого экрана": рендерим Canvas только на клиенте
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -112,7 +104,7 @@ export const ProcessSteps = () => {
 
   return (
     <section id="process" className="relative h-[850px] w-full bg-transparent flex items-center justify-center overflow-hidden border-y border-white/5">
-      {/* Заголовок секции */}
+      {/* Заголовок строго по центру */}
       <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center w-full">
         <h2 className="text-6xl md:text-9xl font-[1000] italic uppercase tracking-tighter leading-none text-neon">
           Умный <span className="text-[#E0FF64]">Конвейер</span>
@@ -123,7 +115,7 @@ export const ProcessSteps = () => {
         <PerspectiveCamera makeDefault position={[18, 12, 18]} fov={25} />
         <Suspense fallback={null}>
           <Environment preset="city" />
-          {/* Значительно усилили свет, чтобы модель была видна */}
+          {/* Значительно усилили свет (было 0.2, стало 1.2), чтобы модель была видна */}
           <ambientLight intensity={1.2} /> 
           <pointLight position={[10, 15, 10]} intensity={3} color="#E0FF64" />
           
@@ -133,18 +125,9 @@ export const ProcessSteps = () => {
             <StepCard key={i} data={step} index={i} />
           ))}
 
-          <ContactShadows 
-            position={[0, -2.5, 0]} 
-            opacity={0.5} 
-            scale={40} 
-            blur={2.5} 
-            color="#E0FF64" 
-          />
+          <ContactShadows position={[0, -2.5, 0]} opacity={0.5} scale={40} blur={2.5} color="#E0FF64" />
         </Suspense>
       </Canvas>
-      
-      {/* Фоновое свечение для глубины */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
     </section>
   );
 };
