@@ -28,7 +28,6 @@ function Model() {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        // Делаем цвет чуть светлее, чтобы он был виден в тени
         mesh.material = new THREE.MeshStandardMaterial({
           color: "#1a1a1a", 
           metalness: 0.8,
@@ -40,7 +39,7 @@ function Model() {
           mesh.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 20, // Увеличили яркость неона
+            emissiveIntensity: 20,
           });
         }
       }
@@ -65,7 +64,6 @@ function StepCard({ data, index }: { data: any, index: number }) {
       const time = state.clock.getElapsedTime();
       const speed = 1.2;
       const offset = index * 5;
-      // Бесконечное движение по диагонали
       let zPos = ((time * speed + offset) % 25) - 12;
       let xPos = -zPos;
       group.current.position.set(xPos, 1.4, zPos);
@@ -75,7 +73,6 @@ function StepCard({ data, index }: { data: any, index: number }) {
   return (
     <group ref={group}>
       <Float speed={2} rotationIntensity={0.1} floatIntensity={0.3}>
-        {/* Основа карточки - полупрозрачное стекло */}
         <mesh>
           <boxGeometry args={[3.2, 1.8, 0.05]} />
           <meshPhysicalMaterial 
@@ -87,7 +84,6 @@ function StepCard({ data, index }: { data: any, index: number }) {
             opacity={0.8}
           />
         </mesh>
-        {/* Контент карточки - УБРАН occlude для надежности */}
         <Html 
           transform 
           distanceFactor={3} 
@@ -116,9 +112,8 @@ export const ProcessSteps = () => {
 
   return (
     <section id="process" className="relative h-[800px] w-full bg-[#050505] overflow-hidden border-y border-white/5">
-      {/* Заголовок */}
       <div className="absolute top-20 left-10 md:left-20 z-20 pointer-events-none">
-        <h2 className="text-6xl md:text-[120px] font-[1000] italic uppercase tracking-tighter leading-[0.8] opacity-5 text-outline absolute -top-10 -left-5">SYSTEM</h2>
+        <h2 className="text-6xl md:text-[120px] font-[1000] italic uppercase tracking-tighter leading-[0.7] opacity-5 text-outline absolute -top-10 -left-5">SYSTEM</h2>
         <h2 className="text-4xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none relative">
           Умный <span className="text-[#E0FF64] text-neon">Конвейер</span>
         </h2>
@@ -127,8 +122,9 @@ export const ProcessSteps = () => {
       <Canvas shadows dpr={[1, 2]} gl={{ antialias: true }}>
         <PerspectiveCamera makeDefault position={[14, 12, 14]} fov={28} />
         <Suspense fallback={null}>
-          <Environment preset="city" intensity={0.6} />
-          <ambientLight intensity={0.5} />
+          {/* ИСПРАВЛЕНО: Удален intensity, так как он не поддерживается типами в этой версии */}
+          <Environment preset="city" />
+          <ambientLight intensity={0.7} />
           <pointLight position={[10, 10, 10]} intensity={2} color="#E0FF64" />
           <spotLight position={[-10, 20, 10]} angle={0.15} penumbra={1} intensity={3} castShadow />
           
@@ -142,7 +138,6 @@ export const ProcessSteps = () => {
         </Suspense>
       </Canvas>
 
-      {/* Нижний статус-бар */}
       <div className="absolute bottom-12 right-10 z-20 flex items-center gap-6 glass px-8 py-4 rounded-3xl border-white/5 bg-black/60">
         <div className="text-right">
           <div className="text-[10px] text-white/20 uppercase font-black tracking-widest">Статус</div>
