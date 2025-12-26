@@ -5,44 +5,36 @@ export async function GET() {
     const API_KEY = process.env.YANDEX_REVIEWS_API_KEY;
     const BUSINESS_ID = process.env.YANDEX_BUSINESS_ID;
 
-    // Если переменные не настроены в Vercel, вернем ошибку
+    // Если переменные не настроены, возвращаем пустой массив, чтобы сайт не падал
     if (!API_KEY || !BUSINESS_ID) {
-      console.error("Missing API Key or Business ID in environment variables");
-      return NextResponse.json(
-        { error: "Конфигурация сервера не завершена" }, 
-        { status: 500 }
-      );
+      console.warn("⚠️ API ключи не найдены в Environment Variables");
+      return NextResponse.json([]);
     }
 
+    // ВАЖНО: Используем актуальный формат URL
     const url = `https://reviews-api.yandex.ru/v1/reviews?key=${API_KEY}&businessId=${BUSINESS_ID}`;
 
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 3600 }, // Кэшируем результат на 1 час
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 3600 } 
     });
 
+    // Если Яндекс вернул 404 или другую ошибку
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Yandex API Response Error:", errorText);
-      return NextResponse.json(
-        { error: "Яндекс API отклонил запрос" }, 
-        { status: response.status }
-      );
+      console.error(`❌ Яндекс API вернул статус: ${response.status}`);
+      // Возвращаем пустой массив вместо ошибки 500
+      return NextResponse.json([]);
     }
 
     const data = await response.json();
     
-    // Возвращаем данные. Если Яндекс вернул массив в поле 'reviews', отдаем его.
-    return NextResponse.json(data.reviews || data);
+    // Яндекс обычно возвращает объект с полем 'reviews'
+    const reviews = Array.isArray(data.reviews) ? data.reviews : [];
+    return NextResponse.json(reviews);
     
   } catch (error: any) {
-    console.error("Route Handler Error:", error.message);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" }, 
-      { status: 500 }
-    );
+    console.error("Internal Server Error:", error.message);
+    return NextResponse.json([], { status: 200 }); // Возвращаем пустой список при любой ошибке
   }
 }
