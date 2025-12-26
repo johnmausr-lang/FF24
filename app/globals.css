@@ -7,10 +7,13 @@
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
+    --border: 240 5% 20%;
   }
 
+  /* Плавный скролл и база */
   html {
     scroll-behavior: smooth;
+    background-color: #000;
   }
 
   body {
@@ -18,6 +21,18 @@
     /* Улучшение отрисовки шрифтов */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Стилизация скроллбара в стиле FF24 */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E0FF64;
+    border-radius: 10px;
   }
 }
 
@@ -32,18 +47,19 @@
   }
 
   .glass-card {
-    @apply relative overflow-hidden bg-white/[0.01] backdrop-blur-2xl border border-white/5 transition-all duration-500;
+    @apply relative overflow-hidden bg-white/[0.01] backdrop-blur-2xl border border-white/5 transition-all duration-500 rounded-[2.5rem];
   }
 
-  /* Эффект свечения границ (для BentoGrid) */
+  /* Эффект свечения границ (для BentoGrid и карточек) */
   .border-glow {
     position: relative;
   }
+  
   .border-glow::before {
     content: "";
     position: absolute;
     inset: -1px;
-    background: linear-gradient(90deg, transparent, rgba(224, 255, 100, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(224, 255, 100, 0.4), transparent);
     background-size: 200% 100%;
     animation: border-flow 4s linear infinite;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -54,14 +70,16 @@
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.5s;
+    pointer-events: none;
   }
+  
   .border-glow:hover::before {
     opacity: 1;
   }
 
-  /* Кнопка Premium Lime */
+  /* Кнопка Premium Lime (с глитч-сканированием) */
   .btn-glass-lime {
-    @apply relative overflow-hidden bg-accent-lime text-black font-black uppercase tracking-widest transition-all duration-500;
+    @apply relative overflow-hidden bg-accent-lime text-black font-[900] uppercase tracking-widest transition-all duration-500 flex items-center justify-center;
     box-shadow: 0 0 20px rgba(224, 255, 100, 0.1);
   }
 
@@ -70,7 +88,6 @@
     box-shadow: 0 0 40px rgba(224, 255, 100, 0.3);
   }
 
-  /* Глитч-полоса сканирования */
   .btn-glass-lime::after {
     content: "";
     position: absolute;
@@ -89,18 +106,28 @@
 
   /* Вторичная кнопка */
   .btn-glass-secondary {
-    @apply glass flex items-center justify-center px-8 py-4 text-white font-bold uppercase tracking-widest text-xs transition-all hover:bg-white/5 hover:border-white/20;
+    @apply glass flex items-center justify-center px-8 py-4 text-white font-bold uppercase tracking-widest text-[10px] transition-all hover:bg-white/5 hover:border-white/20 rounded-full;
   }
 
   /* Текст с обводкой (Киберпанк стиль) */
   .text-outline {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
+  }
+  
+  .text-outline-lime {
+    -webkit-text-stroke: 1px rgba(224, 255, 100, 0.5);
     color: transparent;
   }
 
   /* Градиентный текст */
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-accent-lime;
+  }
+
+  /* Эффект неонового текста */
+  .text-neon {
+    text-shadow: 0 0 10px rgba(224, 255, 100, 0.5), 0 0 20px rgba(224, 255, 100, 0.2);
   }
 }
 
@@ -115,7 +142,17 @@
   100% { top: 200%; }
 }
 
-/* Микро-глитч при скролле (добавляется через Framer Motion x/y) */
+/* Вспомогательные классы для 3D и Фона */
+.canvas-container {
+  @apply pointer-events-none select-none;
+}
+
+/* Микро-глитч при скролле */
 .scroll-blur {
   transition: filter 0.2s ease-out;
+}
+
+/* Убираем стандартные выделения для чистоты интерфейса */
+::selection {
+  @apply bg-accent-lime text-black;
 }
