@@ -2,72 +2,57 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { GlassVideo } from "@/components/ui/GlassVideo";
+
+const TELEGRAM_LINK = "https://t.me/manager24ff";
 
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
+      {/* Видео-подложка: теперь точно отображается */}
+      <GlassVideo src="/videos/hero-bg.webm" opacity={0.5} playbackRate={0.5} />
+      
       <div className="container relative z-10">
         <div className="flex flex-col items-center text-center">
-          
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-            className="mb-8 logo-3d-wrapper"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="logo-3d-wrapper mb-12"
           >
-            {/* ГЛАВНЫЙ ЛОГОТИП С 3D ЭФФЕКТОМ */}
-            <Image 
+            {/* Логотип с классом logo-3d для объема */}
+            <img 
               src="/logo-ff24.png" 
               alt="FF24 Fulfillment" 
-              width={350} 
-              height={120}
-              className="logo-3d w-[280px] md:w-[450px] h-auto object-contain"
-              priority
+              className="logo-3d h-24 md:h-44 w-auto object-contain"
             />
           </motion.div>
 
-          <motion.div
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="glass px-6 py-2 rounded-full border-white/10 flex items-center gap-3 mb-10"
+            className="text-4xl md:text-7xl font-[1000] italic uppercase tracking-tighter leading-[0.9] mb-12"
           >
-            <span className="w-2 h-2 bg-[#E0FF64] rounded-full animate-ping" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">
-              Система онлайн: Готовы к масштабированию
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-4xl md:text-7xl font-black leading-[0.9] mb-12 text-white max-w-5xl italic uppercase tracking-tighter"
-          >
-            Логистика, которая <br />
-            <span className="text-[#E0FF64] text-neon">разгоняет</span> ваш бизнес
+            Логистика, которая <span className="text-accent-lime text-neon">масштабирует</span> ваш успех
           </motion.h1>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.6 }}
           >
             <a 
-              href="#lead" 
-              className="btn-glass-lime group px-12 py-6 text-lg"
+              href={TELEGRAM_LINK} 
+              target="_blank" 
+              className="btn-glass-lime px-14 py-7 text-xl"
             >
               Запустить поток
-              <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" size={24} />
+              <ArrowRight className="ml-3" />
             </a>
           </motion.div>
         </div>
       </div>
-
-      {/* Затемнение низа */}
-      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-black via-black/50 to-transparent z-[5]" />
     </section>
   );
 };
