@@ -1,22 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ParticlesBackground } from "./ParticlesBackground";
-import { usePerformance } from "@/hooks/usePerformance";
 
 export const Footer = () => {
-  const { isLowPower } = usePerformance();
-
   return (
-    <footer className="relative bg-black pt-32 pb-12 border-t border-white/5 overflow-hidden">
-      {!isLowPower && (
-        <div className="absolute inset-0 z-0 opacity-40">
-          <ParticlesBackground />
-        </div>
-      )}
-      
+    <footer className="relative bg-transparent pt-32 pb-12 border-t border-white/5 overflow-hidden">
       <div className="container relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20 items-center">
+          
           <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
             <img src="/logo-ff24.png" alt="FF24 Fulfillment" title="FF24" className="h-14 mb-8" />
             <div className="space-y-6">
@@ -41,7 +32,7 @@ export const Footer = () => {
         </div>
         
         <div className="pt-12 border-t border-white/5 text-[10px] text-center text-white/20 tracking-[0.5em] uppercase font-black">
-          © 2025 FF24 FULFILLMENT. ПРОВЕРЕННАЯ ЛОГИСТИКА ДЛЯ ВАШЕГО БИЗНЕСА.
+          © 2025 FF24 FULFILLMENT. ПРОВЕРЕННАЯ ЛОГИСТИКА.
         </div>
       </div>
     </footer>
