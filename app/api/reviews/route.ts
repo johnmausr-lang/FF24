@@ -2,38 +2,35 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // Ваш API ключ для Яндекс Отзывов
-    const API_KEY = "780fdc73-834e-45e1-801a-f59112bf5915";
-    
-    // Вставьте сюда ID вашего бизнеса в Яндекс Картах
-    // Обычно его можно найти в ссылке на вашу организацию
-    const BUSINESS_ID = "ВАШ_BUSINESS_ID_ТУТ"; 
+    const API_KEY = process.env.YANDEX_REVIEWS_API_KEY;
+    const BUSINESS_ID = process.env.YANDEX_BUSINESS_ID;
 
-    // ВНИМАНИЕ: URL ниже — примерный. 
-    // Яндекс может требовать конкретный метод (Business API или Widgets API)
+    if (!API_KEY || !BUSINESS_ID) {
+      return NextResponse.json({ error: "Конфигурация API не найдена" }, { status: 500 });
+    }
+
+    // Запрос к API Яндекс.Отзывов
     const response = await fetch(
       `https://reviews-api.yandex.ru/v1/reviews?key=${API_KEY}&businessId=${BUSINESS_ID}`,
       {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        next: { revalidate: 3600 }, // Кэшируем отзывы на 1 час, чтобы не спамить в API
+        method: 'GET',
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 }, // Кэш на 1 час
       }
     );
 
     if (!response.ok) {
-      throw new Error("Ошибка при получении данных от Яндекса");
+      throw new Error(`Yandex API Error: ${response.status}`);
     }
 
     const data = await response.json();
     
-    // Возвращаем данные на фронтенд
-    return NextResponse.json(data);
+    // Возвращаем только список отзывов для удобства фронтенда
+    // Обычно структура выглядит так: { reviews: [...] }
+    return NextResponse.json(data.reviews || []);
+    
   } catch (error) {
-    console.error("Reviews API Error:", error);
-    return NextResponse.json(
-      { error: "Не удалось загрузить отзывы" },
-      { status: 500 }
-    );
+    console.error("Ошибка в роуте отзывов:", error);
+    return NextResponse.json({ error: "Ошибка загрузки данных" }, { status: 500 });
   }
 }
