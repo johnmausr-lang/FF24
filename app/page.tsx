@@ -1,50 +1,71 @@
 "use client";
 
+import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { ContactForm } from "@/components/sections/ContactForm";
-import { ParticlesBackground } from "@/components/ParticlesBackground";
-import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
+import { usePerformance } from "@/hooks/usePerformance";
 
 export default function Home() {
-  return (
-    <main className="relative min-h-screen bg-black text-white">
-      {/* Глобальные звезды на заднем плане */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
-        <ParticlesBackground />
-      </div>
+  const { isLowPower } = usePerformance();
 
+  return (
+    <main className="relative min-h-screen bg-black text-white selection:bg-accent-lime selection:text-black">
+      {/* ГЛОБАЛЬНЫЙ ФОН: Звезды рендерятся один раз.
+          Если устройство слабое (isLowPower), звезды отключаются для плавности скролла.
+      */}
+      {!isLowPower && (
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-50">
+          <ParticlesBackground />
+        </div>
+      )}
+
+      {/* Навигация всегда сверху */}
       <Navbar />
 
-      {/* Контент поверх звезд */}
-      <div className="relative z-10 w-full">
-        <Hero />
+      {/* КОНТЕНТ: Все секции имеют bg-transparent.
+          Z-10 гарантирует, что кнопки кликабельны поверх звезд.
+      */}
+      <div className="relative z-10">
         
-        <div className="bg-transparent">
+        {/* Главный экран */}
+        <section className="bg-transparent">
+          <Hero />
+        </section>
+
+        {/* Преимущества с анимированными границами */}
+        <section className="bg-transparent border-y border-white/5">
           <BentoGrid />
-        </div>
+        </section>
 
-        <div className="bg-transparent">
+        {/* 3D Процесс работы */}
+        <section className="bg-transparent">
           <ProcessSteps />
-        </div>
+        </section>
 
-        <div className="bg-transparent">
+        {/* Отзывы с Яндекс.Виджетом */}
+        <section className="bg-transparent border-y border-white/5">
           <Testimonials />
-        </div>
+        </section>
 
-        <div className="bg-transparent">
+        {/* Вопросы-ответы (центр) */}
+        <section className="bg-transparent">
           <FAQ />
-        </div>
+        </section>
 
-        <div className="bg-transparent" id="lead">
+        {/* Форма захвата (Lead) */}
+        <section id="lead" className="bg-transparent py-20">
           <ContactForm />
-        </div>
+        </section>
+
       </div>
 
+      {/* Подвал сайта */}
       <Footer />
     </main>
   );
