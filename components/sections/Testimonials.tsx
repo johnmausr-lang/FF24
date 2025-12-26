@@ -1,105 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Star, Quote, Loader2 } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
+import React from "react";
+import { ParticlesBackground } from "../ParticlesBackground";
 
 export const Testimonials = () => {
-  const [reviews, setReviews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        // Запрос к нашему новому серверному API
-        const response = await fetch("/api/reviews");
-        const data = await response.json();
-        
-        // Если API вернуло массив отзывов
-        if (data && data.reviews) {
-          setReviews(data.reviews.slice(0, 3)); // Берем только первые 3
-        }
-      } catch (err) {
-        console.error("Ошибка загрузки отзывов:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReviews();
-  }, []);
-
   return (
     <section className="py-32 bg-black relative overflow-hidden">
-      {/* Фон - service-bg */}
-      <GlassVideo 
-        src="/videos/service-bg.webm" 
-        opacity={0.2} 
-        playbackRate={0.4}
-      />
+      {/* Звезды на фоне секции отзывов для глубины */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        <ParticlesBackground />
+      </div>
 
       <div className="container relative z-10">
-        <div className="max-w-2xl mb-20">
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-4">
             Голоса <span className="text-accent-lime">рынка</span>
           </h2>
-          <p className="text-white/40 text-lg uppercase tracking-widest font-bold">
-            Реальные отзывы из Яндекс.Карт
+          <p className="text-white/40 uppercase tracking-[0.4em] font-bold text-sm">
+            Прямой поток отзывов из Яндекс.Бизнес
           </p>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="animate-spin text-accent-lime" size={48} />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Если отзывы загрузились — показываем их, если нет — дефолтные */}
-            {(reviews.length > 0 ? reviews : [
-              { author: "Александр В.", text: "Перешел в FF24 после проблем на старом складе. Здесь всё четко: приемка день в день.", rating: 5 },
-              { author: "Елена М.", text: "Идеальная упаковка. За счет их оптимизации снизили логистические затраты на 15%.", rating: 5 },
-              { author: "Игорь Д.", text: "Система уведомлений в телеграм — это спасение. Вижу каждый шаг своего товара.", rating: 5 }
-            ]).map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="relative h-[400px] rounded-[3rem] p-[2px] overflow-hidden group"
-              >
-                <GlassVideo 
-                  src="/videos/service-bg.webm" 
-                  opacity={0.15} 
-                  blur="blur-[30px]" 
-                  overlayColor="bg-black/60"
-                />
-                
-                <div className="relative z-10 h-full w-full bg-white/[0.03] backdrop-blur-[40px] rounded-[3rem] p-10 flex flex-col border border-white/5 group-hover:border-accent-lime/30 transition-colors duration-500">
-                  <Quote className="absolute top-8 right-8 text-white/5" size={80} />
-                  
-                  <div className="flex gap-1 mb-8">
-                    {[...Array(5)].map((_, idx) => (
-                      <Star key={idx} size={16} className="fill-accent-lime text-accent-lime" />
-                    ))}
-                  </div>
-
-                  <p className="text-xl text-white/80 leading-relaxed italic mb-10 line-clamp-4">
-                    "{t.text || t.message}"
-                  </p>
-
-                  <div className="mt-auto">
-                    <p className="text-white font-black uppercase tracking-wider">
-                      {t.author || t.authorName}
-                    </p>
-                    <p className="text-accent-lime/60 text-[10px] font-bold uppercase tracking-[0.2em] mt-2">
-                      Verified Client • Yandex
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
+        {/* Официальный виджет Яндекс.Карт */}
+        <div className="glass-card p-4 border-white/10 bg-white/[0.02] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <iframe
+            src="https://yandex.ru/maps-reviews-widget/240447949600?comments"
+            style={{ width: '100%', height: '600px', border: 0, borderRadius: '1.5rem' }}
+            loading="lazy"
+            title="Yandex Reviews FF24"
+          />
+        </div>
+        
+        <div className="mt-12 text-center">
+          <a 
+            href="https://yandex.ru/maps/org/ff24/240447949600/reviews/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs uppercase tracking-[0.4em] text-white/30 hover:text-accent-lime transition-colors font-bold"
+          >
+            Смотреть все отзывы в первоисточнике →
+          </a>
+        </div>
       </div>
     </section>
   );
