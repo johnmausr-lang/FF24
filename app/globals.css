@@ -12,6 +12,7 @@
 
   html {
     scroll-behavior: smooth;
+    /* Градиентный фон для устранения эффекта "черной дыры" */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -21,15 +22,26 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E0FF64;
+    border-radius: 10px;
+  }
 }
 
 @layer components {
-  /* СТРОГОЕ ЦЕНТРИРОВАНИЕ */
+  /* ГЛОБАЛЬНОЕ ЦЕНТРИРОВАНИЕ КОНТЕЙНЕРА */
   .container {
     @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
   }
 
-  /* 3D ОБЪЕМ ЛОГОТИПА */
+  /* УНИФИЦИРОВАННЫЙ 3D ОБЪЕМ ЛОГОТИПА */
   .logo-3d-wrapper {
     perspective: 1200px;
     @apply flex items-center justify-center;
@@ -49,7 +61,7 @@
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА ДЛЯ КНОПОК */
+  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА ДЛЯ КНОПОК И РАМОК */
   .btn-liquid-3d {
     @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
     background: rgba(255, 255, 255, 0.03);
@@ -78,4 +90,13 @@
   .glass-card {
     @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem];
   }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
+  }
+}
+
+::selection {
+  @apply bg-accent-lime text-black;
 }
