@@ -5,38 +5,36 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
-  { q: "Сколько времени занимает приемка?", a: "Стандартная приемка — 24 часа. Если товар прибыл до 14:00, в 90% случаев он будет оприходован в тот же день." },
-  { q: "Как вы проверяете товар на брак?", a: "Мы проводим визуальный осмотр каждой единицы. По запросу выполняем детальную проверку с фото-фиксацией." },
-  { q: "Работаете ли вы с КИЗами?", a: "Да, работаем с маркировкой Честный Знак: печать, наклейка и передача данных в систему." },
-  { q: "Где вы находитесь?", a: "Наш склад расположен по адресу: ул. Лавочкина, 23, стр. 4, Москва. Удобный подъезд для любого транспорта." }
+  { q: "Как быстро вы принимаете товар?", a: "Норматив FF24 — 24 часа с момента разгрузки. Если товар приехал утром, в 90% случаев он будет доступен к продаже в тот же вечер." },
+  { q: "Как вы работаете с браком?", a: "Мы проводим тотальный визуальный осмотр. При обнаружении дефекта — сразу высылаем фото в ваш Telegram-чат для принятия решения." },
+  { q: "Вы маркируете товар по Честному Знаку?", a: "Да, мы полностью берем на себя работу с КИЗами: печать, оклейка и передача данных в систему Честный Знак." },
+  { q: "Где именно находится склад?", a: "Наш логистический центр расположен в Москве: ул. Лавочкина, 23. Удобная транспортная доступность для любого типа авто." }
 ];
 
 export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 bg-transparent">
-      <div className="container flex flex-col items-center">
-        <motion.h2 
-          initial={{ filter: "blur(10px)", opacity: 0 }}
-          whileInView={{ filter: "blur(0px)", opacity: 1 }}
-          className="text-5xl md:text-7xl font-black italic uppercase mb-20 tracking-tighter text-center"
-        >
-          Критические <span className="text-accent-lime">вопросы</span>
-        </motion.h2>
+    <section id="faq" className="py-32 bg-transparent">
+      <div className="container">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter">
+            Частые <span className="text-[#E0FF64]">вопросы</span>
+          </h2>
+        </div>
 
-        <div className="w-full max-w-4xl space-y-4">
+        <div className="max-w-4xl mx-auto space-y-4">
           {faqs.map((faq, i) => (
-            <div key={i} className="border-b border-white/10 bg-white/[0.01] backdrop-blur-sm rounded-2xl px-6">
+            <div key={i} className="glass-card rounded-[2rem] overflow-hidden">
               <button 
                 onClick={() => setOpenIndex(openIndex === i ? null : i)} 
-                className="w-full py-8 flex items-center justify-between text-left group transition-all"
+                className="w-full p-8 flex items-center justify-between text-left transition-all"
               >
-                <span className={`text-xl md:text-2xl font-bold uppercase tracking-tight transition-colors ${openIndex === i ? 'text-accent-lime' : 'text-white'}`}>
+                <span className={`text-xl md:text-2xl font-black uppercase tracking-tight ${openIndex === i ? 'text-[#E0FF64]' : 'text-white'}`}>
                   {faq.q}
                 </span>
-                <div className={`p-2 rounded-full transition-all ${openIndex === i ? 'bg-accent-lime text-black' : 'text-white/20'}`}>
-                  {openIndex === i ? <Minus size={24} /> : <Plus size={24} />}
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${openIndex === i ? 'bg-[#E0FF64] text-black' : 'bg-white/5 text-white'}`}>
+                  {openIndex === i ? <Minus size={20} /> : <Plus size={20} />}
                 </div>
               </button>
               <AnimatePresence>
@@ -46,7 +44,9 @@ export const FAQ = () => {
                     animate={{ height: "auto", opacity: 1 }} 
                     exit={{ height: 0, opacity: 0 }}
                   >
-                    <p className="pb-8 text-white/50 text-lg leading-relaxed">{faq.a}</p>
+                    <div className="px-8 pb-8 text-white/50 text-lg leading-relaxed font-medium border-t border-white/5 pt-4">
+                      {faq.a}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
