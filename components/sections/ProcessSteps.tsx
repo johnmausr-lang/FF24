@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useRef, useState, useEffect, useMemo } from "react";
+import React, { Suspense, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   useGLTF, 
@@ -8,7 +8,9 @@ import {
   Html, 
   Float, 
   ContactShadows, 
-  PerspectiveCamera 
+  PerspectiveCamera,
+  Center,
+  OrbitControls // Добавим для теста, чтобы вы могли покрутить сцену мышкой
 } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -20,46 +22,26 @@ const steps = [
   { id: 5, title: "Отгрузка", desc: "Доставка" },
 ];
 
-// Компонент модели с принудительной перекраской для видимости
 function Model() {
-  // Убедитесь, что файл лежит в public/models/conveyor.glb
+  // Путь должен быть строго от корня public
   const { scene } = useGLTF("/models/conveyor.glb");
   
-  useMemo(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        // Устанавливаем светлый материал, чтобы точно увидеть объект
-        mesh.material = new THREE.MeshStandardMaterial({
-          color: "#444444", 
-          metalness: 0.6,
-          roughness: 0.2,
-        });
-      }
-    });
-  }, [scene]);
-
   return (
     <primitive 
       object={scene} 
-      scale={6} 
-      position={[0, -2, 0]} 
-      rotation={[0, 0, 0]} 
+      scale={5} 
+      rotation={[0, Math.PI / 2, 0]} 
     />
   );
 }
 
-// Компонент движущейся карточки
 function StepCard({ data, index }: { data: any, index: number }) {
   const group = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (group.current) {
       const time = state.clock.getElapsedTime();
-      const speed = 1.5;
-      const offset = index * 6;
-      // Движение по оси Z
-      let zPos = ((time * speed + offset) % 30) - 15; 
+      let zPos = ((time * 1.5 + index * 6) % 30) - 15; 
       group.current.position.set(0, 1.8, zPos);
     }
   });
@@ -90,35 +72,50 @@ export const ProcessSteps = () => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="h-[800px] w-full bg-black" />;
+  if (!mounted) return <div className="h-[800px] w-full bg-[#0a0a0a]" />;
 
   return (
     <section id="process" className="relative h-[800px] w-full bg-[#050505] overflow-hidden border-y border-white/5">
-      {/* Заголовок строго по центру */}
+      {/* Заголовок */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center w-full px-4">
         <h2 className="text-5xl md:text-8xl font-[1000] italic uppercase tracking-tighter leading-none text-neon">
           Умный <span className="text-[#E0FF64]">Конвейер</span>
         </h2>
       </div>
 
-      <Canvas shadows dpr={[1, 2]}>
-        {/* Камера настроена так, чтобы сцена точно была в кадре */}
-        <PerspectiveCamera makeDefault position={[15, 12, 15]} fov={30} />
+      <Canvas 
+        shadows 
+        dpr={[1, 2]}
+        // Устанавливаем темно-серый фон вместо черного, чтобы видеть границы Canvas
+        onCreated={({ gl }) => gl.setClearColor('#0a0a0a')}
+      >
+        <PerspectiveCamera makeDefault position={[20, 15, 20]} fov={35} />
         
-        <Suspense fallback={<Html center><div className="text-[#E0FF64] font-black uppercase tracking-[0.5em] animate-pulse">Загрузка 3D...</div></Html>}>
-          {/* Сверхмощный свет для гарантии видимости */}
-          <Environment preset="city" />
-          <ambientLight intensity={1.5} /> 
-          <pointLight position={[10, 20, 10]} intensity={5} color="#E0FF64" />
-          <directionalLight position={[-10, 20, -10]} intensity={2} />
+        {/* OrbitControls позволит вам покрутить сцену мышкой и найти модель, если она улетела */}
+        <OrbitControls enableZoom={false} />
+
+        <Suspense fallback={<Html center><div className="text-[#E0FF64] animate-pulse">ЗАГРУЗКА 3D...</div></Html>}>
+          {/* СВЕТ: ОЧЕНЬ МНОГО СВЕТА ДЛЯ ТЕСТА */}
+          <Environment preset="night" />
+          <ambientLight intensity={1} /> 
+          <pointLight position={[10, 20, 10]} intensity={10} color="#E0FF64" />
+          <spotLight position={[-20, 20, 10]} intensity={5} angle={0.3} />
           
-          <Model />
+          <Center top>
+            <Model />
+          </Center>
+
+          {/* ТЕСТОВЫЙ КРАСНЫЙ КУБ: если вы его видите, значит Canvas работает */}
+          <mesh position={[-10, 5, 0]}>
+             <boxGeometry args={[2, 2, 2]} />
+             <meshStandardMaterial color="red" />
+          </mesh>
 
           {steps.map((step, i) => (
             <StepCard key={i} data={step} index={i} />
           ))}
 
-          <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={40} blur={2} color="#E0FF64" />
+          <ContactShadows position={[0, -0.1, 0]} opacity={0.6} scale={40} blur={2} color="#E0FF64" />
         </Suspense>
       </Canvas>
     </section>
