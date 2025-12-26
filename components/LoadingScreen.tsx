@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-// Путь исправлен на @/components/ui/GlassVideo, как в других ваших файлах
 import { GlassVideo } from "@/components/ui/GlassVideo";
 
 interface LoadingScreenProps {
@@ -26,7 +25,7 @@ export const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
         }
         return prev + 1;
       });
-    }, 30);
+    }, 20);
     return () => clearInterval(interval);
   }, [onFinished]);
 
@@ -37,18 +36,20 @@ export const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
           exit={{ opacity: 0, transition: { duration: 0.8 } }}
           className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden"
         >
-          {/* Фоновое видео для глубины */}
           <GlassVideo src="/videos/hero-bg.webm" opacity={0.3} blur="blur-[80px]" />
           
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center text-center">
+            {/* УНИФИЦИРОВАННЫЙ ЛОГОТИП */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="mb-12"
+              className="mb-12 logo-3d-wrapper"
             >
-              <h2 className="text-7xl md:text-9xl font-[1000] italic tracking-tighter text-white uppercase leading-none drop-shadow-[0_0_30px_rgba(224,255,100,0.3)]">
-                FF<span className="text-accent-lime">24</span>
-              </h2>
+              <img 
+                src="/logo-ff24.png" 
+                alt="FF24" 
+                className="logo-3d h-20 md:h-32 w-auto object-contain"
+              />
             </motion.div>
 
             <div className="w-[300px] h-[1px] bg-white/10 relative overflow-hidden rounded-full">
@@ -60,7 +61,7 @@ export const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
             </div>
             
             <div className="mt-8 flex flex-col items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40 animate-pulse">
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">
                 INITIALIZING SYSTEM
               </span>
               <span className="text-accent-lime font-mono text-xl font-bold">
