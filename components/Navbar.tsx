@@ -1,68 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { ParticlesBackground } from "./ParticlesBackground";
-import { usePerformance } from "@/hooks/usePerformance";
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isLowPower } = usePerformance();
-
   return (
-    <>
-      <nav className="fixed top-0 left-0 right-0 z-[100] border-b border-white/5 backdrop-blur-md bg-black/60">
-        <div className="container grid grid-cols-2 md:grid-cols-3 items-center h-20">
-          <div className="flex justify-start">
-            <img 
-              src="/logo-ff24.png" 
-              alt="FF24 - Фулфилмент для маркетплейсов" 
-              title="FF24 Logo"
-              className="h-10 w-auto cursor-pointer object-contain" 
-              onClick={() => window.scrollTo({top:0, behavior:'smooth'})} 
-            />
-          </div>
-
-          <div className="hidden md:flex items-center justify-center gap-10">
-            {["Услуги", "Процесс", "Заявка"].map((item) => (
-              <a key={item} href={`#${item === "Услуги" ? "benefits" : item === "Процесс" ? "process" : "lead"}`} 
-                 title={item}
-                 className="text-[10px] uppercase tracking-[0.3em] font-black hover:text-accent-lime transition-all">
-                {item}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex justify-end items-center gap-4">
-            <a href="https://t.me/manager24ff" target="_blank" className="hidden md:flex btn-glass-lime px-8 py-3 text-xs min-w-[180px] justify-center">
-              Консультация
-            </a>
-            <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(true)}>
-              <Menu size={28} />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] bg-black">
-            {!isLowPower && <ParticlesBackground />}
-            <div className="container h-full flex flex-col p-8 relative z-10">
-              <div className="flex justify-end mt-4"><button onClick={() => setMobileMenuOpen(false)}><X size={40} /></button></div>
-              <div className="flex flex-col items-center gap-10 mt-20">
-                {["Услуги", "Процесс", "Заявка"].map((item) => (
-                   <a key={item} href={`#${item === "Услуги" ? "benefits" : item === "Процесс" ? "process" : "lead"}`} 
-                      onClick={() => setMobileMenuOpen(false)} 
-                      className="text-4xl font-black uppercase italic tracking-tighter">{item}</a>
-                ))}
-                <a href="https://t.me/manager24ff" target="_blank" className="btn-glass-lime w-full py-6 text-center mt-10">Написать в Telegram</a>
-              </div>
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black/50 backdrop-blur-md border-b border-white/5">
+      <div className="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+        
+        {/* ЛОГОТИП: Только буквы, никакого фона */}
+        <Link href="/" className="flex items-center gap-2 group">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center"
+          >
+            <span className="text-3xl font-[900] italic tracking-tighter text-white">
+              FF<span className="text-accent-lime drop-shadow-[0_0_10px_rgba(224,255,100,0.4)]">24</span>
+            </span>
+            <div className="h-5 w-[2px] bg-accent-lime/30 rotate-[20deg] mx-3" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/90 leading-none">
+                Fulfillment
+              </span>
+              <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-accent-lime/60 mt-1">
+                Logistics Solutions
+              </span>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        </Link>
+
+        {/* Меню */}
+        <div className="hidden md:flex items-center gap-8">
+          {["Процесс", "Услуги", "FAQ"].map((item) => (
+            <Link 
+              key={item} 
+              href={`#${item.toLowerCase()}`}
+              className="text-xs font-bold uppercase tracking-widest text-white/50 hover:text-accent-lime transition-colors"
+            >
+              {item}
+            </Link>
+          ))}
+          <Link 
+            href="#lead"
+            className="px-6 py-2 bg-accent-lime text-black text-xs font-[900] uppercase tracking-widest rounded-full hover:scale-105 transition-transform"
+          >
+            Связаться
+          </Link>
+        </div>
+      </div>
+    </nav>
   );
 };
