@@ -142,3 +142,30 @@
     scrollbar-width: none;
   }
 }
+@keyframes glitch-scan {
+  0% { top: -100%; }
+  100% { top: 200%; }
+}
+
+.btn-glass-lime {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glass-lime::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: white;
+  opacity: 0.2;
+  filter: blur(10px);
+  transform: skewY(-10deg);
+  transition: 0s;
+}
+
+.btn-glass-lime:hover::after {
+  animation: glitch-scan 0.6s ease-in-out infinite;
+}
