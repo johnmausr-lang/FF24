@@ -1,91 +1,111 @@
-import Image from "next/image";
+"use client";
+
+import React from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { Send, MapPin, Phone, MessageCircle } from "lucide-react";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#050505] pt-20 pb-10 border-t border-white/5 relative overflow-hidden">
-        {/* Фоновый шум/текстура */}
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none"></div>
+    <footer className="relative bg-transparent pt-32 pb-12 border-t border-white/5 overflow-hidden">
+      {/* Декоративное неоновое свечение в углу футера */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-lime/5 blur-[150px] rounded-full pointer-events-none" />
       
-      <div className="container mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          <div className="md:col-span-2">
-            <Link href="/" className="inline-block mb-6 logo-3d-container">
-               {/* НОВЫЙ ЛОГОТИП В ФУТЕРЕ */}
-              <Image
-                src="/logo-ff24.png"
-                alt="FF24 Logo"
-                width={160}
-                height={50}
-                className="w-auto h-12 logo-3d object-contain origin-left"
-              />
-            </Link>
-            <p className="text-white/50 max-w-md mb-8 leading-relaxed">
-              Мы создаем будущее электронной коммерции, предоставляя фулфилмент-решения нового поколения. Скорость, точность и технологии — наш приоритет.
-            </p>
+      <div className="container relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24 items-start">
+          
+          {/* Блок бренда и контактов */}
+          <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
+            <div className="logo-3d-wrapper mb-10">
+              <Link href="/">
+                <img 
+                  src="/logo-ff24.png" 
+                  alt="FF24 Fulfillment" 
+                  className="logo-3d h-14 md:h-16 w-auto object-contain" 
+                />
+              </Link>
+            </div>
             
-            <div className="flex gap-4">
-                {/* Соцсети - заглушки */}
-                {['telegram', 'whatsapp', 'vk'].map(social => (
-                    <a key={social} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-accent-lime hover:border-accent-lime hover:text-black transition-all duration-300 group">
-                        <span className="capitalize text-xs font-bold">{social[0]}</span>
-                    </a>
-                ))}
+            <div className="space-y-8">
+              <motion.a 
+                href="https://t.me/manager24ff" 
+                target="_blank"
+                whileHover={{ scale: 1.02 }}
+                className="inline-flex items-center gap-4 text-4xl md:text-6xl font-[1000] italic uppercase text-white hover:text-accent-lime transition-all tracking-tighter"
+              >
+                <MessageCircle size={40} className="md:w-12 md:h-12" />
+                @manager24ff
+              </motion.a>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-white/90">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center md:justify-start gap-2 text-accent-lime/60 mb-1">
+                    <Phone size={14} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Телефон</span>
+                  </div>
+                  <a href="tel:+79873761722" className="text-2xl font-bold hover:text-accent-lime transition-colors">
+                    +7 (987) 376-17-22
+                  </a>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center md:justify-start gap-2 text-accent-lime/60 mb-1">
+                    <MapPin size={14} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Наш адрес</span>
+                  </div>
+                  <p className="text-sm uppercase tracking-[0.1em] text-white/50 font-bold leading-relaxed max-w-[250px]">
+                    ул. Лавочкина, 23, стр. 4, Москва
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold uppercase tracking-widest mb-6">Навигация</h4>
-            <ul className="space-y-4">
-              {["Услуги", "Процесс", "Отзывы", "FAQ", "Контакты"].map((item) => (
-                <li key={item}>
-                  <Link
-                    href={`#${item.toLowerCase()}`}
-                    className="text-white/50 hover:text-accent-lime transition-colors inline-flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-accent-lime rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold uppercase tracking-widest mb-6">Контакты</h4>
-            <ul className="space-y-4 text-white/50">
-              <li className="flex flex-col">
-                <span className="text-xs uppercase text-white/30 font-bold mb-1">Телефон</span>
-                <a href="tel:+79990000000" className="hover:text-white transition-colors font-mono">+7 (999) 000-00-00</a>
-              </li>
-               <li className="flex flex-col">
-                <span className="text-xs uppercase text-white/30 font-bold mb-1">Email</span>
-                <a href="mailto:hello@ff24.ru" className="hover:text-white transition-colors font-mono">hello@ff24.ru</a>
-              </li>
-              <li className="flex flex-col">
-                 <span className="text-xs uppercase text-white/30 font-bold mb-1">Адрес</span>
-                 <span>Москва, ул. Примерная, д. 10</span>
-              </li>
-            </ul>
+          {/* Блок навигации и кнопок */}
+          <div className="md:col-span-5 flex flex-col gap-4 w-full max-w-sm mx-auto md:ml-auto">
+            <h4 className="text-[10px] uppercase tracking-[0.5em] text-white/20 font-black mb-6 text-center md:text-right">Навигация по системе</h4>
+            
+            <Link href="#services" className="btn-glass-secondary w-full text-center py-5 font-bold uppercase tracking-widest text-xs group">
+              <span className="group-hover:text-accent-lime transition-colors">Услуги фулфилмента</span>
+            </Link>
+            
+            <Link href="#process" className="btn-glass-secondary w-full text-center py-5 font-bold uppercase tracking-widest text-xs group">
+              <span className="group-hover:text-accent-lime transition-colors">Процесс работы</span>
+            </Link>
+            
+            <Link href="https://t.me/manager24ff" target="_blank" className="btn-glass-lime w-full text-center py-5 font-[1000] uppercase tracking-[0.2em] text-sm mt-2 flex items-center justify-center gap-3">
+              Получить расчет
+              <Send size={18} />
+            </Link>
           </div>
         </div>
-
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30 font-mono uppercase tracking-wider">
-          <p>&copy; {currentYear} FF24 Fulfillment. Все права защищены.</p>
-          <div className="flex gap-8">
-            <Link href="/privacy" className="hover:text-white transition-colors">Политика конфиденциальности</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Публичная оферта</Link>
+        
+        {/* Нижняя часть футера */}
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-[10px] text-center md:text-left text-white/20 tracking-[0.4em] uppercase font-black">
+            © {currentYear} FF24 FULFILLMENT. ПРОВЕРЕННАЯ ЛОГИСТИКА.
+          </div>
+          
+          <div className="flex gap-10">
+            {/* Ссылки заменены на заглушки для устранения ошибок 404 */}
+            <Link href="#" className="text-[9px] uppercase tracking-widest text-white/10 hover:text-white/40 transition-colors font-bold">
+              Политика конфиденциальности
+            </Link>
+            <Link href="#" className="text-[9px] uppercase tracking-widest text-white/10 hover:text-white/40 transition-colors font-bold">
+              Публичная оферта
+            </Link>
           </div>
         </div>
       </div>
-       {/* Большой фоновый текст в футере */}
-       <div className="absolute -bottom-10 left-0 w-full overflow-hidden pointer-events-none opacity-[0.03]">
-            <h2 className="text-[20vw] font-[1000] italic uppercase leading-none text-white whitespace-nowrap">
-                FF24 Future Logistics
-            </h2>
-       </div>
+
+      {/* Огромный фоновый текст для стиля */}
+      <div className="absolute -bottom-10 left-0 w-full overflow-hidden pointer-events-none opacity-[0.02] select-none">
+        <h2 className="text-[22vw] font-[1000] italic uppercase leading-none text-white whitespace-nowrap">
+          FF24 LOGISTICS
+        </h2>
+      </div>
     </footer>
   );
 };
