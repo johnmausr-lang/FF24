@@ -5,12 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Button } from "./button";
+// ИСПРАВЛЕНО: Путь к компоненту Button и импорт
+import { Button } from "@/components/ui/button"; 
 
 const navItems = [
-  { name: "Services", href: "#services" },
-  { name: "Process", href: "#process" },
-  { name: "Reviews", href: "#testimonials" },
+  { name: "Услуги", href: "#services" },
+  { name: "Процесс", href: "#process" },
+  { name: "Отзывы", href: "#testimonials" },
   { name: "FAQ", href: "#faq" },
 ];
 
@@ -35,10 +36,9 @@ export const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        <Link href="/" className="relative z-10 logo-3d-container">
-           {/* НОВЫЙ ЛОГОТИП С 3D ЭФФЕКТОМ */}
+        <Link href="/" className="relative z-10 logo-3d-wrapper">
           <Image
-            src="/logo-ff24.png" // Убедитесь, что файл здесь
+            src="/logo-ff24.png"
             alt="FF24 Logo"
             width={140}
             height={45}
@@ -54,20 +54,19 @@ export const Navbar = () => {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className="text-sm font-bold uppercase tracking-wider text-white/70 hover:text-accent-lime transition-colors relative group"
+                  className="text-sm font-bold uppercase tracking-wider text-white/70 hover:text-[#E0FF64] transition-colors relative group"
                 >
                   {item.name}
-                  <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-accent-lime transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
             ))}
           </ul>
-          <Button variant="neon" size="sm">
-            Get Offer
+          {/* ИСПРАВЛЕНО: вариант lime вместо neon */}
+          <Button variant="lime" size="sm">
+            Связаться
           </Button>
         </nav>
 
-        {/* Mobile Menu Toggle */}
         <button
           className="md:hidden relative z-10 text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -76,36 +75,29 @@ export const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Fullscreen Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: "-100%" }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "-100%" }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-0 flex flex-col items-center justify-center"
           >
             <ul className="flex flex-col items-center gap-8 mb-12">
-              {navItems.map((item, i) => (
-                <motion.li
-                  key={item.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * i + 0.3 }}
-                >
+              {navItems.map((item) => (
+                <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-4xl font-black uppercase tracking-tighter text-white hover:text-accent-lime transition-colors"
+                    className="text-4xl font-black uppercase text-white hover:text-[#E0FF64]"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.name}
                   </Link>
-                </motion.li>
+                </li>
               ))}
             </ul>
-            <Button variant="neon" size="lg" onClick={() => setIsMobileMenuOpen(false)}>
-              Get Offer
+            <Button variant="lime" size="lg" onClick={() => setIsMobileMenuOpen(false)}>
+              Связаться
             </Button>
           </motion.div>
         )}
