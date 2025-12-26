@@ -1,22 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-// Импорты общих компонентов
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { LoadingScreen } from "@/components/LoadingScreen";
-import { ParticlesBackground } from "@/components/ParticlesBackground";
-import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
-import { ExitIntentPopup } from "@/components/ExitIntentPopup";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 
-// ИСПРАВЛЕНО: Пути к секциям (добавлено /sections/)
+// Импорт секций (проверьте, чтобы пути совпадали с вашей структурой)
+import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { LeadForm } from "@/components/sections/LeadForm";
+import { Footer } from "@/components/Footer";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
+import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
 export default function HomeContainer() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,35 +24,60 @@ export default function HomeContainer() {
 
   useEffect(() => {
     setIsMounted(true);
+    // Имитация загрузки ресурсов
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-black overflow-x-hidden">
+    <main className="relative bg-black min-h-screen">
+      {/* 1. ЭКРАН ЗАГРУЗКИ */}
       <AnimatePresence mode="wait">
         {isLoading && (
           <LoadingScreen onFinished={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
 
-      <div className={isLoading ? "opacity-0" : "opacity-100 transition-opacity duration-1000"}>
-        {isMounted && (
-          <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
-            <ParticlesBackground />
-          </div>
-        )}
-        
+      {/* 2. ГЛОБАЛЬНЫЙ ФОН СО ЗВЕЗДАМИ (ФИКСИРОВАННЫЙ) */}
+      {/* Мы возвращаем opacity-60 и фиксированное позиционирование, как было изначально */}
+      {isMounted && (
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
+          <ParticlesBackground />
+        </div>
+      )}
+
+      {/* 3. ОСНОВНОЙ КОНТЕНТ САЙТА */}
+      <div 
+        className={`relative z-10 transition-opacity duration-1000 ${
+          isLoading ? "opacity-0 invisible" : "opacity-100 visible"
+        }`}
+      >
         <Navbar />
         
-        <div className="relative z-10">
+        <div className="relative">
+          {/* Каждая секция bg-transparent, чтобы звезды были видны сквозь них */}
           <Hero />
-          <BentoGrid />
+          
+          <section className="border-y border-white/5 bg-transparent">
+            <BentoGrid />
+          </section>
+
           <ProcessSteps />
-          <Testimonials />
+
+          <section className="border-y border-white/5 bg-transparent">
+            <Testimonials />
+          </section>
+
           <FAQ />
+          
           <LeadForm />
+          
           <Footer />
         </div>
-        
+
+        {/* Всплывающие элементы */}
         <ExitIntentPopup />
         <FloatingTelegramButton />
       </div>
