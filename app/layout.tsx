@@ -3,7 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ReactLenis } from "lenis/react";
 import { Suspense } from "react";
-import { ExitIntentPopup } from "@/components/sections/ExitIntentPopup";
+// ИСПРАВЛЕНО: Путь импорта соответствует структуре проекта
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
 const inter = Inter({
@@ -36,7 +37,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans bg-black text-white antialiased selection:bg-[#E0FF64] selection:text-black overflow-x-hidden min-h-screen`}
       >
         <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-          {/* ИСПРАВЛЕНО: Убран LoadingScreen из fallback, так как он требует пропсы */}
+          {/* Простая заглушка для Suspense, чтобы избежать ошибок гидратации */}
           <Suspense fallback={<div className="fixed inset-0 bg-black z-[100]" />}>
             <div className="relative flex flex-col min-h-screen">
               {children}
