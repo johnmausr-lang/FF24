@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react"; // Добавьте импорт React для надежности
 import { motion } from "framer-motion";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import { ArrowRight } from "lucide-react";
@@ -10,7 +11,6 @@ const TELEGRAM_LINK = "https://t.me/manager24ff";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
-      {/* Видео-подложка для Hero */}
       <GlassVideo 
         src="/videos/hero-bg.webm" 
         opacity={0.5} 
@@ -19,7 +19,7 @@ export const Hero = () => {
       
       <ParticlesBackground />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black z-[5] />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black z-[5]" />
 
       <div className="container relative z-10">
         <div className="flex flex-col items-center text-center">
