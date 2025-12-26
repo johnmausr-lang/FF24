@@ -27,6 +27,7 @@ function Model() {
     });
   }, [scene]);
 
+  // Конвейер стоит прямо вдоль оси Z
   return <primitive object={scene} scale={5.5} position={[0, -2.5, 0]} rotation={[0, 0, 0]} />;
 }
 
@@ -35,6 +36,7 @@ function StepCard({ data, index }: { data: any, index: number }) {
   useFrame((state) => {
     if (group.current) {
       const time = state.clock.getElapsedTime();
+      // Карточки едут ВДОЛЬ ленты по оси Z
       let zPos = ((time * 1.4 + index * 6) % 30) - 15; 
       group.current.position.set(0, 1.6, zPos);
     }
@@ -66,7 +68,7 @@ export const ProcessSteps = () => {
   if (!mounted) return <div className="h-[850px] w-full bg-black" />;
 
   return (
-    <section id="process" className="relative h-[850px] w-full bg-transparent flex items-center justify-center overflow-hidden border-y border-white/5">
+    <section id="process" className="relative h-[850px] w-full bg-transparent flex flex-col items-center justify-center overflow-hidden border-y border-white/5">
       <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center w-full">
         <h2 className="text-6xl md:text-9xl font-[1000] italic uppercase tracking-tighter leading-none text-neon">
           Умный <span className="text-[#E0FF64]">Конвейер</span>
