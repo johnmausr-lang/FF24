@@ -17,96 +17,67 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Добавили backdrop-blur-md для корректного наслоения */}
       <nav className="fixed top-0 left-0 right-0 z-[100] border-b border-white/5 backdrop-blur-md bg-black/20">
         <div className="container flex justify-between items-center h-20">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-3xl font-black italic tracking-tighter cursor-pointer group"
+            className="cursor-pointer group"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <span className="gradient-text transition-all duration-300 group-hover:brightness-125">FF</span>
-            <span className="text-white">24</span>
+            <img 
+              src="/logo-ff24.png" 
+              alt="FF24 Logo" 
+              className="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105"
+            />
           </motion.div>
 
           <div className="hidden md:flex items-center gap-4">
             {navLinks.map((link) => (
-              <a 
-                key={link.label} 
-                href={link.href} 
-                className="btn-glass-secondary !py-2 !px-5 !text-[10px] tracking-widest border-white/5 hover:border-white/20"
-              >
+              <a key={link.label} href={link.href} className="nav-link text-sm uppercase tracking-widest font-bold px-4 py-2 hover:text-accent-lime transition-colors">
                 {link.label}
               </a>
             ))}
-            <a 
-              href={TELEGRAM_LINK} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="btn-glass-lime !py-2.5 !px-6 !text-[10px]"
-            >
-              Написать в Telegram
+            <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="btn-glass-lime ml-4">
+              Консультация
             </a>
           </div>
 
-          <button 
-            onClick={() => setMobileMenuOpen(true)} 
-            className="md:hidden glass p-3 rounded-full hover:border-accent-lime transition-colors"
-          >
-            <Menu size={24} className="text-white" />
+          <button className="md:hidden text-white p-2" onClick={() => setMobileMenuOpen(true)}>
+            <Menu size={32} />
           </button>
         </div>
       </nav>
 
-      {/* Мобильное меню */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-2xl flex flex-col justify-center px-6"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[110] bg-black flex flex-col p-8"
           >
-            <div className="container relative h-full flex flex-col justify-center">
-              <button 
-                onClick={() => setMobileMenuOpen(false)} 
-                className="absolute top-8 right-6 glass p-4 rounded-full border-white/20"
-              >
-                <X size={32} className="text-white" />
+            <div className="flex justify-end mb-8">
+              <button onClick={() => setMobileMenuOpen(false)}>
+                <X size={40} className="text-white" />
               </button>
-
-              <div className="text-center mb-16">
-                <span className="text-6xl font-black italic uppercase tracking-tighter gradient-text">FF24</span>
-              </div>
-
-              <div className="flex flex-col items-center gap-4">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="btn-glass-secondary w-full max-w-sm text-base py-5 border-white/10"
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
-                <motion.a
-                  href={TELEGRAM_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+            </div>
+            <div className="flex flex-col items-center gap-8 mt-12">
+              <img src="/logo-ff24.png" alt="FF24" className="h-16 w-auto mb-8" />
+              {navLinks.map((link) => (
+                <a 
+                  key={link.label} 
+                  href={link.href} 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="btn-glass-lime w-full max-w-sm text-base py-5"
+                  className="text-2xl font-black italic uppercase tracking-tighter text-white hover:text-accent-lime"
                 >
-                  Написать в Telegram
-                </motion.a>
-              </div>
+                  {link.label}
+                </a>
+              ))}
+              <a href={TELEGRAM_LINK} target="_blank" className="btn-glass-lime w-full text-center py-6 mt-8">
+                Telegram
+              </a>
             </div>
           </motion.div>
         )}
