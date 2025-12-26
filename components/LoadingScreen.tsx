@@ -2,13 +2,14 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+// ИСПРАВЛЕНО: Путь изменен на @/components/GlassVideo
 import { GlassVideo } from "@/components/GlassVideo";
 
-interface LoadingProps {
+interface LoadingScreenProps {
   onFinished?: () => void;
 }
 
-export const LoadingScreen = ({ onFinished }: LoadingProps) => {
+export const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -25,7 +26,7 @@ export const LoadingScreen = ({ onFinished }: LoadingProps) => {
         }
         return prev + 1;
       });
-    }, 20);
+    }, 25);
     return () => clearInterval(interval);
   }, [onFinished]);
 
@@ -36,10 +37,15 @@ export const LoadingScreen = ({ onFinished }: LoadingProps) => {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden"
         >
-          <GlassVideo src="/videos/hero-bg.webm" opacity={0.3} blur="blur-[100px]" />
+          {/* Премиальный фон с видео в лоадере */}
+          <GlassVideo src="/videos/hero-bg.webm" opacity={0.3} blur="blur-[80px]" />
           
           <div className="relative z-10 flex flex-col items-center">
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mb-12">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="mb-12"
+            >
               <h2 className="text-7xl md:text-9xl font-[1000] italic tracking-tighter text-white uppercase leading-none">
                 FF<span className="text-accent-lime text-neon">24</span>
               </h2>
@@ -53,8 +59,9 @@ export const LoadingScreen = ({ onFinished }: LoadingProps) => {
               />
             </div>
             
-            <div className="mt-6 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.6em] text-white/40">
-              Initializing System <span className="text-accent-lime font-mono text-sm">{progress}%</span>
+            <div className="mt-6 flex items-center gap-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40">Initializing FF24 System</span>
+              <span className="text-accent-lime font-mono text-sm font-bold">{progress}%</span>
             </div>
           </div>
         </motion.div>
