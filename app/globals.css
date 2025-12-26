@@ -12,7 +12,6 @@
 
   html {
     scroll-behavior: smooth;
-    /* Градиент вместо черного для глубины */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -25,14 +24,15 @@
 }
 
 @layer components {
-  /* ЦЕНТРИРОВАНИЕ КОНТЕЙНЕРА */
+  /* СТРОГОЕ ЦЕНТРИРОВАНИЕ */
   .container {
-    @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center;
+    @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
   }
 
-  /* УНИФИЦИРОВАННЫЙ 3D ОБЪЕМ ЛОГОТИПА */
+  /* 3D ОБЪЕМ ЛОГОТИПА */
   .logo-3d-wrapper {
     perspective: 1200px;
+    @apply flex items-center justify-center;
   }
 
   .logo-3d {
@@ -49,7 +49,7 @@
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА ДЛЯ КНОПОК И РАМОК */
+  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА ДЛЯ КНОПОК */
   .btn-liquid-3d {
     @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
     background: rgba(255, 255, 255, 0.03);
