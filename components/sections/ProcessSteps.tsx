@@ -1,134 +1,120 @@
 "use client";
 
-import React, { Suspense, useRef, useMemo } from "react";
+import React, { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Float, MeshTransmissionMaterial, Environment, Html, ContactShadows } from "@react-three/drei";
+import { useGLTF, MeshTransmissionMaterial, Environment, Html, Float, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 
 const steps = [
-  { id: 1, title: "Приемка", desc: "24 часа на склад" },
-  { id: 2, title: "Контроль", desc: "Проверка брака" },
-  { id: 3, title: "Маркировка", desc: "Честный Знак" },
-  { id: 4, title: "Упаковка", desc: "Защита товара" },
-  { id: 5, title: "Отгрузка", desc: "На все маркетплейсы" },
+  { id: 1, title: "Приемка", desc: "Сверка артикулов" },
+  { id: 2, title: "Контроль", desc: "Фото брака в TG" },
+  { id: 3, title: "Маркировка", desc: "Печать КИЗ" },
+  { id: 4, title: "Упаковка", desc: "Пузырьковая пленка" },
+  { id: 5, title: "Отгрузка", desc: "Склад Коледино" },
 ];
 
-// Компонент стеклянной карточки на конвейере
-function StepCard({ position, data, speed }: { position: [number, number, number], data: any, speed: number }) {
-  const meshRef = useRef<THREE.Group>(null);
+function StepCard({ position, data }: { position: [number, number, number], data: any }) {
+  const group = useRef<THREE.Group>(null);
+  const scrollSpeed = 2;
 
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      // Движение по оси Z (вдоль конвейера)
-      meshRef.current.position.z += delta * speed;
-      
-      // Возврат в начало при достижении конца (бесконечный цикл)
-      if (meshRef.current.position.z > 5) {
-        meshRef.current.position.z = -15;
+    if (group.current) {
+      group.current.position.z += delta * scrollSpeed;
+      if (group.current.position.z > 6) {
+        group.current.position.z = -14;
       }
     }
   });
 
   return (
-    <group ref={meshRef} position={position}>
-      {/* Основа карточки - "Умное стекло" */}
-      <mesh>
-        <boxGeometry args={[2.2, 1.4, 0.05]} />
-        <MeshTransmissionMaterial 
-          backside 
-          samples={4} 
-          thickness={0.1} 
-          chromaticAberration={0.02} 
-          anisotropy={0.1} 
-          distortion={0.1} 
-          distortionScale={0.1} 
-          temporalDistortion={0.1} 
-          iridescence={1}
-          color="#ffffff"
-        />
-      </mesh>
+    <group ref={group} position={position}>
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+        <mesh castShadow>
+          <boxGeometry args={[2.5, 1.5, 0.08]} />
+          <MeshTransmissionMaterial
+            backside
+            samples={4}
+            thickness={0.2}
+            chromaticAberration={0.05}
+            anisotropy={0.1}
+            distortion={0.1}
+            temporalDistortion={0.1}
+            color="#ffffff"
+            transmission={1}
+            transparent
+          />
+        </mesh>
 
-      {/* Контент внутри карточки через HTML-портал */}
-      <Html
-        transform
-        occlude
-        distanceFactor={1.5}
-        position={[0, 0, 0.03]}
-        className="pointer-events-none select-none"
-      >
-        <div className="w-[200px] p-4 font-sans text-white text-center">
-          <div className="text-[10px] text-accent-lime font-black mb-1 opacity-50 uppercase tracking-tighter">Phase 0{data.id}</div>
-          <div className="text-xl font-black italic uppercase leading-none mb-1">{data.title}</div>
-          <div className="text-[8px] text-white/40 uppercase font-bold tracking-[0.2em]">{data.desc}</div>
-        </div>
-      </Html>
+        <Html
+          transform
+          occlude
+          distanceFactor={1.8}
+          position={[0, 0, 0.05]}
+          className="pointer-events-none select-none"
+        >
+          <div className="w-[220px] p-6 bg-black/40 backdrop-blur-md border-accent-lime/20 border rounded-2xl text-center">
+            <span className="text-[10px] font-black text-accent-lime/50 uppercase tracking-[0.3em]">Phase 0{data.id}</span>
+            <h3 className="text-2xl font-black italic uppercase text-white my-1">{data.title}</h3>
+            <p className="text-[9px] text-white/40 font-bold uppercase tracking-widest">{data.desc}</p>
+          </div>
+        </Html>
+      </Float>
     </group>
   );
 }
 
-// Загрузка и отображение вашей модели конвейера
-function ConveyorModel() {
-  const { scene } = useGLTF("/models/conveyor.glb"); // Путь к вашей модели
-  return <primitive object={scene} scale={2} position={[0, -1, 0]} rotation={[0, Math.PI / 2, 0]} />;
+function Model() {
+  const { scene } = useGLTF("/models/conveyor.glb");
+  return <primitive object={scene} scale={2.2} position={[0, -1.2, 0]} rotation={[0, Math.PI / 2, 0]} />;
 }
 
 export const ProcessSteps = () => {
   return (
     <section id="process" className="relative h-[100vh] w-full bg-black overflow-hidden border-y border-white/5">
-      {/* Текстовый заголовок сверху сцены */}
-      <div className="absolute top-20 left-10 z-20 pointer-events-none">
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 text-center w-full px-6">
         <motion.h2 
-          initial={{ opacity: 0, x: -100, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter"
+          initial={{ filter: "blur(20px)", opacity: 0 }}
+          whileInView={{ filter: "blur(0px)", opacity: 1 }}
+          className="text-6xl md:text-9xl font-black italic uppercase tracking-tighter"
         >
-          Smart <span className="text-accent-lime">Flow</span>
+          Smart <span className="text-accent-lime">Line</span>
         </motion.h2>
-        <p className="text-white/30 uppercase tracking-[0.5em] font-bold text-xs mt-4">Автоматизированная цепочка фулфилмента</p>
       </div>
 
-      {/* 3D СЦЕНА */}
-      <Canvas shadows camera={{ position: [5, 3, 8], fov: 35 }}>
-        <color attach="background" args={["#000"]} />
-        <fog attach="fog" args={["#000", 5, 20]} />
+      <Canvas shadows camera={{ position: [8, 5, 10], fov: 30 }}>
+        <color attach="background" args={["#000000"]} />
+        <fog attach="fog" args={["#000", 8, 20]} />
         
         <Suspense fallback={null}>
           <Environment preset="night" />
-          <ambientLight intensity={0.2} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
+          <ambientLight intensity={0.5} />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
           
-          <group position={[0, 0, 0]}>
-            {/* Модель конвейера */}
-            <ConveyorModel />
+          <Model />
 
-            {/* Генерируем карточки с разным интервалом */}
-            {steps.map((step, i) => (
-              <StepCard 
-                key={step.id} 
-                data={step} 
-                position={[0, 0.5, i * -4]} // Распределяем по длине
-                speed={1.5} 
-              />
-            ))}
-          </div>
+          {steps.map((step, i) => (
+            <StepCard 
+              key={step.id} 
+              data={step} 
+              position={[0, 0.8, i * -4]} 
+            />
+          ))}
 
-          <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.5} far={10} color="#E0FF64" />
+          <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={20} blur={2} far={4.5} />
         </Suspense>
       </Canvas>
 
-      {/* Индикация скорости / Статус бар снизу */}
-      <div className="absolute bottom-10 right-10 z-20">
-        <div className="flex gap-4 items-center">
-          <div className="text-right">
-            <div className="text-[10px] text-white/40 uppercase font-black">System Status</div>
-            <div className="text-accent-lime font-mono text-xl animate-pulse">OPERATIONAL</div>
-          </div>
-          <div className="w-12 h-12 rounded-full border border-accent-lime/20 flex items-center justify-center">
-            <div className="w-2 h-2 bg-accent-lime rounded-full animate-ping" />
-          </div>
+      <div className="absolute bottom-12 left-12 z-20 hidden md:block">
+        <div className="flex items-center gap-4 text-accent-lime">
+          <div className="h-[1px] w-20 bg-accent-lime/30" />
+          <span className="text-[10px] font-black uppercase tracking-[0.5em] animate-pulse">
+            Live Logistics Stream
+          </span>
         </div>
       </div>
     </section>
   );
 };
+
+useGLTF.preload("/models/conveyor.glb");
