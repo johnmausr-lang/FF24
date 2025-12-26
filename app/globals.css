@@ -10,7 +10,6 @@
     --border: 240 5% 20%;
   }
 
-  /* Плавный скролл и база */
   html {
     scroll-behavior: smooth;
     background-color: #000;
@@ -18,12 +17,10 @@
 
   body {
     @apply bg-black text-white antialiased overflow-x-hidden;
-    /* Улучшение отрисовки шрифтов */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Стилизация скроллбара в стиле FF24 */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -41,7 +38,28 @@
     @apply max-w-[1300px] mx-auto px-6 lg:px-12;
   }
 
-  /* Glassmorphism 2.0 */
+  /* ЭФФЕКТ 3D ОБЪЕМА ДЛЯ ЛОГОТИПА */
+  .logo-3d-wrapper {
+    perspective: 1000px;
+  }
+
+  .logo-3d {
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transform: rotateX(15deg) rotateY(-10deg);
+    filter: 
+      drop-shadow(1px 1px 0px #E0FF64)
+      drop-shadow(2px 2px 0px #E0FF64)
+      drop-shadow(3px 3px 0px rgba(224, 255, 100, 0.5))
+      drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+  }
+
+  .logo-3d:hover {
+    transform: rotateX(0deg) rotateY(0deg) scale(1.05);
+    filter: 
+      drop-shadow(0 0 20px rgba(224, 255, 100, 0.6))
+      drop-shadow(0 0 40px rgba(224, 255, 100, 0.2));
+  }
+
   .glass {
     @apply bg-white/[0.02] backdrop-blur-[30px] border border-white/5;
   }
@@ -50,109 +68,40 @@
     @apply relative overflow-hidden bg-white/[0.01] backdrop-blur-2xl border border-white/5 transition-all duration-500 rounded-[2.5rem];
   }
 
-  /* Эффект свечения границ (для BentoGrid и карточек) */
-  .border-glow {
-    position: relative;
-  }
-  
-  .border-glow::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(90deg, transparent, rgba(224, 255, 100, 0.4), transparent);
-    background-size: 200% 100%;
-    animation: border-flow 4s linear infinite;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    -webkit-mask-composite: destination-out;
-    padding: 1px;
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
-  }
-  
-  .border-glow:hover::before {
-    opacity: 1;
-  }
-
-  /* Кнопка Premium Lime (с глитч-сканированием) */
   .btn-glass-lime {
-    @apply relative overflow-hidden bg-accent-lime text-black font-[900] uppercase tracking-widest transition-all duration-500 flex items-center justify-center;
-    box-shadow: 0 0 20px rgba(224, 255, 100, 0.1);
+    @apply relative overflow-hidden bg-[#E0FF64] text-black font-[900] uppercase tracking-widest transition-all duration-500 flex items-center justify-center rounded-full;
+    box-shadow: 0 0 20px rgba(224, 255, 100, 0.2);
   }
 
   .btn-glass-lime:hover {
     @apply scale-[1.02];
-    box-shadow: 0 0 40px rgba(224, 255, 100, 0.3);
+    box-shadow: 0 0 40px rgba(224, 255, 100, 0.4);
   }
 
-  .btn-glass-lime::after {
-    content: "";
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6), transparent);
-    transform: skewY(-15deg);
-    pointer-events: none;
-  }
-
-  .btn-glass-lime:hover::after {
-    animation: glitch-scan 0.8s ease-in-out infinite;
-  }
-
-  /* Вторичная кнопка */
-  .btn-glass-secondary {
-    @apply glass flex items-center justify-center px-8 py-4 text-white font-bold uppercase tracking-widest text-[10px] transition-all hover:bg-white/5 hover:border-white/20 rounded-full;
-  }
-
-  /* Текст с обводкой (Киберпанк стиль) */
-  .text-outline {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-    color: transparent;
-  }
-  
-  .text-outline-lime {
-    -webkit-text-stroke: 1px rgba(224, 255, 100, 0.5);
-    color: transparent;
-  }
-
-  /* Градиентный текст */
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-accent-lime;
-  }
-
-  /* Эффект неонового текста */
   .text-neon {
     text-shadow: 0 0 10px rgba(224, 255, 100, 0.5), 0 0 20px rgba(224, 255, 100, 0.2);
   }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+    color: transparent;
+  }
 }
 
-/* Анимации */
-@keyframes border-flow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+/* Анимация сканирования для кнопок */
+.btn-glass-lime::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewY(-15deg);
+  pointer-events: none;
+  transition: 0.8s;
 }
 
-@keyframes glitch-scan {
-  0% { top: -100%; }
-  100% { top: 200%; }
-}
-
-/* Вспомогательные классы для 3D и Фона */
-.canvas-container {
-  @apply pointer-events-none select-none;
-}
-
-/* Микро-глитч при скролле */
-.scroll-blur {
-  transition: filter 0.2s ease-out;
-}
-
-/* Убираем стандартные выделения для чистоты интерфейса */
-::selection {
-  @apply bg-accent-lime text-black;
+.btn-glass-lime:hover::after {
+  top: 200%;
 }
