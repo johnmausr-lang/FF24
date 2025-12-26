@@ -1,12 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import {
-  ClipboardList, Truck, HardHat, Factory,
-  PackageCheck, Download, CheckCircle2
-} from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
+import React from "react";
+import { motion } from "framer-motion";
+import { ClipboardList, Truck, HardHat, Factory, PackageCheck, Download, CheckCircle2 } from "lucide-react";
 
 const steps = [
   { title: "Заявка", desc: "Регистрация ТЗ", icon: <ClipboardList size={32} /> },
@@ -19,68 +15,40 @@ const steps = [
 ];
 
 export const ProcessSteps = () => {
-  const targetRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-70%"]);
+  // Удваиваем массив для бесшовной анимации
+  const duplicatedSteps = [...steps, ...steps];
 
   return (
-    <div id="process" ref={targetRef} className="relative h-[400vh] bg-black">
-      {/* ФОН SERVICE-BG */}
-      <GlassVideo 
-        src="/videos/service-bg.webm" 
-        opacity={0.2} 
-        playbackRate={0.5} 
-      />
+    <section id="process" className="py-32 bg-black overflow-hidden border-y border-white/5">
+      <div className="container mb-20">
+        <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">
+          Процесс <span className="text-accent-lime text-outline-white">работы</span>
+        </h2>
+      </div>
 
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="container mb-20 relative z-20 pointer-events-none">
-          <h2 className="text-6xl md:text-9xl font-black italic uppercase tracking-tighter opacity-10 leading-none">
-            Process <span className="text-accent-lime">Flow</span>
-          </h2>
-        </div>
-
-        <motion.div style={{ x }} className="flex gap-8 px-[10vw] relative z-10">
-          {steps.map((step, i) => (
-            <motion.div
-              key={i}
-              className="relative shrink-0 w-[300px] md:w-[450px]"
-            >
-              <div className="glass-card group h-[500px] p-[1px] bg-gradient-to-br from-white/10 to-transparent">
-                <div className="relative z-10 p-8 h-full flex flex-col bg-black/40 backdrop-blur-3xl rounded-[inherit]">
-                  <div className="w-16 h-16 rounded-xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-6 border border-accent-lime/20">
-                    {step.icon}
-                  </div>
-                  
-                  <div className="mb-4">
-                    <span className="text-xs font-bold text-accent-lime/40 uppercase tracking-[0.3em]">Этап 0{i + 1}</span>
-                    <h3 className="text-2xl font-black italic uppercase tracking-tighter mt-1">{step.title}</h3>
-                  </div>
-                  
-                  <p className="text-white/40 text-sm uppercase leading-snug">
-                    {step.desc}
-                  </p>
-
-                  <div className="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
-                    <div className="w-2 h-2 rounded-full bg-accent-lime animate-pulse" />
-                    <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest group-hover:text-accent-lime/60">System Active</span>
-                  </div>
+      <div className="relative flex">
+        <motion.div 
+          className="flex gap-6 px-6"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            ease: "linear",
+            duration: 30, // Скорость движения
+            repeat: Infinity,
+          }}
+        >
+          {duplicatedSteps.map((step, i) => (
+            <div key={i} className="w-[300px] flex-shrink-0">
+              <div className="glass-card p-8 h-full border-white/10">
+                <div className="w-16 h-16 rounded-xl bg-accent-lime/10 flex items-center justify-center text-accent-lime mb-6">
+                  {step.icon}
                 </div>
+                <h3 className="text-2xl font-black italic uppercase mb-2">{step.title}</h3>
+                <p className="text-white/40 text-sm uppercase">{step.desc}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
