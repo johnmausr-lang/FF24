@@ -13,6 +13,7 @@ export const ExitIntentPopup = () => {
 
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
+      // Срабатывает, когда курсор уходит вверх (попытка закрыть вкладку)
       if (e.clientY <= 0 && !hasShown) {
         setShow(true);
         setHasShown(true);
@@ -37,55 +38,53 @@ export const ExitIntentPopup = () => {
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
-            className="relative max-w-lg w-full rounded-[4rem] p-[2px] overflow-hidden border-none"
+            className="relative max-w-lg w-full rounded-[3.5rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Видео-фон для попапа */}
+            {/* Видео-фон внутри попапа */}
             <GlassVideo 
               src="/videos/hero-bg.webm" 
-              opacity={0.4} 
-              blur="blur-[50px]" 
-              overlayColor="bg-black/50"
+              opacity={0.3} 
+              blur="blur-[40px]" 
+              overlayColor="bg-black/60"
             />
 
-            <div className="relative z-10 bg-white/[0.03] backdrop-blur-[60px] rounded-[4rem] p-10 md:p-16 border border-white/10">
+            <div className="relative z-10 p-10 md:p-14 text-center">
               <button
                 onClick={() => setShow(false)}
-                className="absolute top-8 right-8 text-white/30 hover:text-accent-lime transition-colors z-20"
+                className="absolute top-6 right-6 text-white/30 hover:text-[#E0FF64] transition-colors"
               >
                 <X size={24} />
               </button>
 
-              <div className="text-center relative z-10">
-                <div className="inline-flex w-20 h-20 rounded-3xl glass bg-accent-lime/10 items-center justify-center text-accent-lime mb-10">
-                  <Gift size={40} />
-                </div>
+              <div className="inline-flex w-20 h-20 rounded-3xl bg-[#E0FF64]/10 items-center justify-center text-[#E0FF64] mb-8 border border-[#E0FF64]/20 shadow-[0_0_30px_rgba(224,255,100,0.1)]">
+                <Gift size={40} />
+              </div>
 
-                <h3 className="text-4xl md:text-5xl font-black italic uppercase mb-6 tracking-tighter">
-                  Подождите!
-                </h3>
-                
-                <p className="text-white/60 text-lg mb-12 leading-relaxed">
-                  Закрепите за собой <span className="text-white font-bold">скидку 10%</span> на первый месяц фулфилмента, просто написав нам «СТАРТ».
-                </p>
+              <h3 className="text-4xl md:text-5xl font-black italic uppercase mb-4 tracking-tighter leading-none">
+                Подождите!
+              </h3>
+              
+              <p className="text-white/60 text-lg mb-10 leading-relaxed font-medium">
+                Закрепите за собой <span className="text-white font-bold">скидку 10%</span> на первый месяц работы. Просто напишите нам <span className="text-[#E0FF64]">«СТАРТ»</span>.
+              </p>
 
-                <div className="flex flex-col gap-4">
-                  <a 
-                    href={TELEGRAM_LINK} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="btn-glass-lime w-full group py-5 text-lg"
-                  >
-                    Забрать скидку
-                    <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
-                  </a>
-                  <button 
-                    onClick={() => setShow(false)}
-                    className="text-white/20 hover:text-white/50 text-xs uppercase tracking-widest font-bold py-4 transition-colors"
-                  >
-                    Я хочу платить полную стоимость
-                  </button>
-                </div>
+              <div className="flex flex-col gap-4">
+                <a 
+                  href={TELEGRAM_LINK} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn-glass-lime w-full group py-5 text-lg rounded-2xl"
+                >
+                  Забрать скидку
+                  <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
+                </a>
+                <button 
+                  onClick={() => setShow(false)}
+                  className="text-white/20 hover:text-white/50 text-[10px] uppercase tracking-[0.3em] font-black py-4 transition-colors"
+                >
+                  Я хочу платить полную стоимость
+                </button>
               </div>
             </div>
           </motion.div>
