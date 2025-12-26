@@ -79,5 +79,36 @@ const config: Config = {
   ],
   plugins: [require("tailwindcss-animate")],
 };
+import type { Config } from "tailwind.config";
 
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        "accent-lime": "#E0FF64",
+      },
+      animation: {
+        'glitch-scan': 'glitch-scan 0.6s ease-in-out infinite',
+        'border-flow': 'border-flow 4s linear infinite',
+      },
+      keyframes: {
+        'glitch-scan': {
+          '0%': { top: '-100%' },
+          '100%': { top: '200%' },
+        },
+        'border-flow': {
+          '0%': { 'background-position': '0% 50%' },
+          '100%': { 'background-position': '200% 50%' },
+        }
+      }
+    },
+  },
+  plugins: [],
+};
+export default config;
 export default config;
