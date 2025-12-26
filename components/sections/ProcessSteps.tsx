@@ -2,15 +2,7 @@
 
 import React, { Suspense, useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { 
-  useGLTF, 
-  MeshTransmissionMaterial, 
-  Environment, 
-  Html, 
-  Float, 
-  ContactShadows, 
-  PerspectiveCamera 
-} from "@react-three/drei";
+import { useGLTF, Environment, Html, Float, ContactShadows, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 
 const steps = [
@@ -29,31 +21,24 @@ function Model() {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         mesh.material = new THREE.MeshStandardMaterial({
-          color: "#1a1a1a", 
-          metalness: 0.8,
+          color: "#2a2a2a", // Сделали металл светлее
+          metalness: 0.7,
           roughness: 0.2,
         });
 
-        const name = child.name.toLowerCase();
-        if (name.includes("light") || name.includes("neon") || name.includes("glow")) {
+        if (child.name.toLowerCase().includes("light") || child.name.toLowerCase().includes("neon")) {
           mesh.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 20,
+            emissiveIntensity: 10,
           });
         }
       }
     });
   }, [scene]);
 
-  return (
-    <primitive 
-      object={scene} 
-      scale={5} 
-      position={[0, -2.5, 0]} 
-      rotation={[0, -Math.PI / 4, 0]} 
-    />
-  );
+  // Разворот конвейера вдоль оси Z
+  return <primitive object={scene} scale={5} position={[0, -2.5, 0]} rotation={[0, 0, 0]} />;
 }
 
 function StepCard({ data, index }: { data: any, index: number }) {
@@ -62,38 +47,36 @@ function StepCard({ data, index }: { data: any, index: number }) {
   useFrame((state) => {
     if (group.current) {
       const time = state.clock.getElapsedTime();
-      const speed = 1.2;
-      const offset = index * 5;
-      let zPos = ((time * speed + offset) % 25) - 12;
-      let xPos = -zPos;
-      group.current.position.set(xPos, 1.4, zPos);
+      const speed = 1.5;
+      const offset = index * 6;
+      
+      // Исправленное направление: карточки идут ВДОЛЬ конвейера (по оси Z)
+      // Мы меняем знак или ось, чтобы движение совпадало с лентой
+      let zPos = ((time * speed + offset) % 30) - 15; 
+      
+      group.current.position.set(0, 1.5, zPos);
     }
   });
 
   return (
     <group ref={group}>
-      <Float speed={2} rotationIntensity={0.1} floatIntensity={0.3}>
+      <Float speed={2} rotationIntensity={0.1} floatIntensity={0.4}>
         <mesh>
-          <boxGeometry args={[3.2, 1.8, 0.05]} />
+          <boxGeometry args={[3.5, 2, 0.05]} />
           <meshPhysicalMaterial 
             transmission={1} 
             thickness={0.5} 
-            roughness={0.1} 
+            roughness={0.15} 
             color="#ffffff" 
             transparent 
-            opacity={0.8}
+            opacity={0.9}
           />
         </mesh>
-        <Html 
-          transform 
-          distanceFactor={3} 
-          position={[0, 0, 0.06]} 
-          pointerEvents="none"
-        >
-          <div className="w-[280px] p-6 bg-black/70 backdrop-blur-3xl border border-[#E0FF64]/30 rounded-[2.5rem] text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-            <div className="text-[10px] font-black text-[#E0FF64] uppercase tracking-[0.4em] mb-2">ЭТАП 0{data.id}</div>
-            <div className="text-2xl font-[900] italic uppercase text-white mb-1 leading-none tracking-tighter">{data.title}</div>
-            <div className="text-[9px] text-white/40 font-bold uppercase tracking-widest">{data.desc}</div>
+        <Html transform distanceFactor={3} position={[0, 0, 0.06]} pointerEvents="none">
+          <div className="w-[300px] p-8 bg-black/80 backdrop-blur-3xl border border-[#E0FF64]/40 rounded-[2.5rem] text-center shadow-2xl">
+            <div className="text-[11px] font-black text-[#E0FF64] uppercase tracking-[0.5em] mb-3">ЭТАП 0{data.id}</div>
+            <div className="text-3xl font-[900] italic uppercase text-white mb-2 tracking-tighter">{data.title}</div>
+            <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-relaxed">{data.desc}</div>
           </div>
         </Html>
       </Float>
@@ -108,25 +91,23 @@ export const ProcessSteps = () => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="h-[800px] w-full bg-black" />;
+  if (!mounted) return <div className="h-[800px] w-full" />;
 
   return (
-    <section id="process" className="relative h-[800px] w-full bg-[#050505] overflow-hidden border-y border-white/5">
-      <div className="absolute top-20 left-10 md:left-20 z-20 pointer-events-none">
-        <h2 className="text-6xl md:text-[120px] font-[1000] italic uppercase tracking-tighter leading-[0.7] opacity-5 text-outline absolute -top-10 -left-5">SYSTEM</h2>
-        <h2 className="text-4xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none relative">
-          Умный <span className="text-[#E0FF64] text-neon">Конвейер</span>
+    <section id="process" className="relative h-[900px] w-full bg-transparent overflow-hidden border-y border-white/5 neon-glow-soft">
+      <div className="absolute top-24 left-10 md:left-20 z-20 pointer-events-none">
+        <h2 className="text-4xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none relative text-neon">
+          Умный <span className="text-[#E0FF64]">Конвейер</span>
         </h2>
       </div>
 
-      <Canvas shadows dpr={[1, 2]} gl={{ antialias: true }}>
-        <PerspectiveCamera makeDefault position={[14, 12, 14]} fov={28} />
+      <Canvas shadows dpr={[1, 2]}>
+        <PerspectiveCamera makeDefault position={[18, 12, 18]} fov={25} />
         <Suspense fallback={null}>
-          {/* ИСПРАВЛЕНО: Удален intensity, так как он не поддерживается типами в этой версии */}
           <Environment preset="city" />
-          <ambientLight intensity={0.7} />
-          <pointLight position={[10, 10, 10]} intensity={2} color="#E0FF64" />
-          <spotLight position={[-10, 20, 10]} angle={0.15} penumbra={1} intensity={3} castShadow />
+          <ambientLight intensity={0.8} /> {/* Увеличили общий свет */}
+          <pointLight position={[10, 15, 10]} intensity={2.5} color="#E0FF64" />
+          <directionalLight position={[-10, 20, 10]} intensity={1.5} />
           
           <Model />
 
@@ -134,20 +115,9 @@ export const ProcessSteps = () => {
             <StepCard key={i} data={step} index={i} />
           ))}
 
-          <ContactShadows position={[0, -2.5, 0]} opacity={0.4} scale={30} blur={2} color="#E0FF64" />
+          <ContactShadows position={[0, -2.5, 0]} opacity={0.4} scale={40} blur={2.5} color="#E0FF64" />
         </Suspense>
       </Canvas>
-
-      <div className="absolute bottom-12 right-10 z-20 flex items-center gap-6 glass px-8 py-4 rounded-3xl border-white/5 bg-black/60">
-        <div className="text-right">
-          <div className="text-[10px] text-white/20 uppercase font-black tracking-widest">Статус</div>
-          <div className="text-[#E0FF64] font-mono text-lg">ОПЕРАЦИОННО</div>
-        </div>
-        <div className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E0FF64] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E0FF64]"></span>
-        </div>
-      </div>
     </section>
   );
 };
