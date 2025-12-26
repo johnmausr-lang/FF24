@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
+// Импорты компонентов
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
@@ -13,8 +14,6 @@ import { LeadForm } from "@/components/sections/LeadForm";
 import { Footer } from "@/components/Footer";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { ExitIntentPopup } from "@/components/ExitIntentPopup";
-import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
 export default function HomeContainer() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,60 +21,36 @@ export default function HomeContainer() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Таймер для завершения анимации лоадера
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3500);
+    const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <main className="relative bg-black min-h-screen">
-      {/* 1. ЭКРАН ЗАГРУЗКИ */}
+    <main className="relative min-h-screen">
       <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen onFinished={() => setIsLoading(false)} />
-        )}
+        {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* 2. ФОН СО ЗВЕЗДАМИ (ФИКСИРОВАННЫЙ) */}
+      {/* ЗВЕЗДЫ: Теперь они всегда на фоне и имеют z-index -1 */}
       {isMounted && (
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
+        <div className="fixed inset-0 z-[-1] pointer-events-none opacity-80">
           <ParticlesBackground />
         </div>
       )}
 
-      {/* 3. ОСНОВНОЙ КОНТЕНТ */}
-      <div 
-        className={`relative z-10 transition-opacity duration-1000 ${
-          isLoading ? "opacity-0 invisible" : "opacity-100 visible"
-        }`}
-      >
+      <div className={isLoading ? "opacity-0" : "opacity-100 transition-opacity duration-1000"}>
         <Navbar />
         
-        <div className="relative">
-          {/* Секции имеют прозрачный фон, чтобы звезды были видны */}
+        {/* Все секции теперь bg-transparent, чтобы звезды просвечивали */}
+        <div className="relative z-10 bg-transparent">
           <Hero />
-          
-          <div className="border-y border-white/5 bg-transparent">
-            <BentoGrid />
-          </div>
-
+          <BentoGrid />
           <ProcessSteps />
-
-          <div className="border-y border-white/5 bg-transparent">
-            <Testimonials />
-          </div>
-
+          <Testimonials />
           <FAQ />
-          
           <LeadForm />
-          
           <Footer />
         </div>
-
-        <ExitIntentPopup />
-        <FloatingTelegramButton />
       </div>
     </main>
   );
