@@ -1,4 +1,3 @@
-// app/layout.tsx
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
@@ -16,8 +15,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "FF24 | Фулфилмент Нового Поколения",
-  description: "Автоматизированная логистика: приемка, упаковка и отгрузка на маркетплейсы за 24 часа. Адрес: ул. Лавочкина, 23, стр. 4, Москва.",
-  keywords: ["фулфилмент", "вайлдберриз", "озон", "логистика", "маркетплейсы", "FF24"],
+  description: "Автоматизированная логистика. Адрес: ул. Лавочкина, 23, стр. 4, Москва. Тел: +7 (987) 376-17-22.",
 };
 
 export const viewport: Viewport = {
@@ -27,31 +25,21 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className="scroll-smooth" suppressHydrationWarning>
-      <body 
-        className={`${inter.variable} font-sans bg-black text-white antialiased selection:bg-[#E0FF64] selection:text-black overflow-x-hidden min-h-screen`}
-      >
-        {/* НАСТРОЙКА МАКСИМАЛЬНОЙ ПЛАВНОСТИ СКРОЛЛА */}
+    <html lang="ru" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans bg-black text-white antialiased overflow-x-hidden min-h-screen`}>
+        {/* МАКСИМАЛЬНО ПЛАВНЫЙ СКРОЛЛ */}
         <ReactLenis root options={{ 
-          lerp: 0.06,           // Чем меньше, тем плавнее (инертнее) скролл
-          duration: 1.8,       // Время анимации до полной остановки
+          lerp: 0.05, 
+          duration: 1.8, 
           smoothWheel: true, 
-          wheelMultiplier: 0.8, // Множитель скорости колеса для мягкости
-          touchMultiplier: 1.5,
+          wheelMultiplier: 0.8 
         }}>
-          {/* Главный лоадер проекта */}
           <Suspense fallback={<LoadingScreen />}>
             <div className="relative flex flex-col min-h-screen">
               {children}
             </div>
-            
-            {/* Глобальные элементы */}
             <ExitIntentPopup />
             <FloatingTelegramButton />
           </Suspense>
