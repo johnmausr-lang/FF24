@@ -1,72 +1,67 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { GlassVideo } from "@/components/ui/GlassVideo";
 
-// ИСПРАВЛЕНО: onFinished теперь необязательный (?)
-export const LoadingScreen = ({ onFinished }: { onFinished?: () => void }) => {
+export const LoadingScreen = () => {
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const duration = 3000; 
-    const intervalTime = 50;
-    const steps = duration / intervalTime;
-    let currentStep = 0;
-
     const interval = setInterval(() => {
-      currentStep++;
-      const newProgress = Math.min(100, Math.round(100 * (1 - Math.pow(1 - currentStep / steps, 2))));
-      
-      setProgress(newProgress);
-
-      if (currentStep >= steps) {
-        clearInterval(interval);
-        // Вызываем только если функция передана
-        if (onFinished) {
-          setTimeout(onFinished, 500);
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setLoading(false), 500);
+          return 100;
         }
-      }
-    }, intervalTime);
-
+        return prev + 1;
+      });
+    }, 25);
     return () => clearInterval(interval);
-  }, [onFinished]);
+  }, []);
 
   return (
-    <motion.div
-      className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
-    >
-      <div className="relative flex flex-col items-center">
+    <AnimatePresence>
+      {loading && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-12 logo-3d-wrapper"
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden"
         >
-          <Image
-            src="/logo-ff24.png"
-            alt="Загрузка FF24"
-            width={180}
-            height={60}
-            className="w-auto h-14 md:h-16 logo-3d object-contain"
-            priority
-          />
-        </motion.div>
+          {/* Видео на фоне лоадера для эффекта погружения */}
+          <GlassVideo src="/videos/hero-bg.webm" opacity={0.3} blur="blur-[100px]" />
+          
+          <div className="relative z-10 flex flex-col items-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="mb-12"
+            >
+              <h2 className="text-7xl md:text-9xl font-[1000] italic tracking-tighter text-white uppercase leading-none">
+                FF<span className="text-accent-lime text-neon">24</span>
+              </h2>
+            </motion.div>
 
-        <div className="w-[240px] h-[1px] bg-white/10 rounded-full overflow-hidden relative">
-          <motion.div
-            className="absolute inset-y-0 left-0 bg-[#E0FF64] shadow-[0_0_15px_#E0FF64]"
-            initial={{ width: "0%" }}
-            animate={{ width: `${progress}%` }}
-          />
-        </div>
-        
-        <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.5em] text-[#E0FF64] animate-pulse">
-            Инициализация системы {progress}%
-        </div>
-      </div>
-    </motion.div>
+            <div className="w-[300px] h-[1px] bg-white/10 relative overflow-hidden rounded-full">
+              <motion.div 
+                className="absolute inset-y-0 left-0 bg-accent-lime shadow-[0_0_15px_#E0FF64]"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+              />
+            </div>
+            
+            <div className="mt-6 flex items-center gap-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">
+                Initializing System
+              </span>
+              <span className="text-accent-lime font-mono text-sm font-bold">
+                {progress}%
+              </span>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
