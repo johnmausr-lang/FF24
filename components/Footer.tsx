@@ -7,6 +7,7 @@ export const Footer = () => {
   return (
     <footer className="relative bg-transparent pt-32 pb-12 border-t border-white/5 flex flex-col items-center justify-center text-center">
       <div className="container flex flex-col items-center justify-center">
+        {/* КРУПНЫЙ ЛОГОТИП */}
         <div className="logo-3d-wrapper mb-16">
           <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-20 md:h-32 w-auto object-contain" />
         </div>
@@ -16,9 +17,9 @@ export const Footer = () => {
             <a href="https://t.me/manager24ff" target="_blank" className="flex items-center gap-4 text-4xl md:text-6xl font-[1000] italic uppercase text-white hover:text-accent-lime tracking-tighter transition-all">
               <MessageCircle size={48} /> @manager24ff
             </a>
-            <div className="flex flex-col md:flex-row gap-8 mt-4 text-white/50 font-bold uppercase tracking-widest text-[10px]">
+            <div className="flex flex-col md:flex-row gap-8 mt-4 text-white/50 font-bold uppercase tracking-widest text-[10px] items-center">
               <div className="flex items-center gap-2"><Phone size={14} /> +7 (987) 376-17-22</div>
-              <div className="flex items-center gap-2"><MapPin size={14} /> ул. Лавочкина, 23, стр. 4, Москва</div>
+              <div className="flex items-center gap-2 text-center"><MapPin size={14} /> ул. Лавочкина, 23, стр. 4, Москва</div>
             </div>
           </div>
           <div className="flex flex-col items-center md:items-end justify-center">
