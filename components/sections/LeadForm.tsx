@@ -1,71 +1,108 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, Check } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
-
-const TELEGRAM_LINK = "https://t.me/manager24ff";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, CheckCircle2, Loader2 } from "lucide-react";
 
 export const LeadForm = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [formData, setFormData] = useState({ name: "", phone: "" });
 
-  const handleAction = () => {
-    window.open(TELEGRAM_LINK, "_blank");
-    setSubmitted(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const res = await fetch("/api/send-tg", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
+    }
   };
 
   return (
-    <section id="lead" className="py-32 relative overflow-hidden">
-      <div className="container relative z-10">
-        <motion.div className="glass-card max-w-5xl mx-auto overflow-hidden relative border-accent-lime/20">
-          
-          {/* SERVICE-BG ДЛЯ ВНУТРЕННЕГО БЛОКА */}
-          <GlassVideo 
-            src="/videos/service-bg.webm" 
-            opacity={0.4} 
-            overlayColor="bg-black/60"
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 relative z-10">
-            <div className="p-12 lg:p-20 border-r border-white/5 bg-black/20">
-              <h2 className="text-5xl md:text-6xl font-black italic uppercase mb-8 tracking-tighter">
-                Готовы к <br/><span className="text-accent-lime">взлету?</span>
-              </h2>
-              <p className="text-white/50 text-lg uppercase tracking-wide leading-relaxed">
-                Нажмите кнопку ниже, чтобы перейти в Telegram и получить индивидуальный расчет стоимости за 15 минут.
-              </p>
-            </div>
-
-            <div className="p-12 lg:p-20 flex flex-col justify-center items-center text-center">
-              <AnimatePresence mode="wait">
-                {!submitted ? (
-                  <motion.div key="form" className="w-full">
-                    <div className="mb-10 inline-flex items-center gap-2 text-accent-lime">
-                      <Sparkles className="animate-pulse" />
-                      <span className="font-black uppercase tracking-widest text-sm">Fast Response</span>
-                    </div>
-                    <button 
-                      onClick={handleAction}
-                      className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224, 255, 100, 0.3)]"
-                    >
-                      Связаться в Telegram
-                      <Send className="ml-4 group-hover:rotate-12 transition-transform" />
-                    </button>
-                  </motion.div>
-                ) : (
-                  <motion.div key="success" className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full bg-accent-lime flex items-center justify-center text-black mb-8">
-                      <Check size={40} strokeWidth={3} />
-                    </div>
-                    <h3 className="text-3xl font-black italic uppercase">Ждем вас!</h3>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+    <div className="max-w-4xl mx-auto px-6 py-20">
+      <div className="glass-card p-8 md:p-16 rounded-[3rem] border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
+        {/* Анимированный фон внутри формы */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent-lime/5 blur-[120px] rounded-full" />
+        
+        <div className="relative z-10">
+          <div className="mb-12 text-center md:text-left">
+            <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-4">
+              Запустить <span className="text-accent-lime">поток</span>
+            </h2>
+            <p className="text-white/40 uppercase tracking-[0.3em] text-[10px] font-bold">
+              Оставьте заявку на расчет фулфилмента и аудит
+            </p>
           </div>
-        </motion.div>
+
+          {status === "success" ? (
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }}
+              className="py-12 text-center"
+            >
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-accent-lime/20 text-accent-lime mb-6">
+                <CheckCircle2 size={48} />
+              </div>
+              <h3 className="text-3xl font-black uppercase italic mb-2">Заявка принята</h3>
+              <p className="text-white/50 text-sm tracking-widest uppercase">Менеджер свяжется с вами скоро</p>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase tracking-[0.4em] font-black text-white/20 ml-4">Ваше имя</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="АЛЕКСАНДР"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-6 outline-none focus:border-accent-lime/50 transition-all text-white placeholder:text-white/5 font-bold uppercase tracking-widest"
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase tracking-[0.4em] font-black text-white/20 ml-4">Телефон</label>
+                  <input
+                    required
+                    type="tel"
+                    placeholder="+7 (___) ___-__-__"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-6 outline-none focus:border-accent-lime/50 transition-all text-white placeholder:text-white/5 font-bold uppercase tracking-widest"
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <button
+                disabled={status === "loading"}
+                className="btn-glass-lime w-full py-8 rounded-2xl flex items-center justify-center gap-4 group disabled:opacity-50"
+              >
+                {status === "loading" ? (
+                  <Loader2 className="animate-spin text-black" size={24} />
+                ) : (
+                  <>
+                    <span className="text-sm font-black uppercase tracking-[0.3em]">Отправить в обработку</span>
+                    <Send size={20} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500" />
+                  </>
+                )}
+              </button>
+              
+              <p className="text-center text-[8px] text-white/10 uppercase tracking-[0.2em]">
+                Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности FF24
+              </p>
+            </form>
+          )}
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
