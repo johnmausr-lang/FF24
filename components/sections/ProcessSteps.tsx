@@ -1,62 +1,92 @@
 "use client";
 
-import React, { Suspense, useRef } from "react";
+import React, { Suspense, useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, MeshTransmissionMaterial, Environment, Html, Float, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 
 const steps = [
-  { id: 1, title: "Приемка", desc: "Сверка артикулов" },
-  { id: 2, title: "Контроль", desc: "Фото брака в TG" },
-  { id: 3, title: "Маркировка", desc: "Печать КИЗ" },
-  { id: 4, title: "Упаковка", desc: "Пузырьковая пленка" },
-  { id: 5, title: "Отгрузка", desc: "Склад Коледино" },
+  { id: 1, title: "Приемка", desc: "Сверка и IT-учет" },
+  { id: 2, title: "Контроль", desc: "Проверка на брак" },
+  { id: 3, title: "Маркировка", desc: "Честный знак" },
+  { id: 4, title: "Упаковка", desc: "Брендирование" },
+  { id: 5, title: "Отгрузка", desc: "Доставка на маркетплейс" },
 ];
+
+function Model() {
+  const { scene } = useGLTF("/models/conveyor.glb");
+  
+  useMemo(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        // Красим всё в темный "оружейный" металл
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: "#080808",
+          metalness: 1,
+          roughness: 0.2,
+          emissive: "#000000"
+        });
+
+        // Добавляем неоновое свечение на грани или детали с "light" в названии
+        if (child.name.toLowerCase().includes("light") || child.name.toLowerCase().includes("neon")) {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: "#E0FF64",
+            emissive: "#E0FF64",
+            emissiveIntensity: 10,
+          });
+        }
+      }
+    });
+  }, [scene]);
+
+  return (
+    <primitive 
+      object={scene} 
+      scale={4.5} // Увеличили
+      position={[0, -2, 0]} 
+      rotation={[0, -Math.PI / 1.3, 0]} // Развернули
+    />
+  );
+}
 
 function StepCard({ position, data }: { position: [number, number, number], data: any }) {
   const group = useRef<THREE.Group>(null);
-  const scrollSpeed = 2;
-
+  
   useFrame((state, delta) => {
     if (group.current) {
-      group.current.position.z += delta * scrollSpeed;
-      if (group.current.position.z > 6) {
-        group.current.position.z = -14;
-      }
+      group.current.position.z += delta * 1.5;
+      if (group.current.position.z > 6) group.current.position.z = -14;
     }
   });
 
   return (
     <group ref={group} position={position}>
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <mesh castShadow>
-          <boxGeometry args={[2.5, 1.5, 0.08]} />
+      <Float speed={3} rotationIntensity={0.2} floatIntensity={0.5}>
+        <mesh>
+          <boxGeometry args={[2.8, 1.8, 0.05]} />
           <MeshTransmissionMaterial
-            backside
-            samples={4}
+            samples={6}
             thickness={0.2}
             chromaticAberration={0.05}
-            anisotropy={0.1}
             distortion={0.1}
-            temporalDistortion={0.1}
             color="#ffffff"
             transmission={1}
-            transparent
+            metalness={0.1}
           />
         </mesh>
-
         <Html
           transform
           occlude
-          distanceFactor={1.8}
-          position={[0, 0, 0.05]}
-          className="pointer-events-none select-none"
+          distanceFactor={2}
+          position={[0, 0, 0.04]}
+          className="pointer-events-none"
         >
-          <div className="w-[220px] p-6 bg-black/40 backdrop-blur-md border-accent-lime/20 border rounded-2xl text-center">
-            <span className="text-[10px] font-black text-accent-lime/50 uppercase tracking-[0.3em]">Phase 0{data.id}</span>
-            <h3 className="text-2xl font-black italic uppercase text-white my-1">{data.title}</h3>
-            <p className="text-[9px] text-white/40 font-bold uppercase tracking-widest">{data.desc}</p>
+          <div className="w-[240px] p-6 bg-black/60 backdrop-blur-xl border border-accent-lime/30 rounded-3xl text-center">
+            <div className="text-[10px] font-black text-accent-lime uppercase tracking-[0.4em] mb-2 opacity-70">Step 0{data.id}</div>
+            <div className="text-2xl font-black italic uppercase text-white mb-1 leading-none">{data.title}</div>
+            <div className="text-[9px] text-white/40 font-bold uppercase tracking-widest leading-tight">{data.desc}</div>
           </div>
         </Html>
       </Float>
@@ -64,57 +94,32 @@ function StepCard({ position, data }: { position: [number, number, number], data
   );
 }
 
-function Model() {
-  const { scene } = useGLTF("/models/conveyor.glb");
-  return <primitive object={scene} scale={2.2} position={[0, -1.2, 0]} rotation={[0, Math.PI / 2, 0]} />;
-}
-
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative h-[100vh] w-full bg-black overflow-hidden border-y border-white/5">
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 text-center w-full px-6">
-        <motion.h2 
-          initial={{ filter: "blur(20px)", opacity: 0 }}
-          whileInView={{ filter: "blur(0px)", opacity: 1 }}
-          className="text-6xl md:text-9xl font-black italic uppercase tracking-tighter"
-        >
-          Smart <span className="text-accent-lime">Line</span>
-        </motion.h2>
+    <section id="process" className="relative h-[900px] w-full bg-black overflow-hidden border-y border-white/5">
+      <div className="absolute top-24 left-10 z-20">
+        <h2 className="text-6xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none">
+          Smart <br /> <span className="text-accent-lime text-neon">Workflow</span>
+        </h2>
       </div>
 
-      <Canvas shadows camera={{ position: [8, 5, 10], fov: 30 }}>
+      <Canvas shadows camera={{ position: [10, 6, 12], fov: 25 }}>
         <color attach="background" args={["#000000"]} />
-        <fog attach="fog" args={["#000", 8, 20]} />
-        
+        <fog attach="fog" args={["#000", 10, 25]} />
         <Suspense fallback={null}>
           <Environment preset="night" />
           <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
+          <spotLight position={[15, 15, 15]} angle={0.2} intensity={10} color="#E0FF64" castShadow />
           
           <Model />
 
           {steps.map((step, i) => (
-            <StepCard 
-              key={step.id} 
-              data={step} 
-              position={[0, 0.8, i * -4]} 
-            />
+            <StepCard key={step.id} data={step} position={[0, 1.2, i * -4]} />
           ))}
 
-          <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={20} blur={2} far={4.5} />
+          <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={25} blur={2.4} far={4.5} color="#E0FF64" />
         </Suspense>
       </Canvas>
-
-      <div className="absolute bottom-12 left-12 z-20 hidden md:block">
-        <div className="flex items-center gap-4 text-accent-lime">
-          <div className="h-[1px] w-20 bg-accent-lime/30" />
-          <span className="text-[10px] font-black uppercase tracking-[0.5em] animate-pulse">
-            Live Logistics Stream
-          </span>
-        </div>
-      </div>
     </section>
   );
 };
-
-useGLTF.preload("/models/conveyor.glb");
