@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 
-// Импорт секций (проверьте, чтобы пути совпадали с вашей структурой)
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
@@ -24,10 +22,10 @@ export default function HomeContainer() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Имитация загрузки ресурсов
+    // Таймер для завершения анимации лоадера
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 3500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -40,15 +38,14 @@ export default function HomeContainer() {
         )}
       </AnimatePresence>
 
-      {/* 2. ГЛОБАЛЬНЫЙ ФОН СО ЗВЕЗДАМИ (ФИКСИРОВАННЫЙ) */}
-      {/* Мы возвращаем opacity-60 и фиксированное позиционирование, как было изначально */}
+      {/* 2. ФОН СО ЗВЕЗДАМИ (ФИКСИРОВАННЫЙ) */}
       {isMounted && (
         <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
           <ParticlesBackground />
         </div>
       )}
 
-      {/* 3. ОСНОВНОЙ КОНТЕНТ САЙТА */}
+      {/* 3. ОСНОВНОЙ КОНТЕНТ */}
       <div 
         className={`relative z-10 transition-opacity duration-1000 ${
           isLoading ? "opacity-0 invisible" : "opacity-100 visible"
@@ -57,18 +54,18 @@ export default function HomeContainer() {
         <Navbar />
         
         <div className="relative">
-          {/* Каждая секция bg-transparent, чтобы звезды были видны сквозь них */}
+          {/* Секции имеют прозрачный фон, чтобы звезды были видны */}
           <Hero />
           
-          <section className="border-y border-white/5 bg-transparent">
+          <div className="border-y border-white/5 bg-transparent">
             <BentoGrid />
-          </section>
+          </div>
 
           <ProcessSteps />
 
-          <section className="border-y border-white/5 bg-transparent">
+          <div className="border-y border-white/5 bg-transparent">
             <Testimonials />
-          </section>
+          </div>
 
           <FAQ />
           
@@ -77,7 +74,6 @@ export default function HomeContainer() {
           <Footer />
         </div>
 
-        {/* Всплывающие элементы */}
         <ExitIntentPopup />
         <FloatingTelegramButton />
       </div>
