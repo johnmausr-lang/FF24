@@ -2,7 +2,15 @@
 
 import React, { Suspense, useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, MeshTransmissionMaterial, Environment, Html, Float, ContactShadows } from "@react-three/drei";
+import { 
+  useGLTF, 
+  MeshTransmissionMaterial, 
+  Environment, 
+  Html, 
+  Float, 
+  ContactShadows, 
+  PerspectiveCamera 
+} from "@react-three/drei";
 import * as THREE from "three";
 
 const steps = [
@@ -20,57 +28,75 @@ function Model() {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
+        // Делаем цвет чуть светлее, чтобы он был виден в тени
         mesh.material = new THREE.MeshStandardMaterial({
-          color: "#050505",
-          metalness: 1,
-          roughness: 0.1,
+          color: "#1a1a1a", 
+          metalness: 0.8,
+          roughness: 0.2,
         });
 
-        if (child.name.toLowerCase().includes("light") || child.name.toLowerCase().includes("neon")) {
+        const name = child.name.toLowerCase();
+        if (name.includes("light") || name.includes("neon") || name.includes("glow")) {
           mesh.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 15,
+            emissiveIntensity: 20, // Увеличили яркость неона
           });
         }
       }
     });
   }, [scene]);
 
-  return <primitive object={scene} scale={5} position={[0, -2.5, 0]} rotation={[0, -Math.PI / 4, 0]} />;
+  return (
+    <primitive 
+      object={scene} 
+      scale={5} 
+      position={[0, -2.5, 0]} 
+      rotation={[0, -Math.PI / 4, 0]} 
+    />
+  );
 }
 
-function StepCard({ position, data, index }: { position: [number, number, number], data: any, index: number }) {
+function StepCard({ data, index }: { data: any, index: number }) {
   const group = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (group.current) {
       const time = state.clock.getElapsedTime();
-      const speed = 1.5;
+      const speed = 1.2;
       const offset = index * 5;
+      // Бесконечное движение по диагонали
       let zPos = ((time * speed + offset) % 25) - 12;
       let xPos = -zPos;
-      group.current.position.set(xPos, 1.2, zPos);
+      group.current.position.set(xPos, 1.4, zPos);
     }
   });
 
   return (
     <group ref={group}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
+      <Float speed={2} rotationIntensity={0.1} floatIntensity={0.3}>
+        {/* Основа карточки - полупрозрачное стекло */}
         <mesh>
-          <boxGeometry args={[3, 1.8, 0.05]} />
-          <MeshTransmissionMaterial
-            samples={4}
-            thickness={0.2}
-            chromaticAberration={0.05}
-            color="#ffffff"
-            transmission={1}
+          <boxGeometry args={[3.2, 1.8, 0.05]} />
+          <meshPhysicalMaterial 
+            transmission={1} 
+            thickness={0.5} 
+            roughness={0.1} 
+            color="#ffffff" 
+            transparent 
+            opacity={0.8}
           />
         </mesh>
-        <Html transform occlude distanceFactor={3} position={[0, 0, 0.06]}>
-          <div className="w-[260px] p-6 bg-black/60 backdrop-blur-xl border border-[#E0FF64]/20 rounded-[2rem] text-center select-none">
-            <div className="text-[10px] font-black text-[#E0FF64] uppercase tracking-[0.4em] mb-2">Этап 0{data.id}</div>
-            <div className="text-2xl font-[900] italic uppercase text-white mb-1 leading-none">{data.title}</div>
+        {/* Контент карточки - УБРАН occlude для надежности */}
+        <Html 
+          transform 
+          distanceFactor={3} 
+          position={[0, 0, 0.06]} 
+          pointerEvents="none"
+        >
+          <div className="w-[280px] p-6 bg-black/70 backdrop-blur-3xl border border-[#E0FF64]/30 rounded-[2.5rem] text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+            <div className="text-[10px] font-black text-[#E0FF64] uppercase tracking-[0.4em] mb-2">ЭТАП 0{data.id}</div>
+            <div className="text-2xl font-[900] italic uppercase text-white mb-1 leading-none tracking-tighter">{data.title}</div>
             <div className="text-[9px] text-white/40 font-bold uppercase tracking-widest">{data.desc}</div>
           </div>
         </Html>
@@ -89,24 +115,44 @@ export const ProcessSteps = () => {
   if (!mounted) return <div className="h-[800px] w-full bg-black" />;
 
   return (
-    <section id="процесс" className="relative h-[800px] w-full bg-black overflow-hidden border-y border-white/5">
+    <section id="process" className="relative h-[800px] w-full bg-[#050505] overflow-hidden border-y border-white/5">
+      {/* Заголовок */}
       <div className="absolute top-20 left-10 md:left-20 z-20 pointer-events-none">
-        <h2 className="text-7xl md:text-[120px] font-[1000] italic uppercase tracking-tighter leading-[0.8] opacity-10 text-outline">ПРОЦЕСС</h2>
-        <h2 className="text-5xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none mt-[-20px]">
-          Умный <span className="text-[#E0FF64] text-neon">Поток</span>
+        <h2 className="text-6xl md:text-[120px] font-[1000] italic uppercase tracking-tighter leading-[0.8] opacity-5 text-outline absolute -top-10 -left-5">SYSTEM</h2>
+        <h2 className="text-4xl md:text-8xl font-[900] italic uppercase tracking-tighter leading-none relative">
+          Умный <span className="text-[#E0FF64] text-neon">Конвейер</span>
         </h2>
       </div>
 
-      <Canvas camera={{ position: [15, 12, 15], fov: 25 }}>
+      <Canvas shadows dpr={[1, 2]} gl={{ antialias: true }}>
+        <PerspectiveCamera makeDefault position={[14, 12, 14]} fov={28} />
         <Suspense fallback={null}>
-          <Environment preset="city" />
+          <Environment preset="city" intensity={0.6} />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={2} color="#E0FF64" />
+          <spotLight position={[-10, 20, 10]} angle={0.15} penumbra={1} intensity={3} castShadow />
+          
           <Model />
+
           {steps.map((step, i) => (
-            <StepCard key={i} data={step} index={i} position={[0, 0, 0]} />
+            <StepCard key={i} data={step} index={i} />
           ))}
-          <ContactShadows position={[0, -2.5, 0]} opacity={0.6} scale={40} blur={2} color="#E0FF64" />
+
+          <ContactShadows position={[0, -2.5, 0]} opacity={0.4} scale={30} blur={2} color="#E0FF64" />
         </Suspense>
       </Canvas>
+
+      {/* Нижний статус-бар */}
+      <div className="absolute bottom-12 right-10 z-20 flex items-center gap-6 glass px-8 py-4 rounded-3xl border-white/5 bg-black/60">
+        <div className="text-right">
+          <div className="text-[10px] text-white/20 uppercase font-black tracking-widest">Статус</div>
+          <div className="text-[#E0FF64] font-mono text-lg">ОПЕРАЦИОННО</div>
+        </div>
+        <div className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E0FF64] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E0FF64]"></span>
+        </div>
+      </div>
     </section>
   );
 };
