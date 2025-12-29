@@ -22,32 +22,32 @@ const steps = [
 ];
 
 function ConveyorModel() {
-  const { scene } = useGLTF("/models/conveyor.glb");
+  const { scene } = useGLTF("/models/conveyor.glb"); //
   
   useMemo(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        // Настройка металла конвейера
+        // Глубокий черный металл конвейера
         mesh.material = new THREE.MeshStandardMaterial({
-          color: "#111111",
+          color: "#080808",
           metalness: 0.9,
           roughness: 0.1,
         });
 
-        // Ищем неоновые полоски в модели и заставляем их светиться
+        // Поиск и активация неоновых элементов модели
         if (mesh.name.toLowerCase().includes("light") || mesh.name.toLowerCase().includes("neon")) {
           mesh.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 10,
+            emissiveIntensity: 12,
           });
         }
       }
     });
   }, [scene]);
 
-  return <primitive object={scene} scale={5.5} rotation={[0, Math.PI / 2, 0]} />;
+  return <primitive object={scene} scale={5.8} rotation={[0, Math.PI / 2, 0]} />;
 }
 
 function MovingTile({ data, index }: { data: any, index: number }) {
@@ -56,44 +56,45 @@ function MovingTile({ data, index }: { data: any, index: number }) {
   useFrame((state) => {
     if (group.current) {
       const time = state.clock.getElapsedTime();
-      const speed = 1.2; // Скорость движения
-      const offset = index * 6; // Расстояние между плитками
+      const speed = 1.3; 
+      const offset = index * 6; 
       
-      // Движение по оси Z (вдоль конвейера)
+      // Бесконечный цикл движения по оси Z вдоль ленты
       let zPos = ((time * speed + offset) % 30) - 15; 
-      group.current.position.set(0, 1.8, zPos);
+      group.current.position.set(0, 1.85, zPos);
 
-      // Плавное появление и исчезновение плитки на краях
-      const opacity = Math.sin(Math.PI * (zPos + 15) / 30);
+      // Эффект затухания по краям конвейера
+      const fadeThreshold = 12;
+      const opacity = Math.max(0, 1 - Math.abs(zPos) / fadeThreshold);
       if (group.current.children[0] instanceof THREE.Mesh) {
-        (group.current.children[0].material as THREE.MeshStandardMaterial).opacity = opacity * 0.9;
+        (group.current.children[0].material as THREE.MeshPhysicalMaterial).opacity = opacity * 0.85;
       }
     }
   });
 
   return (
     <group ref={group}>
-      <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.3}>
-        {/* Прозрачная плитка (стекло) */}
+      <Float speed={1.8} rotationIntensity={0.05} floatIntensity={0.4}>
+        {/* Стеклянная плитка с физическими свойствами */}
         <mesh>
-          <boxGeometry args={[4, 2.2, 0.05]} />
+          <boxGeometry args={[4.2, 2.4, 0.06]} />
           <meshPhysicalMaterial 
             transparent 
             opacity={0.8}
-            transmission={0.95} 
-            thickness={0.2}
-            roughness={0.05}
-            envMapIntensity={1}
+            transmission={1} 
+            thickness={0.4}
+            roughness={0.02}
+            envMapIntensity={1.5}
             color="#ffffff"
           />
         </mesh>
         
-        {/* Текст внутри плитки */}
-        <Html transform distanceFactor={4} position={[0, 0, 0.06]} pointerEvents="none">
-          <div className="w-[300px] p-6 bg-black/40 backdrop-blur-md border border-[#E0FF64]/30 rounded-2xl text-center shadow-[0_0_30px_rgba(224,255,100,0.1)]">
-            <div className="text-[10px] font-black text-[#E0FF64] uppercase tracking-[0.4em] mb-2 opacity-60">ЭТАП 0{data.id}</div>
-            <div className="text-3xl font-black italic uppercase text-white tracking-tighter leading-none mb-1">{data.title}</div>
-            <div className="text-[9px] text-white/40 font-bold uppercase tracking-widest">{data.desc}</div>
+        {/* Контент внутри стеклянной плитки */}
+        <Html transform distanceFactor={4.5} position={[0, 0, 0.07]} pointerEvents="none">
+          <div className="w-[320px] p-8 bg-black/30 backdrop-blur-lg border border-[#E0FF64]/20 rounded-3xl text-center shadow-[0_0_40px_rgba(224,255,100,0.05)]">
+            <div className="text-[10px] font-black text-[#E0FF64] uppercase tracking-[0.5em] mb-3 opacity-50">STATION 0{data.id}</div>
+            <div className="text-3xl font-black italic uppercase text-white tracking-tighter leading-none mb-2">{data.title}</div>
+            <div className="text-[10px] text-white/30 font-bold uppercase tracking-widest">{data.desc}</div>
           </div>
         </Html>
       </Float>
@@ -105,37 +106,43 @@ export const ProcessSteps = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  if (!mounted) return <div className="h-[800px] w-full bg-black" />;
+  if (!mounted) return <div className="h-[850px] w-full bg-[#050505]" />;
 
   return (
     <section id="process" className="relative h-[850px] w-full bg-[#050505] overflow-hidden border-y border-white/5 flex flex-col items-center justify-center">
+      {/* Центрированный заголовок с неоном */}
       <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center w-full px-4">
-        <h2 className="text-6xl md:text-9xl font-black italic uppercase tracking-tighter leading-none text-neon">
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none text-neon">
           УМНЫЙ <span className="text-[#E0FF64]">КОНВЕЙЕР</span>
         </h2>
       </div>
 
       <Canvas shadows dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[22, 14, 22]} fov={30} />
+        {/* Ракурс камеры для премиального 3D вида */}
+        <PerspectiveCamera makeDefault position={[24, 16, 24]} fov={28} />
         
         <Suspense fallback={null}>
           <Environment preset="night" />
-          <ambientLight intensity={0.5} /> 
-          <pointLight position={[10, 20, 10]} intensity={8} color="#E0FF64" />
-          <spotLight position={[-20, 20, 20]} intensity={2} angle={0.5} />
+          <ambientLight intensity={0.4} /> 
+          
+          {/* Основной неоновый свет конвейера */}
+          <pointLight position={[0, 10, 0]} intensity={15} color="#E0FF64" distance={30} decay={2} />
+          <spotLight position={[15, 20, 15]} intensity={1.5} angle={0.4} penumbra={1} castShadow />
           
           <Center top>
             <ConveyorModel />
           </Center>
 
-          {/* Плитки теперь едут в бесконечном цикле */}
           {steps.map((step, i) => (
             <MovingTile key={i} data={step} index={i} />
           ))}
 
-          <ContactShadows position={[0, -0.1, 0]} opacity={0.4} scale={40} blur={2.5} color="#E0FF64" />
+          {/* Тени под конвейером */}
+          <ContactShadows position={[0, -0.05, 0]} opacity={0.5} scale={50} blur={3} color="#E0FF64" />
         </Suspense>
       </Canvas>
+      
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
     </section>
   );
 };
