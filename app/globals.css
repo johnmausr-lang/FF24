@@ -96,7 +96,7 @@
     @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] transition-all duration-500;
   }
 
-  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ */
+  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ ДЛЯ КАРТОЧЕК */
   .border-glow {
     position: relative;
   }
@@ -130,7 +130,7 @@
 
   /* --- АНИМАЦИЯ ЗВЕЗД (Мерцание и смещение) --- */
   .star-field {
-    /* Смещение фона противоположно движению мыши */
+    /* Смещение фона противоположно движению мыши для эффекта глубины */
     transform: translate(calc(var(--mouse-x) * -30px), calc(var(--mouse-y) * -30px));
     transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
     @apply pointer-events-none fixed inset-0;
