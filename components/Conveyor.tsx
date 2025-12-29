@@ -1,53 +1,72 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
-import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 export function ConveyorModel(props: any) {
-  const { scene } = useGLTF("/models/conveyor.glb"); // правильный путь из public
-  const ref = useRef<THREE.Group>(null);
-  const beltMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const { scene } = useGLTF("/models/conveyor.glb");
+  const groupRef = useRef<THREE.Group>(null);
+  const beltMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-
-        // Основной тёмный металл
-        mesh.material = new THREE.MeshStandardMaterial({
+      if (child instanceof THREE.Mesh) {
+        // Основной материал — тёмный металл
+        const baseMaterial = new THREE.MeshStandardMaterial({
           color: "#080808",
           metalness: 0.95,
           roughness: 0.15,
         });
 
-        // Если в имени есть "neon", "light", "glow" — делаем ярко светящимся
-        if (child.name.toLowerCase().includes("neon") || child.name.toLowerCase().includes("light")) {
-          mesh.material = new THREE.MeshStandardMaterial({
+        // Если это неоновая часть — делаем ярко светящейся
+        if (
+          child.name.toLowerCase().includes("neon") ||
+          child.name.toLowerCase().includes("light") ||
+          child.name.toLowerCase().includes("glow")
+        ) {
+          child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 15,
-            toneMapped: false, // важно для сильного свечения под Bloom
+            emissiveIntensity: 20,
+            toneMapped: false, // критично для сильного Bloom
           });
+        } else if (
+          child.name.toLowerCase().includes("belt") ||
+          child.name.toLowerCase().includes("tape") ||
+          child.name.toLowerCase().includes("band")
+        ) {
+          // Материал ленты — сохраняем для анимации UV
+          const beltMaterial = new THREE.MeshStandardMaterial({
+            color: "#0a0a0a",
+            metalness: 0.8,
+            roughness: 0.3,
+            map: child.material.map, // сохраняем текстуру, если есть
+          });
+          child.material = beltMaterial;
+          beltMaterialRef.current = beltMaterial;
+        } else {
+          // Всё остальное — тёмный металл
+          child.material = baseMaterial;
         }
 
-        // Сохраняем материал ленты для анимации
-        if (child.name.toLowerCase().includes("belt") || child.name.toLowerCase().includes("tape")) {
-          beltMaterialRef.current = mesh.material as THREE.MeshStandardMaterial;
-        }
+        // Включаем тени для всех мешей
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
   }, [scene]);
 
-  // Анимация движения ленты (UV offset)
-  useFrame((state) => {
+  // Анимация движения ленты через UV-offset
+  useFrame((state, delta) => {
     if (beltMaterialRef.current?.map) {
-      beltMaterialRef.current.map.offset.x += 0.002;
+      beltMaterialRef.current.map.offset.x += delta * 0.3; // скорость движения ленты
+      beltMaterialRef.current.map.offset.x %= 1; // зацикливаем
     }
   });
 
-  return <primitive ref={ref} object={scene} {...props} dispose={null} />;
+  return <primitive ref={groupRef} object={scene} {...props} dispose={null} />;
 }
 
 // Предзагрузка модели
