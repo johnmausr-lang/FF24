@@ -10,7 +10,7 @@ const TELEGRAM_LINK = "https://t.me/manager24ff";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
-      {/* Видео-подложка для Hero */}
+      {/* Оптимизированное видео-фоне (включается только при просмотре) */}
       <GlassVideo 
         src="/videos/hero-bg.webm" 
         opacity={0.5} 
@@ -64,7 +64,12 @@ export const Hero = () => {
             transition={{ delay: 0.6, duration: 1 }}
             className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
           >
-            <a href={TELEGRAM_LINK} target="_blank" className="btn-glass-lime group">
+            <a 
+              href={TELEGRAM_LINK} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-glass-lime group"
+            >
               Запустить процесс
               <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" size={24} />
             </a>
