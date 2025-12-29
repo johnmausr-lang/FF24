@@ -8,14 +8,14 @@
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
     --border: 240 5% 25%;
-    /* Переменные для интерактивной анимации звезд */
+    /* Переменные для анимации звезд от мыши */
     --mouse-x: 0.5;
     --mouse-y: 0.5;
   }
 
   html {
     scroll-behavior: smooth;
-    /* Глубокий градиент для объема сцены */
+    /* Глубокий радиальный градиент для объема */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -54,9 +54,8 @@
   .logo-3d {
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     transform: rotateX(12deg) rotateY(-8deg);
-    /* Многослойные тени для создания эффекта физического объема букв */
     filter: 
-      drop-shadow(2px 2px 0px #E0FF64) 
+      drop-shadow(2px 2px 0px #E0FF64)
       drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.9))
       drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
   }
@@ -66,7 +65,7 @@
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА (LIQUID GLASS) */
+  /* ЖИДКОЕ СТЕКЛО (LIQUID GLASS) */
   .btn-liquid-3d {
     @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
     background: rgba(255, 255, 255, 0.03);
@@ -97,7 +96,7 @@
     @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] transition-all duration-500;
   }
 
-  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ ДЛЯ BENTO GRID */
+  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ */
   .border-glow {
     position: relative;
   }
@@ -129,24 +128,13 @@
     color: transparent;
   }
 
-  /* --- АНИМАЦИЯ ЗВЕЗД (Интерактив и мерцание) --- */
+  /* --- АНИМАЦИЯ ЗВЕЗД (Мерцание и смещение) --- */
   .star-field {
-    /* Смещение фона противоположно движению мыши для эффекта глубины */
-    transform: translate(calc(var(--mouse-x) * -20px), calc(var(--mouse-y) * -20px));
-    transition: transform 0.2s ease-out;
+    /* Смещение фона противоположно движению мыши */
+    transform: translate(calc(var(--mouse-x) * -30px), calc(var(--mouse-y) * -30px));
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
     @apply pointer-events-none fixed inset-0;
   }
-
-  .star {
-    @apply absolute bg-white rounded-full opacity-0;
-    animation: twinkle var(--duration) infinite ease-in-out;
-  }
-}
-
-/* КЛЮЧЕВЫЕ КАДРЫ АНИМАЦИЙ */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.1; transform: scale(0.8); }
-  50% { opacity: 0.8; transform: scale(1.2); }
 }
 
 @keyframes border-flow {
