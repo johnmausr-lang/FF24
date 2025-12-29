@@ -14,7 +14,7 @@ import { Footer } from "@/components/Footer";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
-// Ленивая загрузка тяжелой 3D-секции для оптимизации
+// Динамический импорт 3D-секции для ускорения первой загрузки
 const ProcessSteps = dynamic(() => import('@/components/sections/ProcessSteps').then(mod => mod.ProcessSteps), {
   ssr: false,
   loading: () => <div className="h-[850px] w-full bg-[#050505]" />,
@@ -27,25 +27,26 @@ export default function HomeContainer() {
   useEffect(() => {
     setIsMounted(true);
     
-    // Автоматический таймаут для скрытия загрузочного экрана
+    // Защитный таймаут: скрыть лоадер максимум через 5 секунд
     const timer = setTimeout(() => setIsLoading(false), 5000);
 
-    // Оптимизированный слушатель движения мыши
+    // Оптимизированный расчет координат мыши для CSS-параллакса
     let raf: number;
     const handleMouseMove = (e: MouseEvent) => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const x = e.clientX / window.innerWidth;
         const y = e.clientY / window.innerHeight;
+        // Установка переменных для globals.css
         document.documentElement.style.setProperty('--mouse-x', x.toString());
         document.documentElement.style.setProperty('--mouse-y', y.toString());
       });
     };
 
-    // Подключение Lenis для ультра-плавного скролла
+    // Инициализация Lenis (плавный скролл)
     let lenisRaf: number;
     (async () => {
-      const Lenis = (await import('lenis')).default; // Обновленный импорт
+      const Lenis = (await import('lenis')).default;
       const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -71,24 +72,27 @@ export default function HomeContainer() {
 
   return (
     <main className="relative min-h-screen bg-transparent overflow-hidden">
+      {/* Экран загрузки с плавным исчезновением */}
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Интерактивный фон со звездами и параллаксом */}
+      {/* Интерактивный фон (звезды), который двигается за мышью */}
       {isMounted && (
         <div className="star-field fixed inset-0 z-0 pointer-events-none opacity-60">
           <ParticlesBackground />
         </div>
       )}
 
-      {/* Основной контент сайта */}
+      {/* Основная разметка сайта */}
       <div 
         className={`relative z-10 transition-opacity duration-1000 flex flex-col items-center ${
           isLoading ? "opacity-0 invisible" : "opacity-100 visible"
         }`}
       >
         <Navbar />
+        
+        {/* Секции с принудительным центрированием через flex */}
         <div className="w-full flex flex-col items-center justify-center space-y-0">
           <Hero />
           <BentoGrid />
