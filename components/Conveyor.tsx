@@ -10,26 +10,25 @@ export function ConveyorModel(props: any) {
   useEffect(() => {
     if (!scene) return;
 
-    console.log("%c3D модель конвейера активна", "color: #E0FF64; font-weight: bold;");
-
     scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
-        // Если это неоновые вставки
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 10,
+            emissiveIntensity: 12, // Усиленное свечение неона
             toneMapped: false,
           });
         } else {
-          // Основной корпус делаем светлее, чтобы его было видно (серый металлик)
+          // Делаем каркас более светлым и блестящим
           child.material = new THREE.MeshStandardMaterial({
-            color: "#444455", 
-            metalness: 0.9,
-            roughness: 0.2,
+            color: "#888899", // Значительно светлее для видимости
+            metalness: 1.0,   // Максимальный металл для отражений
+            roughness: 0.1,   // Глянцевая поверхность
+            emissive: "#ffffff",
+            emissiveIntensity: 0.05, // Легкое самосвечение граней
           });
         }
         child.castShadow = true;
