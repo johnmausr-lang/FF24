@@ -8,14 +8,12 @@
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
     --border: 240 5% 25%;
-    /* Переменные для анимации звезд от мыши */
     --mouse-x: 0.5;
     --mouse-y: 0.5;
   }
 
   html {
     scroll-behavior: smooth;
-    /* Глубокий радиальный градиент для объема */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -26,7 +24,6 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Стилизация скроллбара FF24 */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -40,9 +37,17 @@
 }
 
 @layer components {
-  /* ГЛОБАЛЬНОЕ ЦЕНТРИРОВАНИЕ */
   .container {
     @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
+  }
+
+  /* Glassmorphism 2.0 */
+  .glass {
+    @apply bg-white/[0.02] backdrop-blur-[30px] border border-white/5;
+  }
+
+  .glass-card {
+    @apply relative overflow-hidden bg-white/[0.01] backdrop-blur-2xl border border-white/5 transition-all duration-500 rounded-[2.5rem];
   }
 
   /* УНИФИЦИРОВАННЫЙ 3D ОБЪЕМ ЛОГОТИПА */
@@ -65,38 +70,7 @@
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЖИДКОЕ СТЕКЛО (LIQUID GLASS) */
-  .btn-liquid-3d {
-    @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(25px);
-    box-shadow: 
-      inset 0 0 20px rgba(255, 255, 255, 0.05),
-      0 15px 35px rgba(0, 0, 0, 0.5);
-    transform-style: preserve-3d;
-  }
-
-  .btn-liquid-3d:hover {
-    @apply -translate-y-1 border-accent-lime/50;
-    background: rgba(224, 255, 100, 0.1);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(224, 255, 100, 0.2);
-  }
-
-  .btn-liquid-lime {
-    @apply btn-liquid-3d bg-accent-lime text-black font-black uppercase border-accent-lime/30;
-    box-shadow: 0 10px 40px -10px rgba(224, 255, 100, 0.5);
-  }
-
-  .text-neon {
-    @apply text-accent-lime;
-    text-shadow: 0 0 15px rgba(224, 255, 100, 0.4);
-  }
-
-  .glass-card {
-    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] transition-all duration-500;
-  }
-
-  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ ДЛЯ КАРТОЧЕК */
+  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ */
   .border-glow {
     position: relative;
   }
@@ -123,14 +97,67 @@
     opacity: 1;
   }
 
+  /* ЖИДКОЕ СТЕКЛО (LIQUID GLASS) */
+  .btn-liquid-3d {
+    @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px);
+    box-shadow: 
+      inset 0 0 20px rgba(255, 255, 255, 0.05),
+      0 15px 35px rgba(0, 0, 0, 0.5);
+    transform-style: preserve-3d;
+  }
+
+  .btn-liquid-3d:hover {
+    @apply -translate-y-1 border-accent-lime/50;
+    background: rgba(224, 255, 100, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(224, 255, 100, 0.2);
+  }
+
+  .btn-liquid-lime {
+    @apply btn-liquid-3d bg-accent-lime text-black font-black uppercase border-accent-lime/30;
+    box-shadow: 0 10px 40px -10px rgba(224, 255, 100, 0.5);
+  }
+
+  /* Старый стиль кнопок для совместимости */
+  .btn-glass-lime {
+    @apply relative overflow-hidden bg-accent-lime text-black font-[900] uppercase tracking-widest transition-all duration-500 flex items-center justify-center;
+    box-shadow: 0 0 20px rgba(224, 255, 100, 0.1);
+  }
+
+  .btn-glass-lime:hover {
+    @apply scale-[1.02];
+    box-shadow: 0 0 40px rgba(224, 255, 100, 0.3);
+  }
+
+  .btn-glass-lime::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: skewY(-15deg);
+    pointer-events: none;
+  }
+
+  .btn-glass-lime:hover::after {
+    animation: glitch-scan 0.8s ease-in-out infinite;
+  }
+
+  .text-neon {
+    @apply text-accent-lime;
+    text-shadow: 0 0 15px rgba(224, 255, 100, 0.4);
+  }
+
   .text-outline {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     color: transparent;
   }
 
-  /* --- АНИМАЦИЯ ЗВЕЗД (Мерцание и смещение) --- */
+  /* ПАРАЛЛАКС ЗВЕЗД */
   .star-field {
-    /* Смещение фона противоположно движению мыши для эффекта глубины */
     transform: translate(calc(var(--mouse-x) * -30px), calc(var(--mouse-y) * -30px));
     transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
     @apply pointer-events-none fixed inset-0;
