@@ -5,15 +5,23 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export function ConveyorModel(props: any) {
-  // Используем твой исправленный путь
-  const { nodes } = useGLTF('/models/conveyor.glb');
+  // ВНИМАНИЕ: Путь изменен под вашу структуру на GitHub (image_5e1a3e.png)
+  const { nodes } = useGLTF('/public/models/conveyor.glb');
   
+  // Проверка на наличие нужной ноды, чтобы не было белого экрана
+  const meshGeometry = nodes.Mesh10 ? (nodes.Mesh10 as THREE.Mesh).geometry : null;
+
+  if (!meshGeometry) {
+    console.warn("Mesh10 not found in model. Check node names.");
+    return null;
+  }
+
   const technoMaterial = new THREE.MeshStandardMaterial({
     color: "#050505",
     metalness: 1,
     roughness: 0.1,
     emissive: "#E0FF64",
-    emissiveIntensity: 0.02,
+    emissiveIntensity: 0.05,
   });
 
   return (
@@ -21,12 +29,12 @@ export function ConveyorModel(props: any) {
       <mesh
         castShadow
         receiveShadow
-        geometry={(nodes.Mesh10 as THREE.Mesh).geometry}
+        geometry={meshGeometry}
         material={technoMaterial}
       />
-      {/* Яркая неоновая направляющая вдоль ленты */}
+      {/* Световая полоса вдоль ленты */}
       <mesh position={[0, 0.1, 0]}>
-        <boxGeometry args={[60, 0.02, 1.9]} />
+        <boxGeometry args={[60, 0.03, 1.9]} />
         <meshStandardMaterial 
           color="#E0FF64" 
           emissive="#E0FF64" 
@@ -39,4 +47,4 @@ export function ConveyorModel(props: any) {
   );
 }
 
-useGLTF.preload('/models/conveyor.glb');
+useGLTF.preload('/public/models/conveyor.glb');
