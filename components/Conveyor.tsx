@@ -5,32 +5,40 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export function ConveyorModel(props: any) {
-  // Используем стандартный путь для Next.js
   const { scene } = useGLTF("/models/conveyor.glb");
 
   useEffect(() => {
-    if (scene) {
-      console.log("3D Model loaded successfully:", scene);
-      scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          // Настройка материалов для премиального вида
+    if (!scene) return;
+
+    console.log("%c3D модель конвейера активна", "color: #E0FF64; font-weight: bold;");
+
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const name = child.name.toLowerCase();
+
+        // Если это неоновые вставки
+        if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
-            color: "#0a0a0a",
-            metalness: 0.9,
-            roughness: 0.1,
+            color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 0.02,
+            emissiveIntensity: 10,
+            toneMapped: false,
           });
-          child.castShadow = true;
-          child.receiveShadow = true;
+        } else {
+          // Основной корпус делаем светлее, чтобы его было видно (серый металлик)
+          child.material = new THREE.MeshStandardMaterial({
+            color: "#444455", 
+            metalness: 0.9,
+            roughness: 0.2,
+          });
         }
-      });
-    }
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
   }, [scene]);
 
   if (!scene) return null;
-
-  // Возвращаем модель без анимации внутри, чтобы она была статичной базой
   return <primitive object={scene} {...props} />;
 }
 
