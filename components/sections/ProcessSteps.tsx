@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import {
   PerspectiveCamera,
   Environment,
@@ -19,13 +19,13 @@ import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
 
 const steps = [
-  { title: "Заявка", desc: "Моментальная регистрация груза в системе" },
-  { title: "Забор", desc: "Быстрый выезд курьера в удобное время" },
-  { title: "Приёмка", desc: "Сверка и IT-учёт каждой единицы" },
-  { title: "Маркировка", desc: "Автоматическая наклейка 'Честный знак'" },
-  { title: "Упаковка", desc: "Брендированная защита товара" },
-  { title: "Отгрузка", desc: "Доставка на маркетплейс в течение 24ч" },
-  { title: "Финиш", desc: "Подтверждение и отчёт клиенту" },
+  { title: "Заявка", desc: "Автоматическая регистрация заказа в системе FF24 сразу после оформления на маркетплейсе" },
+  { title: "Забор", desc: "Курьер забирает товар с вашего склада или адреса в удобное для вас время" },
+  { title: "Приёмка", desc: "Полная сверка количества, проверка на брак и IT-учёт каждой позиции" },
+  { title: "Маркировка", desc: "Автоматическая печать и наклейка кодов 'Честный знак' по требованиям закона" },
+  { title: "Упаковка", desc: "Профессиональная брендированная упаковка с защитой от повреждений" },
+  { title: "Отгрузка", desc: "Доставка на склад маркетплейса в течение 24 часов с подтверждением" },
+  { title: "Финиш", desc: "Полный отчёт, фотофиксация и обновление статуса в вашем кабинете" },
 ];
 
 function MovingBox({ index, title, desc }: { index: number; title: string; desc: string }) {
@@ -34,8 +34,8 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
 
   useFrame(() => {
     if (!groupRef.current) return;
-    groupRef.current.scale.lerp(new THREE.Vector3(hovered ? 1.15 : 1, hovered ? 1.15 : 1, hovered ? 1.15 : 1), 0.2);
-    groupRef.current.rotation.y = hovered ? Math.sin(Date.now() * 0.005) * 0.1 : 0;
+    groupRef.current.scale.lerp(new THREE.Vector3(hovered ? 1.2 : 1, hovered ? 1.2 : 1, hovered ? 1.2 : 1), 0.2);
+    groupRef.current.rotation.y = hovered ? Math.sin(Date.now() * 0.004) * 0.15 : 0;
   });
 
   const offsetX = index * 9 - 30;
@@ -44,39 +44,39 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
     <group
       ref={groupRef}
       position={[offsetX, 4.5, 0]}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      onPointerOver={(e) => (e.stopPropagation(), setHovered(true))}
+      onPointerOut={(e) => (e.stopPropagation(), setHovered(false))}
     >
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.4}>
+      <Float speed={1.4} rotationIntensity={0.3} floatIntensity={0.4}>
         {/* Матовое стекло (frosted glass) */}
         <mesh castShadow receiveShadow>
           <boxGeometry args={[3.4, 2, 1.6]} />
           <MeshTransmissionMaterial
             backside
             samples={12}
-            thickness={1.5}
-            chromaticAberration={hovered ? 0.2 : 0.05}
+            thickness={1.8}
+            chromaticAberration={hovered ? 0.25 : 0.05}
             anisotropy={0.1}
-            distortion={0.05}
+            distortion={hovered ? 0.1 : 0.05}
             distortionScale={0.3}
-            transmission={0.9}
-            roughness={0.4}                 // ключевой параметр для матовости
-            clearcoat={0.8}
-            clearcoatRoughness={0.4}
-            color={hovered ? "#E0FF64" : "#e0e0ff"}
-            envMapIntensity={1.2}
+            transmission={0.92}
+            roughness={0.45}                 // матовость
+            clearcoat={0.6}
+            clearcoatRoughness={0.5}
+            color={hovered ? "#E0FF64" : "#d0d0ff"}
+            envMapIntensity={1.4}
             toneMapped={false}
           />
         </mesh>
 
-        {/* Внутреннее свечение — только при hover */}
+        {/* Яркое внутреннее свечение при hover */}
         {hovered && (
-          <mesh position={[0, 0, 0.1]}>
-            <boxGeometry args={[2.8, 1.6, 1.3]} />
+          <mesh position={[0, 0, 0.05]}>
+            <boxGeometry args={[3.0, 1.8, 1.4]} />
             <meshStandardMaterial
               color="#E0FF64"
               emissive="#E0FF64"
-              emissiveIntensity={4}
+              emissiveIntensity={5}
               toneMapped={false}
             />
           </mesh>
@@ -86,19 +86,23 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
         <Text position={[0, 0.3, 0.81]} fontSize={0.16} color="white" anchorX="center">
           {`ID: 24-0${index + 1}`}
         </Text>
-        <Text position={[0, -0.2, 0.81]} fontSize={0.34} color={hovered ? "#E0FF64" : "#ffffff"} anchorX="center">
+        <Text position={[0, -0.2, 0.81]} fontSize={0.36} color={hovered ? "#000000" : "#E0FF64"} anchorX="center">
           {title.toUpperCase()}
         </Text>
 
-        {/* Tooltip при hover */}
+        {/* Большое всплывающее окно с описанием */}
         {hovered && (
-          <Html position={[0, 3.5, 0]} center distanceFactor={8}>
-            <div className="px-6 py-4 bg-black/90 backdrop-blur-xl border border-[#E0FF64]/50 rounded-3xl text-center shadow-2xl">
-              <div className="text-[#E0FF64] font-black uppercase tracking-widest text-xs mb-1">
-                STATION 0{index + 1}
+          <Html position={[0, 4.5, 0]} center distanceFactor={7}>
+            <div className="max-w-md px-8 py-6 bg-black/95 backdrop-blur-2xl border-2 border-[#E0FF64]/60 rounded-3xl shadow-2xl text-left">
+              <div className="text-[#E0FF64] font-black uppercase tracking-widest text-sm mb-2">
+                ЭТАП {index + 1} • {title.toUpperCase()}
               </div>
-              <div className="text-white font-black text-xl">{title}</div>
-              <div className="text-white/70 text-xs mt-2 max-w-[220px]">{desc}</div>
+              <div className="text-white font-medium text-base leading-relaxed">
+                {desc}
+              </div>
+              <div className="mt-4 text-[#E0FF64]/80 text-xs uppercase tracking-wider">
+                FF24 — работаем 24/7
+              </div>
             </div>
           </Html>
         )}
@@ -108,7 +112,7 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
 }
 
 export const ProcessSteps = () => {
-  console.log("%cProcessSteps FINAL VERSION зарендерился", "color: cyan; font-size: 18px;");
+  console.log("%cProcessSteps FINAL — конвейер и матовые коробки", "color: cyan; font-size: 18px;");
 
   return (
     <section id="process" className="relative h-screen w-full bg-black overflow-hidden">
