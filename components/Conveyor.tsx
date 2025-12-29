@@ -1,50 +1,54 @@
 "use client";
 
-import React from 'react';
-import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei";
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 
 export function ConveyorModel(props: any) {
-  // ВНИМАНИЕ: Путь изменен под вашу структуру на GitHub (image_5e1a3e.png)
-  const { nodes } = useGLTF('/public/models/conveyor.glb');
-  
-  // Проверка на наличие нужной ноды, чтобы не было белого экрана
-  const meshGeometry = nodes.Mesh10 ? (nodes.Mesh10 as THREE.Mesh).geometry : null;
+  const { scene } = useGLTF("/models/conveyor.glb"); // правильный путь из public
+  const ref = useRef<THREE.Group>(null);
+  const beltMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  if (!meshGeometry) {
-    console.warn("Mesh10 not found in model. Check node names.");
-    return null;
-  }
+  React.useEffect(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
 
-  const technoMaterial = new THREE.MeshStandardMaterial({
-    color: "#050505",
-    metalness: 1,
-    roughness: 0.1,
-    emissive: "#E0FF64",
-    emissiveIntensity: 0.05,
+        // Основной тёмный металл
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: "#080808",
+          metalness: 0.95,
+          roughness: 0.15,
+        });
+
+        // Если в имени есть "neon", "light", "glow" — делаем ярко светящимся
+        if (child.name.toLowerCase().includes("neon") || child.name.toLowerCase().includes("light")) {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: "#E0FF64",
+            emissive: "#E0FF64",
+            emissiveIntensity: 15,
+            toneMapped: false, // важно для сильного свечения под Bloom
+          });
+        }
+
+        // Сохраняем материал ленты для анимации
+        if (child.name.toLowerCase().includes("belt") || child.name.toLowerCase().includes("tape")) {
+          beltMaterialRef.current = mesh.material as THREE.MeshStandardMaterial;
+        }
+      }
+    });
+  }, [scene]);
+
+  // Анимация движения ленты (UV offset)
+  useFrame((state) => {
+    if (beltMaterialRef.current?.map) {
+      beltMaterialRef.current.map.offset.x += 0.002;
+    }
   });
 
-  return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={meshGeometry}
-        material={technoMaterial}
-      />
-      {/* Световая полоса вдоль ленты */}
-      <mesh position={[0, 0.1, 0]}>
-        <boxGeometry args={[60, 0.03, 1.9]} />
-        <meshStandardMaterial 
-          color="#E0FF64" 
-          emissive="#E0FF64" 
-          emissiveIntensity={3} 
-          transparent 
-          opacity={0.8} 
-        />
-      </mesh>
-    </group>
-  );
+  return <primitive ref={ref} object={scene} {...props} dispose={null} />;
 }
 
-useGLTF.preload('/public/models/conveyor.glb');
+// Предзагрузка модели
+useGLTF.preload("/models/conveyor.glb");
