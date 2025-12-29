@@ -123,7 +123,7 @@ export const ProcessSteps = () => {
             ))}
           </group>
 
-          {/* Дальние конвейеры для глубины */}
+          {/* Дальние конвейеры для атмосферы */}
           <group position={[0, -5, -40]} rotation={[0, 0.2, 0]}>
             <ConveyorModel scale={1.5} />
           </group>
@@ -131,7 +131,6 @@ export const ProcessSteps = () => {
             <ConveyorModel scale={1.2} />
           </group>
 
-          {/* Искры */}
           <Sparkles
             count={250}
             scale={[60, 8, 4]}
