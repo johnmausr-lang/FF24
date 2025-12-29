@@ -14,31 +14,37 @@ export function ConveyorModel(props: any) {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
+        // Настройка материала для максимальной видимости (светлый металлик)
+        child.material = new THREE.MeshStandardMaterial({
+          color: "#9999aa", 
+          metalness: 1.0,
+          roughness: 0.1,
+          emissive: "#ffffff",
+          emissiveIntensity: 0.1, 
+        });
+
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 12, // Усиленное свечение неона
+            emissiveIntensity: 15,
             toneMapped: false,
           });
-        } else {
-          // Делаем каркас более светлым и блестящим
-          child.material = new THREE.MeshStandardMaterial({
-            color: "#888899", // Значительно светлее для видимости
-            metalness: 1.0,   // Максимальный металл для отражений
-            roughness: 0.1,   // Глянцевая поверхность
-            emissive: "#ffffff",
-            emissiveIntensity: 0.05, // Легкое самосвечение граней
-          });
         }
-        child.castShadow = true;
-        child.receiveShadow = true;
       }
     });
   }, [scene]);
 
   if (!scene) return null;
-  return <primitive object={scene} {...props} />;
+
+  return (
+    <primitive 
+      object={scene} 
+      {...props} 
+      // Принудительный разворот модели на 90 градусов, если она смотрит вбок
+      rotation={[0, Math.PI / 2, 0]} 
+    />
+  );
 }
 
 useGLTF.preload("/models/conveyor.glb");
