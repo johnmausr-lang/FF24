@@ -7,20 +7,17 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
-// Настройка шрифта Inter с поддержкой кириллицы
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
   display: "swap",
   variable: "--font-inter",
 });
 
-// Метаданные проекта
 export const metadata: Metadata = {
   title: "FF24 | Фулфилмент Нового Поколения",
-  description: "Автоматизированная логистика и складские решения. Адрес: ул. Лавочкина, 23, стр. 4, Москва. Тел: +7 (987) 376-17-22.",
+  description: "FF24 — фулфилмент нового поколения. 24-часовой цикл, нулевой брак, API-интеграция. Масштабируйте бизнес без границ. Адрес: ул. Лавочкина, 23, стр. 4, Москва.",
 };
 
-// Настройки вьюпорта
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -32,23 +29,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans bg-black text-white antialiased overflow-x-hidden min-h-screen`}>
-        {/* Интеграция Lenis для магически плавного скролла */}
         <ReactLenis 
           root 
           options={{ 
-            lerp: 0.06,           // Коэффициент плавности торможения
-            duration: 1.5,        // Длительность прокрутки в секундах
+            lerp: 0.06,           // Плавность торможения
+            duration: 1.5,        // Длительность прокрутки
             smoothWheel: true, 
-            wheelMultiplier: 1.1, // Чувствительность колеса мыши
-            touchMultiplier: 2    // Чувствительность тач-панелей
           }}
         >
           <Suspense fallback={<LoadingScreen />}>
             <div className="relative flex flex-col min-h-screen">
               {children}
             </div>
-            
-            {/* Глобальные интерактивные компоненты */}
             <ExitIntentPopup />
             <FloatingTelegramButton />
           </Suspense>
