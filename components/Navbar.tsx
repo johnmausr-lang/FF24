@@ -17,7 +17,6 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Добавили backdrop-blur-md для корректного наслоения */}
       <nav className="fixed top-0 left-0 right-0 z-[100] border-b border-white/5 backdrop-blur-md bg-black/20">
         <div className="container flex justify-between items-center h-20">
           <motion.div
