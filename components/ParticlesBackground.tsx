@@ -1,28 +1,35 @@
 "use client";
 
-import { useCallback } from "react";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
-import type { Engine } from "tsparticles-engine";
+import { useEffect, useState } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import type { Engine } from "@tsparticles/engine";
 
 export const ParticlesBackground = () => {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadFull(engine);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    initParticlesEngine(async (engine: Engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
   }, []);
+
+  if (!init) return null;
 
   return (
     <Particles
       id="tsparticles"
-      init={particlesInit}
       className="w-full h-full"
       options={{
-        fullScreen: { enable: false },
+        background: { color: "transparent" },
         fpsLimit: 60,
         interactivity: {
           events: {
             onHover: {
               enable: true,
-              mode: "repulse", // Звезды убегают от мыши
+              mode: "repulse",
             },
           },
           modes: {
@@ -37,7 +44,9 @@ export const ParticlesBackground = () => {
           links: {
             enable: true,
             distance: 150,
+            color: "#ffffff",
             opacity: 0.05,
+            width: 1,
           },
           move: {
             enable: true,
@@ -54,12 +63,14 @@ export const ParticlesBackground = () => {
             animation: {
               enable: true,
               speed: 1,
+              sync: false,
             },
           },
           size: {
             value: { min: 1, max: 2 },
           },
         },
+        detectRetina: true,
       }}
     />
   );
