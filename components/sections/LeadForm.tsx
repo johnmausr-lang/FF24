@@ -11,16 +11,23 @@ export const LeadForm = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleAction = () => {
+    // Открываем диалог с менеджером в новой вкладке
     window.open(TELEGRAM_LINK, "_blank");
+    // Показываем состояние успеха на сайте
     setSubmitted(true);
   };
 
   return (
     <section id="lead" className="py-32 relative overflow-hidden">
       <div className="container relative z-10">
-        <motion.div className="glass-card max-w-5xl mx-auto overflow-hidden relative border-accent-lime/20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card max-w-5xl mx-auto overflow-hidden relative border-accent-lime/20"
+        >
           
-          {/* Видео-фон только для формы */}
+          {/* Видео-фон с оптимизацией (теперь через Intersection Observer из нового GlassVideo) */}
           <GlassVideo 
             src="/videos/process-bg.webm" 
             opacity={0.4} 
@@ -33,32 +40,50 @@ export const LeadForm = () => {
                 Готовы к <br/><span className="text-accent-lime">взлету?</span>
               </h2>
               <p className="text-white/60 text-xl mb-12">
-                Оставьте заявку и получите персональный расчет стоимости за 24 часа.
+                Нажмите на кнопку, чтобы перейти в чат с менеджером и получить расчет стоимости за 24 часа.
               </p>
             </div>
 
             <div className="p-12 lg:p-20 flex flex-col justify-center items-center text-center">
               <AnimatePresence mode="wait">
                 {!submitted ? (
-                  <motion.div key="form" className="w-full">
+                  <motion.div 
+                    key="form" 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.1 }}
+                    className="w-full"
+                  >
                     <div className="mb-10 inline-flex items-center gap-2 text-accent-lime">
                       <Sparkles className="animate-pulse" />
-                      <span className="font-black uppercase tracking-widest text-sm">Fast Response</span>
+                      <span className="font-black uppercase tracking-widest text-sm">Direct Contact</span>
                     </div>
                     <button 
                       onClick={handleAction}
                       className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224,255,100,0.3)]"
                     >
-                      Связаться в Telegram
+                      Написать менеджеру
                       <Send className="ml-4 group-hover:rotate-12 transition-transform" />
                     </button>
                   </motion.div>
                 ) : (
-                  <motion.div key="success" className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full bg-accent-lime flex items-center justify-center text-black mb-8">
+                  <motion.div 
+                    key="success" 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col items-center"
+                  >
+                    <div className="w-24 h-24 rounded-full bg-accent-lime flex items-center justify-center text-black mb-8 shadow-[0_0_30px_#E0FF64]">
                       <Check size={40} strokeWidth={3} />
                     </div>
-                    <h3 className="text-3xl font-black italic uppercase">Ждем вас!</h3>
+                    <h3 className="text-3xl font-black italic uppercase">Диалог открыт!</h3>
+                    <p className="text-white/40 mt-4 uppercase text-xs tracking-widest font-bold">Ждем вас в Telegram</p>
+                    <button 
+                      onClick={() => setSubmitted(false)}
+                      className="mt-8 text-white/20 hover:text-white/60 transition-colors uppercase text-[10px] tracking-[0.3em] font-black"
+                    >
+                      Вернуться назад
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>
