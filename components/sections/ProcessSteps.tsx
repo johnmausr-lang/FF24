@@ -18,6 +18,7 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
 
+// Описания этапов для tooltip
 const steps = [
   { title: "Заявка", desc: "Моментальная регистрация груза в системе" },
   { title: "Забор", desc: "Быстрый выезд курьера в удобное время" },
@@ -28,29 +29,22 @@ const steps = [
   { title: "Финиш", desc: "Подтверждение и отчёт клиенту" },
 ];
 
+// Компонент коробки с hover-эффектами
 function MovingBox({ index, title, desc }: { index: number; title: string; desc: string }) {
   const groupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const { clock } = useThree();
 
-  // Глобальная скорость конвейера (для замедления при hover)
-  const globalSpeed = useRef(0.3);
-
-  useFrame((state, delta) => {
+  useFrame(() => {
     if (!groupRef.current) return;
 
     if (hovered) {
-      globalSpeed.current = THREE.MathUtils.lerp(globalSpeed.current, 0.05, 0.1);
       groupRef.current.scale.lerp(new THREE.Vector3(1.2, 1.2, 1.2), 0.2);
       groupRef.current.rotation.y = Math.sin(clock.getElapsedTime() * 2) * 0.1;
     } else {
-      globalSpeed.current = THREE.MathUtils.lerp(globalSpeed.current, 0.3, 0.1);
       groupRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.2);
       groupRef.current.rotation.y = 0;
     }
-
-    // Движение ленты (синхронизировано с Conveyor.tsx)
-    // Но для коробок — просто позиция
   });
 
   const offsetX = index * 9 - 30;
@@ -84,7 +78,7 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
           />
         </mesh>
 
-        {/* Внутренний неоновый блок */}
+        {/* Внутреннее свечение */}
         <mesh position={[0, 0, 0.1]}>
           <boxGeometry args={[2.8, 1.6, 1.3]} />
           <meshStandardMaterial
@@ -95,7 +89,7 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
           />
         </mesh>
 
-        {/* Текст */}
+        {/* Текст на коробке */}
         <Text position={[0, 0.3, 0.81]} fontSize={0.16} color="white" anchorX="center">
           {`ID: 24-0${index + 1}`}
         </Text>
@@ -106,50 +100,65 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
         {/* Tooltip при hover */}
         {hovered && (
           <Html position={[0, 3, 0]} center distanceFactor={8}>
-            <div className="px-6 py-4 bg-black/80 backdrop-blur-xl border border-[#E0FF64]/30 rounded-3xl text-center shadow-2xl">
+            <div className="px-6 py-4 bg-black/80 backdrop-blur-xl border border-[#E0FF64]/30 rounded-3xl text-center shadow-2xl min-w-[220px]">
               <div className="text-[#E0FF64] font-black uppercase tracking-wider text-sm mb-1">
                 STATION 0{index + 1}
               </div>
               <div className="text-white font-bold text-lg">{title}</div>
-              <div className="text-white/60 text-xs mt-2 max-w-[200px]">{desc}</div>
+              <div className="text-white/60 text-xs mt-2">{desc}</div>
             </div>
           </Html>
         )}
 
-        {/* Дополнительные искры при hover */}
+        {/* Искры при hover */}
         {hovered && (
-          <Sparkles count={50} scale={4} size={4} speed={2} opacity={1} color="#E0FF64" />
+          <Sparkles count={50} scale={5} size={5} speed={2} opacity={1} color="#E0FF64" />
         )}
       </Float>
     </group>
   );
 }
 
-// Звук конвейера (опционально, добавь файл public/sounds/conveyor-ambient.mp3)
-useEffect(() => {
-  const audio = new Audio("/sounds/conveyor-ambient.mp3");
-  audio.loop = true;
-  audio.volume = 0.2;
+// Отдельный компонент для звука (чтобы useEffect был внутри компонента)
+function ConveyorSound() {
+  React.useEffect(() => {
+    const audio = new Audio("/sounds/conveyor-ambient.mp3");
+    audio.loop = true;
+    audio.volume = 0.15;
 
-  const playAudio = () => audio.play();
-  window.addEventListener("click", playAudio, { once: true }); // автоплей после взаимодействия
+    const playOnInteraction = () => {
+      audio.play().catch(() => console.log("Autoplay prevented"));
+      window.removeEventListener("click", playOnInteraction);
+      window.removeEventListener("touchstart", playOnInteraction);
+    };
 
-  return () => {
-    audio.pause();
-    window.removeEventListener("click", playAudio);
-  };
-}, []);
+    window.addEventListener("click", playOnInteraction);
+    window.addEventListener("touchstart", playOnInteraction);
+
+    return () => {
+      audio.pause();
+      window.removeEventListener("click", playOnInteraction);
+      window.removeEventListener("touchstart", playOnInteraction);
+    };
+  }, []);
+
+  return null;
+}
 
 export const ProcessSteps = () => {
   console.log("%cProcessSteps NEXT LEVEL зарендерился", "color: cyan; font-size: 18px;");
 
   return (
     <section id="process" className="relative h-screen w-full bg-black overflow-hidden">
+      {/* Заголовок */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center">
         <h1 className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none">
           КОНВЕЙЕР <span className="text-[#E0FF64]">FF24</span>
         </h1>
       </div>
+
+      {/* Звук конвейера */}
+      <ConveyorSound />
 
       <Canvas shadows dpr={[1, 1.5]}>
         <PerspectiveCamera makeDefault position={[0, 8, 28]} fov={30} />
