@@ -1,69 +1,76 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
+import { useCallback } from "react";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
+import type { Engine } from "tsparticles-engine";
 
 export const ParticlesBackground = () => {
-  const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadFull(engine);
   }, []);
-
-  if (!init) return null;
 
   return (
     <Particles
       id="tsparticles"
-      className="absolute inset-0 z-0"
+      init={particlesInit}
       options={{
-        background: { color: { value: "transparent" } },
+        fullScreen: { enable: false },
+        background: { color: "transparent" },
         fpsLimit: 60,
         interactivity: {
           events: {
-            onHover: { enable: true, mode: "grab" },
-            resize: { enable: true },
+            onHover: {
+              enable: true,
+              mode: "repulse", // Звезды разлетаются от мыши
+            },
+            resize: true,
           },
           modes: {
-            grab: { distance: 200, links: { opacity: 0.2 } },
+            repulse: {
+              distance: 120,    // Радиус влияния мыши
+              duration: 0.4,
+              speed: 1,
+            },
           },
         },
         particles: {
-          color: { value: ["#2563EB", "#E0FF64"] },
+          color: { value: "#ffffff" },
           links: {
-            color: "#ffffff",
-            distance: 150,
             enable: true,
-            opacity: 0.05,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.05,     // Очень тонкие созвездия
             width: 1,
           },
           move: {
             enable: true,
-            speed: 0.6,
+            speed: 0.4,        // Медленное космическое движение
             direction: "none",
             random: true,
             straight: false,
             outModes: { default: "out" },
           },
           number: {
-            density: { enable: true, width: 1920, height: 1080 },
-            value: 50,
+            density: { enable: true, area: 800 },
+            value: 100,        // Количество звезд
           },
           opacity: {
-            value: { min: 0.1, max: 0.3 },
+            value: { min: 0.1, max: 0.7 },
+            animation: {
+              enable: true,    // Эффект мерцания
+              speed: 1,
+              sync: false,
+            },
           },
           shape: { type: "circle" },
           size: {
-            value: { min: 1, max: 3 },
+            value: { min: 1, max: 2 },
           },
         },
         detectRetina: true,
       }}
+      className="w-full h-full"
     />
   );
 };
