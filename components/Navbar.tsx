@@ -22,22 +22,25 @@ export const Navbar = () => {
         isScrolled ? "py-4" : "py-8"
       }`}
     >
-      <div className="section-container flex items-center justify-between relative">
-        {/* Стеклянная подложка теперь идеально выровнена по контейнеру */}
-        <div className={`absolute inset-0 -z-10 transition-all duration-500 rounded-full border ${
-          isScrolled ? "bg-black/60 backdrop-blur-3xl border-white/10" : "bg-transparent border-transparent"
+      <div className="section-container relative flex items-center justify-between">
+        {/* Подложка Navbar при скролле */}
+        <div className={`absolute inset-0 -z-10 transition-all duration-500 rounded-full ${
+          isScrolled ? "bg-black/60 backdrop-blur-3xl border border-white/10" : "bg-transparent border-transparent"
         }`} />
 
         <Link href="/" className="logo-3d-wrapper shrink-0">
-          <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-12 md:h-16 w-auto object-contain" />
+          <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-10 md:h-14 w-auto object-contain" />
         </Link>
 
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-10">
           <nav className="hidden md:block">
-            <ul className="flex items-center gap-10">
+            <ul className="flex items-center gap-8">
               {["Услуги", "Процесс", "FAQ"].map((item) => (
                 <li key={item}>
-                  <Link href={`#${item.toLowerCase()}`} className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-accent-lime transition-all">
+                  <Link 
+                    href={`#${item.toLowerCase()}`} 
+                    className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-accent-lime transition-all"
+                  >
                     {item}
                   </Link>
                 </li>
@@ -45,8 +48,8 @@ export const Navbar = () => {
             </ul>
           </nav>
           
-          <a href="https://t.me/manager24ff" target="_blank" className="btn-liquid-frame group scale-90 md:scale-100">
-            <div className="inner-content !py-3 !px-8">
+          <a href="https://t.me/manager24ff" target="_blank" className="btn-liquid-frame group">
+            <div className="inner-content !py-3 !px-6">
               <Send size={14} className="text-accent-lime" />
               <span className="text-[10px] font-black uppercase tracking-widest">Связаться</span>
             </div>
