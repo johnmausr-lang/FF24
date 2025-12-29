@@ -1,25 +1,39 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useSpring, useTransform, animate } from "framer-motion";
 import { ArrowRight, Zap } from "lucide-react";
 
 export const Hero = () => {
-  const [count, setCount] = useState(13500);
+  const [targetCount, setTargetCount] = useState(13540);
+  const count = useSpring(13000, { stiffness: 10, damping: 20 });
+  const displayCount = useTransform(count, (latest) => Math.floor(latest).toLocaleString());
 
-  // Анимированный счетчик "Отгружено сегодня"
   useEffect(() => {
+    // Начальная анимация до цели
+    const controls = animate(count, targetCount, { duration: 3 });
+    
+    // Имитация новых заказов в реальном времени
     const interval = setInterval(() => {
-      setCount(prev => prev + Math.floor(Math.random() * 3));
-    }, 3000);
-    return () => clearInterval(interval);
+      const increment = Math.floor(Math.random() * 5) + 1;
+      setTargetCount(prev => prev + increment);
+    }, 4000);
+
+    return () => {
+      controls.stop();
+      clearInterval(interval);
+    };
   }, []);
+
+  useEffect(() => {
+    animate(count, targetCount, { duration: 1 });
+  }, [targetCount, count]);
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden bg-black">
       <div className="container relative z-10 flex flex-col items-center">
         
-        {/* Микро-анимация счетчика */}
+        {/* Анимированный бейдж */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -27,7 +41,7 @@ export const Hero = () => {
         >
           <Zap size={14} className="text-accent-lime animate-pulse fill-current" />
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80">
-            Отгружено сегодня: <span className="text-accent-lime">{count.toLocaleString()}</span> единиц
+            Отгружено сегодня: <motion.span className="text-accent-lime">{displayCount}</motion.span> ед.
           </span>
         </motion.div>
 
@@ -69,7 +83,6 @@ export const Hero = () => {
             <ArrowRight className="ml-4 group-hover:translate-x-3 transition-transform" />
           </a>
 
-          {/* Логотипы маркетплейсов для доверия */}
           <div className="w-full pt-12 border-t border-white/5 opacity-20 grayscale hover:opacity-50 hover:grayscale-0 transition-all duration-1000">
             <p className="text-center text-[10px] font-black uppercase tracking-[0.5em] mb-10 text-white/40">
               Интеграция с крупнейшими сетями
