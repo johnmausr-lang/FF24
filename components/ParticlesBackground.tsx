@@ -14,23 +14,21 @@ export const ParticlesBackground = () => {
     <Particles
       id="tsparticles"
       init={particlesInit}
+      className="w-full h-full"
       options={{
         fullScreen: { enable: false },
-        background: { color: "transparent" },
         fpsLimit: 60,
         interactivity: {
           events: {
             onHover: {
               enable: true,
-              mode: "repulse", // Звезды разлетаются от мыши
+              mode: "repulse", // Звезды убегают от мыши
             },
-            resize: true,
           },
           modes: {
             repulse: {
-              distance: 120,    // Радиус влияния мыши
+              distance: 150,
               duration: 0.4,
-              speed: 1,
             },
           },
         },
@@ -39,38 +37,30 @@ export const ParticlesBackground = () => {
           links: {
             enable: true,
             distance: 150,
-            color: "#ffffff",
-            opacity: 0.05,     // Очень тонкие созвездия
-            width: 1,
+            opacity: 0.05,
           },
           move: {
             enable: true,
-            speed: 0.4,        // Медленное космическое движение
-            direction: "none",
+            speed: 0.6,
             random: true,
-            straight: false,
             outModes: { default: "out" },
           },
           number: {
             density: { enable: true, area: 800 },
-            value: 100,        // Количество звезд
+            value: 100,
           },
           opacity: {
-            value: { min: 0.1, max: 0.7 },
+            value: { min: 0.1, max: 0.6 },
             animation: {
-              enable: true,    // Эффект мерцания
+              enable: true,
               speed: 1,
-              sync: false,
             },
           },
-          shape: { type: "circle" },
           size: {
             value: { min: 1, max: 2 },
           },
         },
-        detectRetina: true,
       }}
-      className="w-full h-full"
     />
   );
 };
