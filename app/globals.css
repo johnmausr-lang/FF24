@@ -8,14 +8,14 @@
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
     --border: 240 5% 25%;
-    /* Переменные для анимации звезд от мыши */
+    /* Переменные для интерактивной анимации звезд */
     --mouse-x: 0.5;
     --mouse-y: 0.5;
   }
 
   html {
     scroll-behavior: smooth;
-    /* Глубокий радиальный градиент для объема */
+    /* Глубокий градиент для объема сцены */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -45,7 +45,7 @@
     @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
   }
 
-  /* УНИФИЦИРОВАННЫЙ 3D ЛОГОТИП */
+  /* УНИФИЦИРОВАННЫЙ 3D ОБЪЕМ ЛОГОТИПА */
   .logo-3d-wrapper {
     perspective: 1200px;
     @apply flex items-center justify-center;
@@ -54,8 +54,9 @@
   .logo-3d {
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     transform: rotateX(12deg) rotateY(-8deg);
+    /* Многослойные тени для создания эффекта физического объема букв */
     filter: 
-      drop-shadow(2px 2px 0px #E0FF64)
+      drop-shadow(2px 2px 0px #E0FF64) 
       drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.9))
       drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
   }
@@ -65,7 +66,7 @@
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЖИДКОЕ СТЕКЛО (LIQUID GLASS) */
+  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА (LIQUID GLASS) */
   .btn-liquid-3d {
     @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
     background: rgba(255, 255, 255, 0.03);
@@ -96,14 +97,41 @@
     @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] transition-all duration-500;
   }
 
+  /* ЭФФЕКТ СВЕЧЕНИЯ ГРАНИЦ ДЛЯ BENTO GRID */
+  .border-glow {
+    position: relative;
+  }
+  
+  .border-glow::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(90deg, transparent, rgba(224, 255, 100, 0.4), transparent);
+    background-size: 200% 100%;
+    animation: border-flow 4s linear infinite;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+    padding: 1px;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  
+  .border-glow:hover::before {
+    opacity: 1;
+  }
+
   .text-outline {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     color: transparent;
   }
 
-  /* --- АНИМАЦИЯ ЗВЕЗД (Мерцание и смещение) --- */
+  /* --- АНИМАЦИЯ ЗВЕЗД (Интерактив и мерцание) --- */
   .star-field {
-    /* Смещение фона в зависимости от мыши (двигается противоположно) */
+    /* Смещение фона противоположно движению мыши для эффекта глубины */
     transform: translate(calc(var(--mouse-x) * -20px), calc(var(--mouse-y) * -20px));
     transition: transform 0.2s ease-out;
     @apply pointer-events-none fixed inset-0;
@@ -115,9 +143,20 @@
   }
 }
 
+/* КЛЮЧЕВЫЕ КАДРЫ АНИМАЦИЙ */
 @keyframes twinkle {
   0%, 100% { opacity: 0.1; transform: scale(0.8); }
   50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes glitch-scan {
+  0% { top: -100%; }
+  100% { top: 200%; }
 }
 
 ::selection {
