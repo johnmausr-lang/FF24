@@ -20,10 +20,10 @@ export default function HomeContainer() {
   useEffect(() => {
     setIsMounted(true);
     
-    // Передача координат мыши в CSS переменные
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX / window.innerWidth;
       const y = e.clientY / window.innerHeight;
+      // Передача координат в CSS переменные для параллакса
       document.documentElement.style.setProperty('--mouse-x', x.toString());
       document.documentElement.style.setProperty('--mouse-y', y.toString());
     };
@@ -33,21 +33,26 @@ export default function HomeContainer() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-transparent">
+    <main className="relative min-h-screen bg-transparent overflow-hidden">
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Звезды со смещением от мыши */}
+      {/* Слой звезд с эффектом параллакса */}
       {isMounted && (
         <div className="star-field fixed inset-0 z-0 pointer-events-none opacity-60">
           <ParticlesBackground />
         </div>
       )}
 
-      <div className={`relative z-10 transition-opacity duration-1000 flex flex-col items-center ${isLoading ? "opacity-0 invisible" : "opacity-100 visible"}`}>
+      {/* Контент сайта с принудительным центрированием */}
+      <div 
+        className={`relative z-10 transition-opacity duration-1000 flex flex-col items-center ${
+          isLoading ? "opacity-0 invisible" : "opacity-100 visible"
+        }`}
+      >
         <Navbar />
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center justify-center space-y-0">
           <Hero />
           <BentoGrid />
           <ProcessSteps />
