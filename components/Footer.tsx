@@ -1,77 +1,67 @@
 "use client";
 
-import React from "react";
-import { MessageCircle, Phone, MapPin, ArrowUpRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Send } from "lucide-react";
 
-export const Footer = () => {
+export const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <footer className="relative bg-transparent pt-40 pb-16 overflow-hidden border-t border-white/5">
-      <div className="container relative z-10">
-        
-        {/* Массивный Логотип Фон */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.02]">
-          <h2 className="text-[30vw] font-black italic uppercase leading-none select-none">FF24</h2>
-        </div>
+    <motion.header 
+      initial={{ y: -120 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${
+        isScrolled ? "py-4" : "py-10"
+      }`}
+    >
+      <div className="container px-8 flex items-center justify-between">
+        {/* Интеллектуальная стеклянная подложка */}
+        <div className={`absolute inset-x-4 inset-y-0 -z-10 transition-all duration-700 rounded-full border ${
+          isScrolled 
+            ? "bg-black/60 backdrop-blur-3xl border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" 
+            : "bg-transparent border-transparent"
+        }`} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32 items-end">
-          <div className="space-y-12">
-            <div className="logo-3d-wrapper !justify-start">
-              <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-24 w-auto object-contain" />
-            </div>
-            <h3 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter leading-[0.9]">
-              Масштабируем <br />
-              <span className="text-accent-lime text-neon">вашу прибыль</span>
-            </h3>
-          </div>
+        <Link href="/" className="logo-3d-wrapper group">
+          <img 
+            src="/logo-ff24.png" 
+            alt="FF24" 
+            className="logo-3d h-14 md:h-20 w-auto object-contain transition-all duration-500 group-hover:scale-110" 
+          />
+        </Link>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <ContactLink 
-              icon={<MessageCircle size={20} />} 
-              label="Telegram" 
-              value="@manager24ff" 
-              href="https://t.me/manager24ff" 
-            />
-            <ContactLink 
-              icon={<Phone size={20} />} 
-              label="Телефон" 
-              value="+7 (987) 376-17-22" 
-              href="tel:+79873761722" 
-            />
-            <div className="space-y-2 md:col-span-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 flex items-center gap-2">
-                <MapPin size={14} /> Наш адрес
-              </span>
-              <p className="text-lg font-bold uppercase tracking-widest text-white/60">
-                ул. Лавочкина, 23, стр. 4, Москва
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">
-            © 2025 FF24 FULFILLMENT. ALL RIGHTS RESERVED.
-          </p>
-          <div className="flex gap-10">
-            {["Instagram", "WhatsApp", "VK"].map((social) => (
-              <a key={social} href="#" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-accent-lime transition-colors">
-                {social}
-              </a>
+        <nav className="hidden md:flex items-center gap-16">
+          <ul className="flex items-center gap-12">
+            {["Услуги", "Процесс", "FAQ"].map((item) => (
+              <li key={item}>
+                <Link 
+                  href={`#${item.toLowerCase()}`} 
+                  className="text-[11px] font-black uppercase tracking-[0.5em] text-white/30 hover:text-accent-lime transition-all"
+                >
+                  {item}
+                </Link>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+          
+          <a 
+            href="https://t.me/manager24ff" 
+            target="_blank" 
+            className="btn-liquid-lime px-12 py-5 text-[11px] flex items-center gap-3"
+          >
+            <Send size={14} className="fill-current" />
+            Связаться
+          </a>
+        </nav>
       </div>
-    </footer>
+    </motion.header>
   );
 };
-
-const ContactLink = ({ icon, label, value, href }: { icon: React.ReactNode, label: string, value: string, href: string }) => (
-  <a href={href} target="_blank" className="group space-y-2 block">
-    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 flex items-center gap-2 transition-colors group-hover:text-accent-lime">
-      {icon} {label}
-    </span>
-    <div className="text-2xl font-bold tracking-tight text-white flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-      {value} <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-opacity text-accent-lime" />
-    </div>
-  </a>
-);
