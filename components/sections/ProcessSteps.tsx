@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import React, { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   PerspectiveCamera,
   Environment,
@@ -9,13 +9,12 @@ import {
   Float,
   Sparkles,
   OrbitControls,
-  useScroll,
+  ScrollControls,
   MeshTransmissionMaterial,
   Text,
 } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { ConveyorModel } from "../Conveyor";
-import * as THREE from "three";
 
 const steps = [
   { title: "Заявка" },
@@ -28,32 +27,12 @@ const steps = [
 ];
 
 function MovingBox({ index, title }: { index: number; title: string }) {
-  const ref = useRef<THREE.Group>(null);
-  const scroll = useScroll();
-  const targetX = useRef(0);
-
-  useFrame((state) => {
-    if (!ref.current) return;
-
-    const time = state.clock.getElapsedTime();
-    const baseSpeed = 0.8;
-    const scrollSpeed = scroll.offset * 2;
-    const speed = baseSpeed + scrollSpeed;
-
-    const spacing = 9;
-    const loopLength = steps.length * spacing;
-
-    let x = (time * speed + index * spacing) % loopLength;
-    if (x > loopLength / 2) x -= loopLength;
-
-    targetX.current = x - loopLength / 2 + spacing / 2;
-
-    ref.current.position.x += (targetX.current - ref.current.position.x) * 0.1;
-  });
+  // Простая анимация без useScroll, чтобы избежать крашей
+  const timeOffset = index * 1.5;
 
   return (
-    <group ref={ref} position={[0, 4.5, 0]}>
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.4}>
+    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.4}>
+      <group position={[index * 9 - 30, 4.5, 0]}>
         {/* Стеклянная коробка */}
         <mesh castShadow receiveShadow>
           <boxGeometry args={[3.4, 2, 1.6]} />
@@ -93,14 +72,17 @@ function MovingBox({ index, title }: { index: number; title: string }) {
         <Text position={[0, -0.2, 0.81]} fontSize={0.34} color="#E0FF64" anchorX="center">
           {title.toUpperCase()}
         </Text>
-      </Float>
-    </group>
+      </group>
+    </Float>
   );
 }
 
 export const ProcessSteps = () => {
+  console.log("%cProcessSteps компонент зарендерился", "color: lime; font-size: 16px;");
+
   return (
     <section id="process" className="relative h-screen w-full bg-black overflow-hidden">
+      {/* Заголовок */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center">
         <h1 className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none">
           КОНВЕЙЕР <span className="text-[#E0FF64]">FF24</span>
@@ -110,46 +92,58 @@ export const ProcessSteps = () => {
       <Canvas shadows dpr={[1, 1.5]}>
         <PerspectiveCamera makeDefault position={[0, 10, 35]} fov={28} />
 
-        <fog attach="fog" args={["#000000", 20, 80]} />
+        {/* Обязательно для стабильности */}
+        <ScrollControls pages={1} damping={0.25}>
+          <fog attach="fog" args={["#000000", 20, 80]} />
 
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[10, 20, 10]} intensity={1.5} color="#E0FF64" />
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[10, 20, 10]} intensity={1.5} color="#E0FF64" />
 
-        <Suspense fallback={null}>
-          <group rotation={[0, -0.1, 0]} position={[0, -5, 0]}>
-            <ConveyorModel scale={2} />
-            {steps.map((step, i) => (
-              <MovingBox key={i} index={i} title={step.title} />
-            ))}
-          </group>
+          <Suspense fallback={<mesh><boxGeometry args={[5, 5, 5]} /><meshStandardMaterial color="red" /></mesh>}>
+            {/* Основной конвейер */}
+            <group rotation={[0, -0.1, 0]} position={[0, -5, 0]}>
+              <ConveyorModel scale={2} />
+              {steps.map((step, i) => (
+                <MovingBox key={i} index={i} title={step.title} />
+              ))}
+            </group>
 
-          {/* Дальние конвейеры для атмосферы */}
-          <group position={[0, -5, -40]} rotation={[0, 0.2, 0]}>
-            <ConveyorModel scale={1.5} />
-          </group>
-          <group position={[-30, -5, -60]} rotation={[0, -0.3, 0]}>
-            <ConveyorModel scale={1.2} />
-          </group>
+            {/* Фон: дальние конвейеры */}
+            <group position={[0, -5, -40]} rotation={[0, 0.2, 0]}>
+              <ConveyorModel scale={1.5} />
+            </group>
+            <group position={[-30, -5, -60]} rotation={[0, -0.3, 0]}>
+              <ConveyorModel scale={1.2} />
+            </group>
 
-          <Sparkles
-            count={250}
-            scale={[60, 8, 4]}
-            position={[0, 2, 0]}
-            size={6}
-            speed={0.6}
-            opacity={0.9}
-            color="#E0FF64"
-            noise={0.6}
-          />
+            {/* Искры */}
+            <Sparkles
+              count={300}
+              scale={[70, 10, 6]}
+              position={[0, 2, 0]}
+              size={6}
+              speed={0.6}
+              opacity={0.9}
+              color="#E0FF64"
+              noise={0.6}
+            />
 
-          <Environment preset="night" />
-          <ContactShadows position={[0, -5.1, 0]} opacity={0.6} scale={80} blur={3} color="#E0FF64" />
-        </Suspense>
+            <Environment preset="night" />
+            <ContactShadows position={[0, -5.1, 0]} opacity={0.6} scale={80} blur={3} color="#E0FF64" />
+          </Suspense>
 
-        <EffectComposer>
-          <Bloom intensity={2.0} luminanceThreshold={0.05} luminanceSmoothing={0.9} radius={0.8} />
-        </EffectComposer>
+          {/* Неоновый Bloom */}
+          <EffectComposer>
+            <Bloom
+              intensity={2.0}
+              luminanceThreshold={0.05}
+              luminanceSmoothing={0.9}
+              radius={0.8}
+            />
+          </EffectComposer>
+        </ScrollControls>
 
+        {/* Интерактивная камера */}
         <OrbitControls
           enableZoom={false}
           enablePan={false}
@@ -161,6 +155,7 @@ export const ProcessSteps = () => {
         />
       </Canvas>
 
+      {/* Вуаль для глубины */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80 pointer-events-none z-10" />
     </section>
   );
