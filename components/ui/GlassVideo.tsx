@@ -19,35 +19,57 @@ export const GlassVideo = ({
   playbackRate = 0.6,
 }: GlassVideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = playbackRate;
-      // Принудительный запуск с обработкой ошибки
-      videoRef.current.play().catch(() => {
-        console.warn("Video autoplay was prevented");
-      });
+      if (isInView) {
+        videoRef.current.play().catch(() => {
+          console.warn("Video autoplay was prevented");
+        });
+      } else {
+        videoRef.current.pause();
+      }
     }
-  }, [playbackRate, src]);
+  }, [playbackRate, isInView]);
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-black">
-      <video
-        ref={videoRef}
-        src={src}
-        autoPlay
-        muted
-        loop
-        playsInline
-        onCanPlay={() => setIsLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover scale-110 transition-opacity duration-1000 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ opacity: opacity }}
-      />
-      {/* Слой размытия и наложения цвета */}
-      <div className={`absolute inset-0 z-10 ${blur} ${overlayColor} backdrop-transform`} />
+    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-black">
+      {isInView && (
+        <video
+          ref={videoRef}
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onCanPlay={() => setIsLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover scale-110 transition-opacity duration-1000 ${
+            isLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ opacity: opacity }}
+        />
+      )}
+      {/* Слой размытия (Glass Effect) */}
+      <div className={`absolute inset-0 backdrop-blur-3xl ${blur} ${overlayColor} z-10 pointer-events-none`} />
     </div>
   );
 };
