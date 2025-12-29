@@ -12,29 +12,17 @@ import { LeadForm } from "@/components/sections/LeadForm";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 
-// Интерактив и компоненты удержания
-// ВАЖНО: Путь исправлен на @/components/ (без sections), так как файл лежит там
-import { ExitIntentPopup } from "@/components/ExitIntentPopup"; 
-import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
-import { LoadingScreen } from "@/components/LoadingScreen";
-
 export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-accent-lime selection:text-black antialiased overflow-x-hidden">
       
-      {/* Экран загрузки: блокирует скролл до завершения анимации */}
-      <AnimatePresence mode="wait">
-        <LoadingScreen key="loader" />
-      </AnimatePresence>
-
       {/* Глобальный фон Mesh Gradient: зафиксирован, чтобы просвечивать сквозь стекло секций */}
       <div className="fixed inset-0 z-0 bg-mesh pointer-events-none opacity-40 backdrop-transform" />
 
       {/* Навигация: всегда поверх контента */}
       <Navbar />
-      
-      {/* Основной контент */}
-      <main className="relative z-10 flex flex-col">
+
+      <main className="relative z-10">
         {/* Главный экран */}
         <Hero />
         
@@ -61,17 +49,11 @@ export default function LandingPage() {
       {/* Футер со стеклянным эффектом и навигацией */}
       <Footer />
 
-      {/* Плавающая кнопка связи (Telegram) */}
-      <FloatingTelegramButton />
-      
-      {/* Умный попап: появляется при попытке пользователя увести курсор с вкладки */}
-      <ExitIntentPopup />
-
       {/* Эффект аналогового шума для прибавления текстурности и премиальности */}
       <div className="fixed inset-0 z-[99] pointer-events-none opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay" />
       
-      {/* Нижнее свечение (визуальный финиш страницы) */}
-      <div className="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-accent-lime/5 to-transparent pointer-events-none z-0" />
+      {/* Нижнее свечение (визуальный якорь) */}
+      <div className="fixed bottom-0 left-0 w-full h-64 bg-gradient-to-t from-accent-lime/5 to-transparent pointer-events-none z-0" />
     </div>
   );
 }
