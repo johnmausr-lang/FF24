@@ -18,32 +18,32 @@ export function ConveyorModel(props: any) {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
-        // Основной каркас — тёмный, но с лёгким металлом, чтобы был виден
+        // Основной каркас — видимый тёмно-серый металл
         if (!name.includes("neon") && !name.includes("light") && !name.includes("glow") && !name.includes("belt")) {
           child.material = new THREE.MeshStandardMaterial({
-            color: "#1a1a1a",           // чуть светлее чёрного, чтобы контуры были видны
-            metalness: 0.9,
-            roughness: 0.2,
-            envMapIntensity: 1,
+            color: "#222233",           // тёмно-синий/серый — виден на чёрном фоне
+            metalness: 0.8,
+            roughness: 0.3,
+            envMapIntensity: 1.2,
           });
         }
 
-        // Неоновые элементы — яркое свечение
+        // Неоновые линии — яркие и светящиеся
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 8,        // снижено с 20 — чтобы не выжигало
+            emissiveIntensity: 12,      // ярко, но не выжигает
             toneMapped: false,
           });
         }
 
-        // Лента конвейера
+        // Лента конвейера — тёмная с текстурой движения
         if (name.includes("belt") || name.includes("tape") || name.includes("band")) {
           const beltMat = new THREE.MeshStandardMaterial({
-            color: "#111111",
-            metalness: 0.6,
-            roughness: 0.4,
+            color: "#0a0a0f",
+            metalness: 0.5,
+            roughness: 0.6,
             map: (child.material as THREE.MeshStandardMaterial).map || null,
           });
           child.material = beltMat;
@@ -56,6 +56,7 @@ export function ConveyorModel(props: any) {
     });
   }, [scene]);
 
+  // Движение ленты
   useFrame((state, delta) => {
     if (beltMaterialRef.current?.map) {
       beltMaterialRef.current.map.offset.x += delta * 0.3;
@@ -63,7 +64,7 @@ export function ConveyorModel(props: any) {
   });
 
   if (!scene) {
-    return null; // теперь просто ничего, раз модель грузится
+    return null;
   }
 
   return <primitive object={scene} {...props} dispose={null} />;
