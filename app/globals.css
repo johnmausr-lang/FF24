@@ -8,11 +8,14 @@
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
     --border: 240 5% 25%;
+    /* Переменные для анимации звезд от мыши */
+    --mouse-x: 0.5;
+    --mouse-y: 0.5;
   }
 
   html {
     scroll-behavior: smooth;
-    /* Градиентный фон для устранения эффекта "черной дыры" */
+    /* Глубокий радиальный градиент для объема */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -23,6 +26,7 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Стилизация скроллбара FF24 */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -36,12 +40,12 @@
 }
 
 @layer components {
-  /* ГЛОБАЛЬНОЕ ЦЕНТРИРОВАНИЕ КОНТЕЙНЕРА */
+  /* ГЛОБАЛЬНОЕ ЦЕНТРИРОВАНИЕ */
   .container {
     @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
   }
 
-  /* УНИФИЦИРОВАННЫЙ 3D ОБЪЕМ ЛОГОТИПА */
+  /* УНИФИЦИРОВАННЫЙ 3D ЛОГОТИП */
   .logo-3d-wrapper {
     perspective: 1200px;
     @apply flex items-center justify-center;
@@ -57,11 +61,11 @@
   }
 
   .logo-3d:hover {
-    transform: rotateX(0deg) rotateY(0deg) scale(1.08) translateZ(50px);
+    transform: rotateX(0deg) rotateY(0deg) scale(1.1) translateZ(50px);
     filter: drop-shadow(0 0 40px rgba(224, 255, 100, 0.5));
   }
 
-  /* ЭФФЕКТ ЖИДКОГО СТЕКЛА ДЛЯ КНОПОК И РАМОК */
+  /* ЖИДКОЕ СТЕКЛО (LIQUID GLASS) */
   .btn-liquid-3d {
     @apply relative overflow-hidden flex items-center justify-center transition-all duration-500 rounded-full border border-white/20;
     background: rgba(255, 255, 255, 0.03);
@@ -84,17 +88,36 @@
   }
 
   .text-neon {
+    @apply text-accent-lime;
     text-shadow: 0 0 15px rgba(224, 255, 100, 0.4);
   }
 
   .glass-card {
-    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem];
+    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] transition-all duration-500;
   }
 
   .text-outline {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     color: transparent;
   }
+
+  /* --- АНИМАЦИЯ ЗВЕЗД (Мерцание и смещение) --- */
+  .star-field {
+    /* Смещение фона в зависимости от мыши (двигается противоположно) */
+    transform: translate(calc(var(--mouse-x) * -20px), calc(var(--mouse-y) * -20px));
+    transition: transform 0.2s ease-out;
+    @apply pointer-events-none fixed inset-0;
+  }
+
+  .star {
+    @apply absolute bg-white rounded-full opacity-0;
+    animation: twinkle var(--duration) infinite ease-in-out;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.8); }
+  50% { opacity: 0.8; transform: scale(1.2); }
 }
 
 ::selection {
