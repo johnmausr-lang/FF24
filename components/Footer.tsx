@@ -1,36 +1,77 @@
 "use client";
 
 import React from "react";
-import { MessageCircle, Phone, MapPin } from "lucide-react";
+import { MessageCircle, Phone, MapPin, ArrowUpRight } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-transparent pt-32 pb-12 border-t border-white/5 flex flex-col items-center justify-center text-center">
-      <div className="container flex flex-col items-center justify-center">
-        {/* КРУПНЫЙ ЛОГОТИП */}
-        <div className="logo-3d-wrapper mb-16">
-          <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-20 md:h-32 w-auto object-contain" />
+    <footer className="relative bg-transparent pt-40 pb-16 overflow-hidden border-t border-white/5">
+      <div className="container relative z-10">
+        
+        {/* Массивный Логотип Фон */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.02]">
+          <h2 className="text-[30vw] font-black italic uppercase leading-none select-none">FF24</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20 w-full max-w-5xl">
-          <div className="flex flex-col items-center md:items-start gap-6">
-            <a href="https://t.me/manager24ff" target="_blank" className="flex items-center gap-4 text-4xl md:text-6xl font-[1000] italic uppercase text-white hover:text-accent-lime tracking-tighter transition-all">
-              <MessageCircle size={48} /> @manager24ff
-            </a>
-            <div className="flex flex-col md:flex-row gap-8 mt-4 text-white/50 font-bold uppercase tracking-widest text-[10px] items-center">
-              <div className="flex items-center gap-2"><Phone size={14} /> +7 (987) 376-17-22</div>
-              <div className="flex items-center gap-2 text-center"><MapPin size={14} /> ул. Лавочкина, 23, стр. 4, Москва</div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32 items-end">
+          <div className="space-y-12">
+            <div className="logo-3d-wrapper !justify-start">
+              <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-24 w-auto object-contain" />
+            </div>
+            <h3 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter leading-[0.9]">
+              Масштабируем <br />
+              <span className="text-accent-lime text-neon">вашу прибыль</span>
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <ContactLink 
+              icon={<MessageCircle size={20} />} 
+              label="Telegram" 
+              value="@manager24ff" 
+              href="https://t.me/manager24ff" 
+            />
+            <ContactLink 
+              icon={<Phone size={20} />} 
+              label="Телефон" 
+              value="+7 (987) 376-17-22" 
+              href="tel:+79873761722" 
+            />
+            <div className="space-y-2 md:col-span-2">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 flex items-center gap-2">
+                <MapPin size={14} /> Наш адрес
+              </span>
+              <p className="text-lg font-bold uppercase tracking-widest text-white/60">
+                ул. Лавочкина, 23, стр. 4, Москва
+              </p>
             </div>
           </div>
-          <div className="flex flex-col items-center md:items-end justify-center">
-             <a href="https://t.me/manager24ff" target="_blank" className="btn-liquid-lime px-16 py-8 text-xl">Запустить поток</a>
-          </div>
         </div>
 
-        <div className="pt-12 border-t border-white/5 w-full text-[10px] text-white/20 tracking-[0.4em] uppercase font-black">
-          © 2025 FF24 FULFILLMENT. ПРОВЕРЕННАЯ ЛОГИСТИКА.
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">
+            © 2025 FF24 FULFILLMENT. ALL RIGHTS RESERVED.
+          </p>
+          <div className="flex gap-10">
+            {["Instagram", "WhatsApp", "VK"].map((social) => (
+              <a key={social} href="#" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-accent-lime transition-colors">
+                {social}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
   );
 };
+
+const ContactLink = ({ icon, label, value, href }: { icon: React.ReactNode, label: string, value: string, href: string }) => (
+  <a href={href} target="_blank" className="group space-y-2 block">
+    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 flex items-center gap-2 transition-colors group-hover:text-accent-lime">
+      {icon} {label}
+    </span>
+    <div className="text-2xl font-bold tracking-tight text-white flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+      {value} <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-opacity text-accent-lime" />
+    </div>
+  </a>
+);
