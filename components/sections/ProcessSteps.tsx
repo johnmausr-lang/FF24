@@ -7,58 +7,56 @@ import {
   PerspectiveCamera, 
   Text, 
   Environment,
-  ContactShadows,
-  useGLTF 
+  ContactShadows 
 } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
+import { ConveyorModel } from "./Conveyor"; // Импорт вашей модели
 
 const steps = [
-  { title: "Заявка" },
-  { title: "Забор" },
-  { title: "Приёмка" },
-  { title: "Маркировка" },
-  { title: "Упаковка" },
-  { title: "Отгрузка" },
-  { title: "Финиш" },
+  { title: "Заявка", desc: "Регистрация ТЗ" },
+  { title: "Забор", desc: "Логистика" },
+  { title: "Приёмка", desc: "Контроль брака" },
+  { title: "Маркировка", desc: "Честный Знак" },
+  { title: "Упаковка", desc: "Подготовка" },
+  { title: "Отгрузка", desc: "Склад МП" },
+  { title: "Финиш", desc: "Готов к продаже" },
 ];
 
-// Компонент вашей загруженной модели
-function MyConveyorModel() {
-  // Замените путь на реальный путь к вашей модели
-  const { scene } = useGLTF("/models/conveyor.glb"); 
-  return <primitive object={scene} scale={1.5} position={[0, -2, 0]} />;
-}
-
-function ConveyorCard({ position, title, index }: { position: [number, number, number], title: string, index: number }) {
+function FloatingCard({ position, title, index }: { position: [number, number, number], title: string, index: number }) {
   const meshRef = useRef<THREE.Group>(null);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.position.x -= 0.02; // Скорость движения ленты
-    if (meshRef.current.position.x < -10) meshRef.current.position.x = 15;
+    // Движение карточек вдоль конвейера
+    meshRef.current.position.x -= 0.015;
+    // Зацикливание движения
+    if (meshRef.current.position.x < -12) {
+      meshRef.current.position.x = 12;
+    }
   });
 
   return (
     <group ref={meshRef} position={position}>
-      <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
-        {/* Стеклянная карточка */}
+      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
+        {/* Стеклянная панель */}
         <mesh>
-          <boxGeometry args={[2.2, 3, 0.05]} />
+          <boxGeometry args={[2.2, 1.4, 0.05]} />
           <meshPhysicalMaterial
-            roughness={0}
-            transmission={0.9}
-            thickness={0.5}
+            roughness={0.1}
+            transmission={0.8}
+            thickness={0.2}
             color="#E0FF64"
             transparent
-            opacity={0.3}
+            opacity={0.4}
           />
         </mesh>
 
-        <Text position={[0, 0.5, 0.06]} fontSize={0.25} color="white" anchorX="center">
-          {`0${index + 1}`}
+        {/* Текстовый контент на карточке */}
+        <Text position={[0, 0.3, 0.06]} fontSize={0.15} color="white" font="/fonts/inter-bold.json">
+          {`ЭТАП 0${index + 1}`}
         </Text>
-        <Text position={[0, -0.2, 0.06]} fontSize={0.18} color="#E0FF64" textAlign="center" maxWidth={1.8}>
+        <Text position={[0, -0.1, 0.06]} fontSize={0.22} color="#E0FF64" fontWeight="bold">
           {title.toUpperCase()}
         </Text>
       </Float>
@@ -68,49 +66,48 @@ function ConveyorCard({ position, title, index }: { position: [number, number, n
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative h-screen bg-black overflow-hidden">
+    <section id="process" className="relative h-[80vh] md:h-screen bg-black overflow-hidden">
+      {/* Текстовый слой */}
       <div className="absolute top-20 left-10 z-10 pointer-events-none">
         <motion.h2 
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter"
+          className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter"
         >
           КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
         </motion.h2>
       </div>
 
       <Canvas shadows>
-        <PerspectiveCamera makeDefault position={[8, 3, 12]} fov={35} />
+        <PerspectiveCamera makeDefault position={[0, 4, 12]} fov={35} />
         
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1.5} color="#E0FF64" />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} castShadow />
         
         <Suspense fallback={null}>
-          <group rotation={[0, -Math.PI / 4, 0]}>
-            {/* Рендерим вашу модель */}
-            <MyConveyorModel />
+          <group rotation={[0.2, -Math.PI / 6, 0]}>
+            {/* Ваша 3D модель */}
+            <ConveyorModel scale={0.5} position={[0, -1, 0]} />
 
-            {/* Рендерим карточки поверх модели */}
+            {/* Едущие карточки */}
             {steps.map((step, i) => (
-              <ConveyorCard 
+              <FloatingCard 
                 key={i} 
                 index={i}
                 title={step.title}
-                position={[i * 4, 1, 0]} 
+                position={[i * 4 - 6, 1.2, 0]} 
               />
             ))}
           </group>
 
-          <Environment preset="city" />
-          <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={20} blur={2} />
+          <Environment preset="night" />
+          <ContactShadows position={[0, -1, 0]} opacity={0.6} scale={20} blur={2.5} far={4} />
         </Suspense>
       </Canvas>
 
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-20" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-20" />
+      {/* Затемнение краев для глубины */}
+      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-black to-transparent z-20" />
+      <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-black to-transparent z-20" />
     </section>
   );
 };
-
-// Предварительная загрузка модели для исключения лагов
-useGLTF.preload("/models/conveyor.glb");
