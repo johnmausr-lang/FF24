@@ -5,14 +5,13 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export function ConveyorModel(props: any) {
-  // Исправленный путь к модели
-  const { nodes, materials } = useGLTF('/models/conveyor.glb');
+  // Используем твой исправленный путь
+  const { nodes } = useGLTF('/models/conveyor.glb');
   
-  // Создаем премиальный техно-материал
   const technoMaterial = new THREE.MeshStandardMaterial({
-    color: "#0a0a0a",
-    metalness: 0.9,
-    roughness: 0.15,
+    color: "#050505",
+    metalness: 1,
+    roughness: 0.1,
     emissive: "#E0FF64",
     emissiveIntensity: 0.02,
   });
@@ -25,15 +24,15 @@ export function ConveyorModel(props: any) {
         geometry={(nodes.Mesh10 as THREE.Mesh).geometry}
         material={technoMaterial}
       />
-      {/* Световая полоса вдоль всей ленты для технологичности */}
-      <mesh position={[0, 0.08, 0]}>
-        <boxGeometry args={[50, 0.01, 1.8]} />
+      {/* Яркая неоновая направляющая вдоль ленты */}
+      <mesh position={[0, 0.1, 0]}>
+        <boxGeometry args={[60, 0.02, 1.9]} />
         <meshStandardMaterial 
           color="#E0FF64" 
           emissive="#E0FF64" 
-          emissiveIntensity={1.5} 
+          emissiveIntensity={3} 
           transparent 
-          opacity={0.6} 
+          opacity={0.8} 
         />
       </mesh>
     </group>
