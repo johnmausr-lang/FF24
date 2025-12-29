@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { useGLTF, Text } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -18,32 +18,32 @@ export function ConveyorModel(props: any) {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
-        // Основной каркас — видимый тёмно-серый металл
+        // Основной каркас — видимый тёмно-серый с металлическим блеском
         if (!name.includes("neon") && !name.includes("light") && !name.includes("glow") && !name.includes("belt")) {
           child.material = new THREE.MeshStandardMaterial({
-            color: "#222233",           // тёмно-синий/серый — виден на чёрном фоне
-            metalness: 0.8,
-            roughness: 0.3,
-            envMapIntensity: 1.2,
+            color: "#2a2a3a",           // тёмно-синий/серый — отлично видно на чёрном фоне
+            metalness: 0.85,
+            roughness: 0.25,
+            envMapIntensity: 1.3,
           });
         }
 
-        // Неоновые линии — яркие и светящиеся
+        // Неоновые линии — яркие
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 12,      // ярко, но не выжигает
+            emissiveIntensity: 10,
             toneMapped: false,
           });
         }
 
-        // Лента конвейера — тёмная с текстурой движения
+        // Лента конвейера — движение
         if (name.includes("belt") || name.includes("tape") || name.includes("band")) {
           const beltMat = new THREE.MeshStandardMaterial({
-            color: "#0a0a0f",
-            metalness: 0.5,
-            roughness: 0.6,
+            color: "#111122",
+            metalness: 0.6,
+            roughness: 0.5,
             map: (child.material as THREE.MeshStandardMaterial).map || null,
           });
           child.material = beltMat;
@@ -56,7 +56,6 @@ export function ConveyorModel(props: any) {
     });
   }, [scene]);
 
-  // Движение ленты
   useFrame((state, delta) => {
     if (beltMaterialRef.current?.map) {
       beltMaterialRef.current.map.offset.x += delta * 0.3;
