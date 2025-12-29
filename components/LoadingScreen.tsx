@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { GlassVideo } from "@/components/ui/GlassVideo";
 
-export const LoadingScreen = ({ onFinished }: { onFinished?: () => void }) => {
+interface LoadingScreenProps {
+  onFinished?: () => void;
+}
+
+export const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -13,7 +17,10 @@ export const LoadingScreen = ({ onFinished }: { onFinished?: () => void }) => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => { setLoading(false); if (onFinished) onFinished(); }, 600);
+          setTimeout(() => {
+            setLoading(false);
+            if (onFinished) onFinished();
+          }, 800);
           return 100;
         }
         return prev + 1;
@@ -26,30 +33,42 @@ export const LoadingScreen = ({ onFinished }: { onFinished?: () => void }) => {
     <AnimatePresence>
       {loading && (
         <motion.div
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-center"
+          exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
+          transition={{ duration: 1 }}
+          className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden"
         >
-          <GlassVideo src="/videos/hero-bg.webm" opacity={0.3} blur="blur-[80px]" />
+          {/* Видео-фон для лоадера */}
+          <GlassVideo src="/videos/hero-bg.webm" opacity={0.4} blur="blur-[100px]" />
           
-          <div className="relative z-10 flex flex-col items-center justify-center">
-            {/* КРУПНЫЙ ЛОГОТИП */}
+          <div className="relative z-10 flex flex-col items-center">
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="mb-12 logo-3d-wrapper"
+              transition={{ type: "spring", stiffness: 50 }}
+              className="mb-16 logo-3d-wrapper"
             >
-              <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-24 md:h-44 w-auto object-contain" />
+              <img src="/logo-ff24.png" alt="FF24" className="logo-3d h-32 md:h-56 w-auto object-contain" />
             </motion.div>
 
-            <div className="w-[300px] h-[1px] bg-white/10 relative overflow-hidden rounded-full mb-6 text-center">
-              <motion.div 
-                className="absolute inset-y-0 left-0 bg-accent-lime shadow-[0_0_20px_#E0FF64]" 
-                initial={{ width: 0 }} 
-                animate={{ width: `${progress}%` }} 
-              />
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-[300px] md:w-[500px] h-[1px] bg-white/5 relative overflow-hidden rounded-full">
+                <motion.div 
+                  className="absolute inset-y-0 left-0 bg-accent-lime shadow-[0_0_20px_#E0FF64]"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                />
+              </div>
+              
+              <div className="flex justify-between w-full px-1">
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">System Load</span>
+                <span className="text-accent-lime font-mono text-lg font-bold">{progress}%</span>
+              </div>
             </div>
-            <span className="text-accent-lime font-mono text-xl font-bold">{progress}%</span>
           </div>
+
+          {/* Декоративные углы как в интерфейсах хай-тек */}
+          <div className="absolute top-10 left-10 w-20 h-20 border-t border-l border-white/10" />
+          <div className="absolute bottom-10 right-10 w-20 h-20 border-b border-r border-white/10" />
         </motion.div>
       )}
     </AnimatePresence>
