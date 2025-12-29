@@ -8,12 +8,14 @@
     --foreground: 0 0% 98%;
     --accent-lime: 78 100% 70%;
     --border: 240 5% 25%;
+    /* Переменные для интерактивного параллакса звезд */
     --mouse-x: 0.5;
     --mouse-y: 0.5;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Глубокий радиальный градиент для объема сцены */
     background: radial-gradient(circle at 50% -20%, #1a1c1e 0%, #0a0a0b 100%);
   }
 
@@ -24,6 +26,7 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Тюнинг скроллбара в стиле FF24 */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -37,6 +40,7 @@
 }
 
 @layer components {
+  /* ГЛОБАЛЬНОЕ ЦЕНТРИРОВАНИЕ */
   .container {
     @apply max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center text-center;
   }
@@ -119,7 +123,6 @@
     box-shadow: 0 10px 40px -10px rgba(224, 255, 100, 0.5);
   }
 
-  /* Старый стиль кнопок для совместимости */
   .btn-glass-lime {
     @apply relative overflow-hidden bg-accent-lime text-black font-[900] uppercase tracking-widest transition-all duration-500 flex items-center justify-center;
     box-shadow: 0 0 20px rgba(224, 255, 100, 0.1);
@@ -161,6 +164,12 @@
     transform: translate(calc(var(--mouse-x) * -30px), calc(var(--mouse-y) * -30px));
     transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
     @apply pointer-events-none fixed inset-0;
+  }
+
+  /* МАСКА ДЛЯ ПЛАВНОГО ИСЧЕЗНОВЕНИЯ ЛЕНТЫ ОТЗЫВОВ */
+  .mask-fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   }
 }
 
