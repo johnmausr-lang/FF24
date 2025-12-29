@@ -23,7 +23,7 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "@studio-freight/lenis": "^1.0.42",
+    "lenis": "^1.1.18",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/engine": "^3.5.0",
     "@tsparticles/slim": "^3.5.0",
