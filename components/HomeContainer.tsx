@@ -14,7 +14,7 @@ import { Footer } from "@/components/Footer";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
-// Ленивая загрузка тяжелой 3D-секции
+// Ленивая загрузка тяжелой 3D-секции для оптимизации
 const ProcessSteps = dynamic(() => import('@/components/sections/ProcessSteps').then(mod => mod.ProcessSteps), {
   ssr: false,
   loading: () => <div className="h-[850px] w-full bg-[#050505]" />,
@@ -27,10 +27,10 @@ export default function HomeContainer() {
   useEffect(() => {
     setIsMounted(true);
     
-    // Автоматическое скрытие лоадера через 5 секунд (защита от зависаний)
+    // Автоматический таймаут для скрытия загрузочного экрана
     const timer = setTimeout(() => setIsLoading(false), 5000);
 
-    // Оптимизированный Mouse move listener через requestAnimationFrame
+    // Оптимизированный слушатель движения мыши
     let raf: number;
     const handleMouseMove = (e: MouseEvent) => {
       cancelAnimationFrame(raf);
@@ -42,15 +42,14 @@ export default function HomeContainer() {
       });
     };
 
-    // Подключение Lenis для ultra-smooth scroll
+    // Подключение Lenis для ультра-плавного скролла
     let lenisRaf: number;
     (async () => {
-      const Lenis = (await import('@studio-freight/lenis')).default;
+      const Lenis = (await import('lenis')).default; // Обновленный импорт
       const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        smoothTouch: false,
       });
 
       function scrollRaf(time: number) {
@@ -76,14 +75,14 @@ export default function HomeContainer() {
         {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Слой звезд с эффектом параллакса */}
+      {/* Интерактивный фон со звездами и параллаксом */}
       {isMounted && (
         <div className="star-field fixed inset-0 z-0 pointer-events-none opacity-60">
           <ParticlesBackground />
         </div>
       )}
 
-      {/* Контент сайта с принудительным центрированием */}
+      {/* Основной контент сайта */}
       <div 
         className={`relative z-10 transition-opacity duration-1000 flex flex-col items-center ${
           isLoading ? "opacity-0 invisible" : "opacity-100 visible"
@@ -93,7 +92,6 @@ export default function HomeContainer() {
         <div className="w-full flex flex-col items-center justify-center space-y-0">
           <Hero />
           <BentoGrid />
-          {/* 3D секция загружается лениво */}
           <ProcessSteps />
           <Testimonials />
           <FAQ />
