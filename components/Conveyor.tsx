@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Text } from "@react-three/drei"; // ← Добавлен импорт Text
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -28,7 +28,7 @@ export function ConveyorModel(props: any) {
           roughness: 0.15,
         });
 
-        // Неоновые элементы — яркое свечение для Bloom
+        // Неоновые элементы
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
@@ -38,7 +38,7 @@ export function ConveyorModel(props: any) {
           });
         }
 
-        // Лента конвейера — сохраняем для анимации UV-offset
+        // Лента конвейера
         if (name.includes("belt") || name.includes("tape") || name.includes("band")) {
           const beltMat = new THREE.MeshStandardMaterial({
             color: "#0f0f0f",
@@ -50,14 +50,13 @@ export function ConveyorModel(props: any) {
           beltMaterialRef.current = beltMat;
         }
 
-        // Тени
         child.castShadow = true;
         child.receiveShadow = true;
       }
     });
   }, [scene]);
 
-  // Анимация движения ленты
+  // Анимация ленты
   useFrame((state, delta) => {
     if (beltMaterialRef.current?.map) {
       beltMaterialRef.current.map.offset.x += delta * 0.3;
@@ -65,17 +64,37 @@ export function ConveyorModel(props: any) {
     }
   });
 
-  // Fallback, если модель не загрузилась
+  // Fallback при ошибке загрузки модели
   if (!scene) {
-    console.error("%cКритическая ошибка: scene is null. Проверь путь /models/conveyor.glb и наличие файла в public/", "color: red; font-size: 16px;");
+    console.error("%cКритическая ошибка: модель не загружена. Проверь путь public/models/conveyor.glb", "color: red; font-size: 16px;");
+
     return (
       <group {...props}>
+        {/* Красный wireframe бокс как placeholder */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[20, 4, 40]} />
           <meshStandardMaterial color="red" wireframe />
         </mesh>
-        <Text position={[0, 5, 0]} fontSize={2} color="red">
+
+        {/* Текст с ошибкой */}
+        <Text
+          position={[0, 8, 0]}
+          fontSize={3}
+          color="red"
+          anchorX="center"
+          anchorY="middle"
+        >
           MODEL NOT LOADED
+        </Text>
+
+        <Text
+          position={[0, 4, 0]}
+          fontSize={1.5}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+        >
+          Check: public/models/conveyor.glb
         </Text>
       </group>
     );
@@ -84,5 +103,5 @@ export function ConveyorModel(props: any) {
   return <primitive object={scene} {...props} dispose={null} />;
 }
 
-// Простой preload без onError (поддерживается в drei)
+// Простой preload
 useGLTF.preload("/models/conveyor.glb");
