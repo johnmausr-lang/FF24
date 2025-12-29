@@ -40,7 +40,7 @@ export const ExitIntentPopup = () => {
             className="relative max-w-lg w-full rounded-[4rem] p-[2px] overflow-hidden border-none"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Видео-фон для попапа */}
+            {/* Оптимизированное видео-фон */}
             <GlassVideo 
               src="/videos/hero-bg.webm" 
               opacity={0.4} 
