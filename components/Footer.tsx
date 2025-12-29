@@ -36,7 +36,7 @@ export const Footer = () => {
               </p>
             </div>
 
-            {/* Навигация */}
+            {/* Навигация по якорям */}
             <div className="md:col-span-3 text-center md:text-left">
               <h4 className="font-black uppercase text-xs tracking-[0.4em] mb-10 text-accent-lime/60">
                 Навигация
@@ -44,18 +44,18 @@ export const Footer = () => {
               <ul className="space-y-4">
                 {navLinks.map((link) => (
                   <li key={link.label}>
-                    <Link 
+                    <a 
                       href={link.href} 
                       className="text-2xl font-black italic uppercase hover:text-accent-lime transition-colors inline-block"
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Контакты */}
+            {/* Контакты напрямую в Telegram */}
             <div className="md:col-span-4 text-center md:text-right">
               <h4 className="font-black uppercase text-xs tracking-[0.4em] mb-10 text-accent-lime/60">
                 Связь с нами
@@ -77,13 +77,12 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Нижняя панель с защитой от 404 */}
+          {/* Нижняя панель */}
           <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.5em] text-white/20">
             <div>
               © 2025 FF24 FULFILLMENT. ALL RIGHTS RESERVED.
             </div>
             <div className="flex gap-12">
-              {/* prefetch={false} отключает попытку Next.js загрузить несуществующие файлы */}
               <Link href="/privacy" prefetch={false} className="hover:text-white transition-colors">
                 Политика
               </Link>
