@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-
-// Импорт компонентов (убедись, что пути верны)
+import { AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { BentoGrid } from "@/components/sections/BentoGrid";
@@ -19,14 +17,13 @@ export default function HomeContainer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
-  // 1. Логика отслеживания мыши для параллакса звезд
   useEffect(() => {
     setIsMounted(true);
     
+    // Передача координат мыши в CSS переменные
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX / window.innerWidth;
       const y = e.clientY / window.innerHeight;
-      // Передаем координаты в CSS переменные
       document.documentElement.style.setProperty('--mouse-x', x.toString());
       document.documentElement.style.setProperty('--mouse-y', y.toString());
     };
@@ -36,47 +33,27 @@ export default function HomeContainer() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-transparent select-none">
-      {/* ЭКРАН ЗАГРУЗКИ (с исправленным типом onFinished) */}
+    <main className="relative min-h-screen bg-transparent">
       <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen onFinished={() => setIsLoading(false)} />
-        )}
+        {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* ФОН: Звезды с эффектом параллакса через CSS */}
+      {/* Звезды со смещением от мыши */}
       {isMounted && (
         <div className="star-field fixed inset-0 z-0 pointer-events-none opacity-60">
           <ParticlesBackground />
         </div>
       )}
 
-      {/* ОСНОВНОЙ КОНТЕНТ: Строго по центру */}
-      <div 
-        className={`relative z-10 flex flex-col items-center transition-opacity duration-1000 ${
-          isLoading ? "opacity-0" : "opacity-100"
-        }`}
-      >
+      <div className={`relative z-10 transition-opacity duration-1000 flex flex-col items-center ${isLoading ? "opacity-0 invisible" : "opacity-100 visible"}`}>
         <Navbar />
-        
-        {/* Каждая секция bg-transparent, чтобы звезды были видны */}
-        <div className="w-full space-y-0 bg-transparent flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-center">
           <Hero />
-          
-          <section className="w-full border-y border-white/5 bg-transparent">
-            <BentoGrid />
-          </section>
-
+          <BentoGrid />
           <ProcessSteps />
-
-          <section className="w-full border-y border-white/5 bg-transparent">
-            <Testimonials />
-          </section>
-
+          <Testimonials />
           <FAQ />
-          
           <LeadForm />
-          
           <Footer />
         </div>
       </div>
