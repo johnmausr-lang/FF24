@@ -3,61 +3,73 @@
 import React, { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
-  Float, 
   PerspectiveCamera, 
   Text, 
   Environment,
-  ContactShadows 
+  ContactShadows,
+  Float,
+  MeshTransmissionMaterial 
 } from "@react-three/drei";
 import * as THREE from "three";
-import { motion } from "framer-motion";
-// Исправленный путь: поднимаемся на уровень выше к папке components
-import { ConveyorModel } from "../Conveyor"; 
+import { ConveyorModel } from "../Conveyor";
 
 const steps = [
-  { title: "Заявка", desc: "Регистрация ТЗ" },
-  { title: "Забор", desc: "Логистика" },
-  { title: "Приёмка", desc: "Контроль брака" },
-  { title: "Маркировка", desc: "Честный Знак" },
-  { title: "Упаковка", desc: "Подготовка" },
-  { title: "Отгрузка", desc: "Склад МП" },
-  { title: "Финиш", desc: "Готов к продаже" },
+  { title: "Заявка" },
+  { title: "Забор" },
+  { title: "Приёмка" },
+  { title: "Маркировка" },
+  { title: "Упаковка" },
+  { title: "Отгрузка" },
+  { title: "Финиш" },
 ];
 
-function FloatingCard({ position, title, index }: { position: [number, number, number], title: string, index: number }) {
+function GlassBox({ position, title, index }: { position: [number, number, number], title: string, index: number }) {
   const meshRef = useRef<THREE.Group>(null);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current) return;
-    // Движение карточек вдоль конвейера
-    meshRef.current.position.x -= 0.015;
-    // Зацикливание движения (телепортация в начало при выходе за границы)
-    if (meshRef.current.position.x < -12) {
-      meshRef.current.position.x = 12;
-    }
+    meshRef.current.position.x -= 0.025; // Скорость движения коробок
+    if (meshRef.current.position.x < -18) meshRef.current.position.x = 18;
   });
 
   return (
     <group ref={meshRef} position={position}>
-      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-        {/* Стеклянная панель с эффектом пропускания света */}
-        <mesh>
-          <boxGeometry args={[2.2, 1.4, 0.05]} />
-          <meshPhysicalMaterial
-            roughness={0.1}
-            transmission={0.8}
-            thickness={0.2}
-            color="#E0FF64"
+      <Float speed={1.8} rotationIntensity={0.4} floatIntensity={0.4}>
+        {/* Премиальная стеклянная коробка */}
+        <mesh castShadow>
+          <boxGeometry args={[2.8, 1.6, 1.4]} />
+          <MeshTransmissionMaterial 
+            backside
+            samples={8}
+            thickness={0.4}
+            chromaticAberration={0.02}
+            anisotropy={0.1}
+            distortion={0.05}
+            color="#ffffff"
+            transmission={1}
+            ior={1.2}
             transparent
-            opacity={0.4}
+            opacity={0.5}
           />
         </mesh>
 
-        {/* Текстовый контент на карточке */}
-        <Text position={[0, 0.3, 0.06]} fontSize={0.15} color="white">
-          {`ЭТАП 0${index + 1}`}
+        {/* Внутреннее свечение (индикатор статуса товара) */}
+        <mesh>
+          <boxGeometry args={[2.2, 1.2, 1.0]} />
+          <meshStandardMaterial 
+            color="#E0FF64" 
+            emissive="#E0FF64" 
+            emissiveIntensity={0.8} 
+            transparent 
+            opacity={0.15} 
+          />
+        </mesh>
+
+        {/* Текст на фронтальной части коробки */}
+        <Text position={[0, 0.25, 0.71]} fontSize={0.12} color="white" anchorX="center">
+          {`CARGO ID-0${index + 1}`}
         </Text>
-        <Text position={[0, -0.1, 0.06]} fontSize={0.22} color="#E0FF64" fontWeight="bold">
+        <Text position={[0, -0.15, 0.71]} fontSize={0.24} color="#E0FF64" fontWeight="900" anchorX="center">
           {title.toUpperCase()}
         </Text>
       </Float>
@@ -67,52 +79,56 @@ function FloatingCard({ position, title, index }: { position: [number, number, n
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative h-[80vh] md:h-screen bg-black overflow-hidden">
-      {/* Текстовый заголовок поверх 3D сцены */}
-      <div className="absolute top-20 left-10 z-10 pointer-events-none">
-        <motion.h2 
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter"
-        >
+    <section id="process" className="relative h-screen bg-black overflow-hidden">
+      <div className="absolute top-24 left-12 z-10 pointer-events-none">
+        <h2 className="text-6xl md:text-9xl font-black italic uppercase tracking-tighter text-white/90">
           КОНВЕЙЕР <span className="text-accent-lime">FF24</span>
-        </motion.h2>
+        </h2>
+        <div className="flex items-center gap-3 mt-4">
+            <span className="w-2 h-2 bg-accent-lime rounded-full animate-ping" />
+            <p className="text-accent-lime/60 uppercase tracking-[0.4em] font-bold text-sm">Real-time processing active</p>
+        </div>
       </div>
 
-      <Canvas shadows>
-        {/* Камера с небольшим углом сверху для лучшего обзора конвейера */}
-        <PerspectiveCamera makeDefault position={[0, 4, 12]} fov={35} />
+      <Canvas shadows dpr={[1, 2]}>
+        <PerspectiveCamera makeDefault position={[0, 8, 20]} fov={28} />
         
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} castShadow />
+        <ambientLight intensity={0.1} />
+        <pointLight position={[15, 15, 15]} intensity={3} color="#E0FF64" castShadow />
+        
+        {/* Линейный свет вдоль ленты */}
+        <rectAreaLight
+          width={40}
+          height={1}
+          intensity={15}
+          color="#E0FF64"
+          position={[0, 1, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        />
         
         <Suspense fallback={null}>
-          <group rotation={[0.2, -Math.PI / 6, 0]}>
-            {/* Ваша 3D модель конвейера */}
-            <ConveyorModel scale={0.5} position={[0, -1, 0]} />
+          <group rotation={[0, -Math.PI / 10, 0]} position={[0, -2, 0]}>
+            <ConveyorModel scale={1.3} />
 
-            {/* Карточки, едущие по ленте */}
             {steps.map((step, i) => (
-              <FloatingCard 
+              <GlassBox 
                 key={i} 
                 index={i}
                 title={step.title}
-                position={[i * 4 - 6, 1.2, 0]} 
+                position={[i * 6 - 15, 2.2, 0]} 
               />
             ))}
           </group>
 
-          {/* Освещение окружения для реалистичных бликов на металле и стекле */}
-          <Environment preset="night" />
-          
-          {/* Мягкие тени на "полу" */}
-          <ContactShadows position={[0, -1, 0]} opacity={0.6} scale={20} blur={2.5} far={4} />
+          <Environment preset="city" />
+          <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={40} blur={3} far={5} />
         </Suspense>
       </Canvas>
 
-      {/* Затемнение краев экрана для эффекта кинематографичности */}
-      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-black to-transparent z-20" />
-      <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-black to-transparent z-20" />
+      {/* Виньетка и градиенты для объема */}
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
+      <div className="absolute inset-y-0 left-0 w-80 bg-gradient-to-r from-black via-black/40 to-transparent z-20" />
+      <div className="absolute inset-y-0 right-0 w-80 bg-gradient-to-l from-black via-black/40 to-transparent z-20" />
     </section>
   );
 };
