@@ -27,39 +27,27 @@ const steps = [
 function SceneDebugger() {
   const { scene, camera } = useThree();
   useEffect(() => {
-    console.log("%cСЦЕНА ИНИЦИАЛИЗИРОВАНА", "color: #E0FF64; font-weight: bold;");
-    console.log("Текущая камера:", camera.position);
-    console.log("Объектов в сцене:", scene.children.length);
+    console.log("%cRENDERER READY", "color: cyan; font-weight: bold;");
+    console.log("Camera Pos:", camera.position);
+    console.log("Scene objects:", scene.children.length);
   }, [scene, camera]);
   return null;
-}
-
-function ScannerLaser() {
-  const laserRef = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (laserRef.current) {
-      laserRef.current.position.x = Math.sin(state.clock.elapsedTime) * 15;
-    }
-  });
-  return (
-    <mesh ref={laserRef} position={[0, 4, 0]}>
-      <boxGeometry args={[0.1, 8, 4]} />
-      <meshStandardMaterial color="#E0FF64" emissive="#E0FF64" emissiveIntensity={5} transparent opacity={0.4} />
-    </mesh>
-  );
 }
 
 function AbyssBox({ index, title, desc, total }: { index: number; title: string; desc: string; total: number }) {
   const groupRef = useRef<THREE.Group>(null);
   const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
+  
   const spacing = 18;
   const conveyorEnd = -30;
 
   useFrame((state, delta) => {
     const g = groupRef.current;
     if (!g) return;
+
     g.position.x -= delta * 6;
+
     if (g.position.x < conveyorEnd) {
       velocityRef.current += delta * 25;
       g.position.y -= velocityRef.current * delta;
@@ -69,13 +57,15 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       g.position.y = 2.0; 
       g.rotation.set(0, 0, 0);
     }
+
     if (g.position.y < -35) {
       g.position.x = (total - 1) * spacing;
       g.position.y = 2.0;
       velocityRef.current = 0;
     }
-    const targetScale = hovered ? 1.2 : 1;
-    g.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+
+    const s = hovered ? 1.2 : 1;
+    g.scale.lerp(new THREE.Vector3(s, s, s), 0.1);
   });
 
   return (
@@ -107,20 +97,17 @@ export const ProcessSteps = () => {
         shadows
         dpr={[1, 2]}
         gl={{ antialias: true }}
-        onCreated={() => console.log("%cCANVAS СОЗДАН", "color: cyan;")}
       >
         <SceneDebugger />
         <PerspectiveCamera makeDefault position={[0, 20, 60]} fov={30} />
         
-        {/* Убрали туман временно для отладки видимости */}
         <ambientLight intensity={1} /> 
         <pointLight position={[0, 50, 50]} intensity={1.5} color="#ffffff" />
         <spotLight position={[0, 80, 40]} angle={0.3} intensity={2} color="#E0FF64" castShadow />
 
-        <Suspense fallback={<Html center><div className="text-[#E0FF64] text-2xl animate-pulse font-black">ЗАГРУЗКА FF24 ENGINE...</div></Html>}>
+        <Suspense fallback={<Html center><div className="text-[#E0FF64] font-black text-xl">LOADING ASSETS...</div></Html>}>
           <group position={[0, -6, 0]}>
             <ConveyorModel scale={20} /> 
-            <ScannerLaser />
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
