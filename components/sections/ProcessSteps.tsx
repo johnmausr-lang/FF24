@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useRef, useState, useEffect } from "react";
+import React, { Suspense, useRef, useState, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   PerspectiveCamera,
@@ -10,141 +10,142 @@ import {
   MeshTransmissionMaterial,
   Text,
   Html,
-  OrbitControls
+  Sparkles,
+  Stars
 } from "@react-three/drei";
 import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
 
 const steps = [
-  { title: "Заявка", desc: "Автоматическая регистрация ТЗ. Наш менеджер связывается с вами для уточнения деталей упаковки и логистики." },
-  { title: "Забор", desc: "Собственный автопарк забирает товар с вашего склада или от поставщика в любую погоду 24/7." },
-  { title: "Приёмка", desc: "Тщательная проверка на брак, сверка артикулов и занесение каждой единицы в систему учёта FF24." },
-  { title: "Маркировка", desc: "Печать и наклейка штрихкодов, КИЗов и этикеток 'Честный Знак' в соответствии с регламентами." },
-  { title: "Упаковка", desc: "Профессиональная подготовка: от бабл-пленки до брендированных коробов с усиленной защитой." },
-  { title: "Отгрузка", desc: "Формирование паллет и оперативная доставка на склады Wildberries, Ozon или Яндекс.Маркет." },
-  { title: "Финиш", desc: "Товар готов к продаже. Вы получаете полный фотоотчет и документы в личном кабинете." },
+  { title: "Заявка", desc: "Автоматическая регистрация заказа в системе FF24." },
+  { title: "Забор", desc: "Курьер забирает товар с вашего адреса 24/7." },
+  { title: "Приёмка", desc: "Проверка на брак и IT-учёт каждой позиции." },
+  { title: "Маркировка", desc: "Печать КИЗов и кодов 'Честный знак'." },
+  { title: "Упаковка", desc: "Брендированная упаковка с защитой от ударов." },
+  { title: "Отгрузка", desc: "Доставка на маркетплейс в течение 24 часов." },
+  { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-function MovingBox({ index, title, desc }: { index: number; title: string; desc: string }) {
+// Фоновые стеллажи склада из линий
+function WarehouseBackground() {
+  return (
+    <group position={[0, 0, -20]}>
+      <gridHelper args={[100, 20, "#E0FF64", "#111"]} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -5]} opacity={0.1} transparent />
+      {/* Стилизованные линии стеллажей */}
+      {Array.from({ length: 10 }).map((_, i) => (
+        <mesh key={i} position={[i * 15 - 75, 5, -10]}>
+          <boxGeometry args={[0.05, 30, 0.05]} />
+          <meshBasicMaterial color="#E0FF64" transparent opacity={0.2} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function MovingBox({ index, title, desc, total }: { index: number; title: string; desc: string; total: number }) {
   const groupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Инициализация звука при монтировании компонента
-  useEffect(() => {
-    const audio = new Audio("/sound/conveyor-belt-loop.mp3");
-    audio.loop = true;
-    audio.volume = 0.2; // Громкость 20%, чтобы не пугать пользователя
-    audioRef.current = audio;
-
-    return () => {
-      audio.pause();
-      audioRef.current = null;
-    };
-  }, []);
-
-  // Управление воспроизведением при наведении
-  useEffect(() => {
-    if (audioRef.current) {
-      if (hovered) {
-        audioRef.current.play().catch(() => {
-          console.warn("Автовоспроизведение звука заблокировано браузером до первого клика.");
-        });
-      } else {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0; // Сбрасываем звук при уходе курсора
-      }
-    }
-  }, [hovered]);
+  
+  // Идеально ровное расстояние: 12 единиц между коробками
+  const spacing = 12;
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
-    groupRef.current.position.x -= delta * 3.5;
-    if (groupRef.current.position.x < -35) groupRef.current.position.x = 35;
+    // Идеально ровное движение по оси X
+    groupRef.current.position.x -= delta * 4;
     
-    const s = hovered ? 1.2 : 1;
+    // Бесшовный цикл
+    if (groupRef.current.position.x < -(spacing * 2)) {
+      groupRef.current.position.x += spacing * total;
+    }
+
+    const s = hovered ? 1.15 : 1;
     groupRef.current.scale.lerp(new THREE.Vector3(s, s, s), 0.1);
   });
 
   return (
     <group
       ref={groupRef}
-      position={[index * 11 - 20, 2.5, 0]} // Коробки едут
+      // Точка соприкосновения с лентой: y=2.0 (настроено под scale 16 конвейера)
+      position={[index * spacing, 2.0, 0]}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        {/* Мутное стекло */}
+      <Float speed={hovered ? 0 : 1.5} rotationIntensity={0.2} floatIntensity={0.2}>
         <mesh castShadow>
-          <boxGeometry args={[4, 2.5, 2.2]} />
+          <boxGeometry args={[4, 2.6, 2.4]} />
           <MeshTransmissionMaterial 
-            backside
-            samples={12}
-            thickness={2}
-            chromaticAberration={0.15}
-            transmission={1}
-            roughness={0.7} // Сильное замутнение стекла
-            color={hovered ? "#E0FF64" : "#ffffff"} 
-            ior={1.3}
+            backside samples={16} thickness={2.5} chromaticAberration={0.1} 
+            transmission={1} roughness={0.8} color={hovered ? "#E0FF64" : "#ffffff"} 
+            ior={1.4}
           />
         </mesh>
         
-        <Text position={[0, 0.2, 1.11]} fontSize={0.25} color="white" fontWeight="bold">
-          {`0${index + 1}`}
+        <Text position={[0, 0.3, 1.21]} fontSize={0.25} color="white" fontWeight="bold">
+          {`STAGE 0${index + 1}`}
         </Text>
-        <Text position={[0, -0.4, 1.11]} fontSize={0.45} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
+        <Text position={[0, -0.4, 1.21]} fontSize={0.45} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
           {title.toUpperCase()}
         </Text>
 
         {hovered && (
-          <Html position={[0, 4.5, 0]} center distanceFactor={10}>
-            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[400px] shadow-[0_0_80px_rgba(224,255,100,0.4)] transition-all duration-500">
-              <h4 className="text-[#E0FF64] font-black text-sm mb-3 uppercase tracking-[0.3em]">
-                FF24 INDUSTRIAL ENGINE
-              </h4>
-              <p className="text-white text-lg font-bold leading-relaxed mb-2 italic">
-                {title.toUpperCase()}
-              </p>
-              <p className="text-white/80 text-base font-medium leading-snug">
-                {desc}
-              </p>
+          <Html position={[0, 4.5, 0]} center>
+            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[30px] backdrop-blur-3xl w-[450px] shadow-[0_0_100px_rgba(224,255,100,0.3)]">
+              <h4 className="text-[#E0FF64] font-black text-xs mb-3 uppercase tracking-widest">FF24 SYSTEM // LOGISTICS</h4>
+              <p className="text-white text-xl font-black mb-2 italic uppercase">{title}</p>
+              <p className="text-white/70 text-base font-medium leading-relaxed">{desc}</p>
             </div>
           </Html>
         )}
       </Float>
+
+      {/* Искры под коробкой (трение об ленту) */}
+      <Sparkles count={20} scale={[4, 0.5, 2]} size={4} speed={2} color="#E0FF64" opacity={hovered ? 1 : 0.3} />
     </group>
   );
 }
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative h-screen w-full bg-black overflow-hidden">
-      <div className="absolute top-24 w-full z-10 pointer-events-none text-center">
-        <h2 className="text-7xl md:text-[160px] font-black italic uppercase text-white tracking-tighter leading-none opacity-90">
-          КОНВЕЙЕР <span className="text-[#E0FF64] text-glow">FF24</span>
-        </h2>
-      </div>
-
+    <section id="process" className="relative h-screen w-full bg-[#030303] overflow-hidden">
       <Canvas shadows dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[0, 16, 40]} fov={30} />
+        <PerspectiveCamera makeDefault position={[0, 14, 45]} fov={28} />
         
-        <ambientLight intensity={1.8} /> 
-        <spotLight position={[0, 50, 20]} angle={0.4} penumbra={1} intensity={12} color="#E0FF64" castShadow />
+        {/* Освещение складского помещения */}
+        <ambientLight intensity={0.5} /> 
+        <spotLight position={[0, 60, 20]} angle={0.4} penumbra={1} intensity={15} color="#E0FF64" castShadow />
+        <rectAreaLight width={100} height={2} intensity={20} color="#E0FF64" position={[0, 5, -5]} rotation={[-Math.PI / 2, 0, 0]} />
 
         <Suspense fallback={null}>
+          <WarehouseBackground />
+          
           <group position={[0, -5, 0]}>
-            <ConveyorModel scale={16} /> 
+            {/* Идеально выверенный масштаб и позиция конвейера */}
+            <ConveyorModel scale={16} position={[0, 0, 0]} /> 
+            
             {steps.map((step, i) => (
-              <MovingBox key={i} index={i} title={step.title} desc={step.desc} />
+              <MovingBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
           </group>
           
-          <Environment preset="studio" />
-          <ContactShadows position={[0, -5, 0]} opacity={0.8} scale={120} blur={3.5} />
+          <Environment preset="night" />
+          <ContactShadows position={[0, -5, 0]} opacity={1} scale={150} blur={2.5} far={10} color="#000" />
         </Suspense>
 
-        <OrbitControls enableZoom={false} maxPolarAngle={Math.PI / 2.1} />
+        {/* Пыль в воздухе для атмосферы склада */}
+        <Sparkles count={500} scale={[100, 50, 100]} size={2} speed={0.3} opacity={0.2} color="#ffffff" />
       </Canvas>
+
+      {/* HUD-элементы поверх экрана */}
+      <div className="absolute top-24 left-12 z-10">
+        <h2 className="text-8xl md:text-[180px] font-black italic uppercase text-white/10 tracking-tighter absolute -top-10 -left-4 select-none">FF24</h2>
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter relative z-10">КОНВЕЙЕР</h2>
+      </div>
+
+      <div className="absolute bottom-12 right-12 z-10 text-right">
+        <p className="text-[#E0FF64] font-mono text-sm tracking-widest uppercase animate-pulse">● System Diagnostic: Optimal</p>
+        <p className="text-white/40 font-mono text-xs mt-2 uppercase">Automated fulfillment line v8.2</p>
+      </div>
     </section>
   );
 };
