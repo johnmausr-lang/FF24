@@ -5,6 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export function ConveyorModel(props: any) {
+  // Загрузка модели из папки public/models
   const { scene } = useGLTF("/models/conveyor.glb");
 
   useEffect(() => {
@@ -14,24 +15,24 @@ export function ConveyorModel(props: any) {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
-        // Материал "Оружейная сталь 8K"
+        // Материал премиального темного металла
         child.material = new THREE.MeshPhysicalMaterial({
-          color: "#0a0a0c",
+          color: "#08080a",
           metalness: 1.0,
-          roughness: 0.12,
+          roughness: 0.15,
           reflectivity: 1.0,
           clearcoat: 1.0,
-          clearcoatRoughness: 0.05,
-          iridescence: 0.2, // Бензиновые разводы на металле
+          clearcoatRoughness: 0.1,
           emissive: "#E0FF64",
           emissiveIntensity: 0.01,
         });
 
+        // Подсветка неоновых вставок модели
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 25, // Ослепляющий неон
+            emissiveIntensity: 20,
             toneMapped: false,
           });
         }
@@ -42,6 +43,7 @@ export function ConveyorModel(props: any) {
   }, [scene]);
 
   if (!scene) return null;
+  // Разворот модели на 90 градусов для выравнивания с линией движения
   return <primitive object={scene} {...props} rotation={[0, Math.PI / 2, 0]} />;
 }
 
