@@ -24,65 +24,42 @@ const steps = [
   { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-// Компонент сканирующего лазера (ИСПРАВЛЕНО: корректные теги)
+function SceneDebugger() {
+  const { scene, camera } = useThree();
+  useEffect(() => {
+    console.log("%cСЦЕНА ИНИЦИАЛИЗИРОВАНА", "color: #E0FF64; font-weight: bold;");
+    console.log("Текущая камера:", camera.position);
+    console.log("Объектов в сцене:", scene.children.length);
+  }, [scene, camera]);
+  return null;
+}
+
 function ScannerLaser() {
   const laserRef = useRef<THREE.Mesh>(null);
-  
   useFrame((state) => {
     if (laserRef.current) {
-      // Лазер движется туда-сюда по линии конвейера
       laserRef.current.position.x = Math.sin(state.clock.elapsedTime) * 15;
     }
   });
-
   return (
     <mesh ref={laserRef} position={[0, 4, 0]}>
       <boxGeometry args={[0.1, 8, 4]} />
-      <meshStandardMaterial 
-        color="#E0FF64" 
-        emissive="#E0FF64" 
-        emissiveIntensity={10} 
-        transparent 
-        opacity={0.4} 
-      />
+      <meshStandardMaterial color="#E0FF64" emissive="#E0FF64" emissiveIntensity={5} transparent opacity={0.4} />
     </mesh>
   );
-}
-
-// Автофокус камеры под модель
-function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3, center: THREE.Vector3 } | null }) {
-  const { camera } = useThree();
-  
-  useEffect(() => {
-    if (targetData) {
-      const { size } = targetData;
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-      
-      cameraZ *= 2.8; 
-      camera.position.set(0, cameraZ * 0.4, cameraZ);
-      camera.updateProjectionMatrix();
-    }
-  }, [targetData, camera]);
-  
-  return null;
 }
 
 function AbyssBox({ index, title, desc, total }: { index: number; title: string; desc: string; total: number }) {
   const groupRef = useRef<THREE.Group>(null);
   const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
-  
   const spacing = 18;
   const conveyorEnd = -30;
 
   useFrame((state, delta) => {
     const g = groupRef.current;
     if (!g) return;
-
     g.position.x -= delta * 6;
-
     if (g.position.x < conveyorEnd) {
       velocityRef.current += delta * 25;
       g.position.y -= velocityRef.current * delta;
@@ -92,13 +69,11 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       g.position.y = 2.0; 
       g.rotation.set(0, 0, 0);
     }
-
     if (g.position.y < -35) {
       g.position.x = (total - 1) * spacing;
       g.position.y = 2.0;
       velocityRef.current = 0;
     }
-
     const targetScale = hovered ? 1.2 : 1;
     g.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
   });
@@ -108,21 +83,10 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
         <mesh castShadow receiveShadow>
           <boxGeometry args={[4.2, 2.8, 2.6]} />
-          <meshPhysicalMaterial
-            color={hovered ? "#E0FF64" : "#f0f0f0"}
-            roughness={0.25}
-            metalness={0.05}
-            clearcoat={0.3}
-          />
+          <meshPhysicalMaterial color={hovered ? "#E0FF64" : "#f0f0f0"} roughness={0.25} metalness={0.05} clearcoat={0.3} />
         </mesh>
-        
-        <Text position={[0, 0.4, 1.35]} fontSize={0.25} color="white" fontWeight="900">
-          {`ID: 24-0${index + 1}`}
-        </Text>
-        <Text position={[0, -0.4, 1.35]} fontSize={0.45} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
-          {title.toUpperCase()}
-        </Text>
-
+        <Text position={[0, 0.4, 1.35]} fontSize={0.25} color="white" fontWeight="900">{`ID: 24-0${index + 1}`}</Text>
+        <Text position={[0, -0.4, 1.35]} fontSize={0.45} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">{title.toUpperCase()}</Text>
         {hovered && (
           <Html position={[0, 5, 0]} center>
             <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[400px] shadow-[0_0_100px_rgba(224,255,100,0.3)] pointer-events-none">
@@ -137,43 +101,38 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
 }
 
 export const ProcessSteps = () => {
-  const [modelData, setModelData] = useState<{size: THREE.Vector3, center: THREE.Vector3} | null>(null);
-
   return (
     <section id="process" className="relative h-screen w-full bg-[#020202] overflow-hidden">
       <Canvas
         shadows
-        dpr={[1.5, 2]}
-        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
+        dpr={[1, 2]}
+        gl={{ antialias: true }}
+        onCreated={() => console.log("%cCANVAS СОЗДАН", "color: cyan;")}
       >
-        <PerspectiveCamera makeDefault position={[0, 20, 60]} fov={28} />
-        <fog attach="fog" args={["#020202", 30, 90]} />
+        <SceneDebugger />
+        <PerspectiveCamera makeDefault position={[0, 20, 60]} fov={30} />
         
-        <ambientLight intensity={0.7} /> 
-        <spotLight position={[0, 80, 40]} angle={0.3} intensity={1500} color="#E0FF64" castShadow />
+        {/* Убрали туман временно для отладки видимости */}
+        <ambientLight intensity={1} /> 
+        <pointLight position={[0, 50, 50]} intensity={1.5} color="#ffffff" />
+        <spotLight position={[0, 80, 40]} angle={0.3} intensity={2} color="#E0FF64" castShadow />
 
-        <Suspense fallback={null}>
-          <CameraAutofocus targetData={modelData} />
-          
+        <Suspense fallback={<Html center><div className="text-[#E0FF64] text-2xl animate-pulse font-black">ЗАГРУЗКА FF24 ENGINE...</div></Html>}>
           <group position={[0, -6, 0]}>
-            <ConveyorModel scale={20} onLoaded={setModelData} /> 
+            <ConveyorModel scale={20} /> 
             <ScannerLaser />
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
           </group>
-          
           <Environment preset="night" />
-          <ContactShadows position={[0, -6.1, 0]} opacity={0.7} scale={120} blur={3} far={15} color="#000" />
         </Suspense>
         
-        <OrbitControls enableZoom={false} maxPolarAngle={Math.PI / 2.1} />
+        <OrbitControls enableZoom={true} />
       </Canvas>
 
       <div className="absolute top-24 w-full z-10 text-center pointer-events-none">
-        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter opacity-90">
-          КОНВЕЙЕР <span className="text-[#E0FF64]">FF24</span>
-        </h2>
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter opacity-90">КОНВЕЙЕР</h2>
       </div>
     </section>
   );
