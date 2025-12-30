@@ -17,27 +17,25 @@ export function ConveyorModel(props: any) {
       child.castShadow = true;
       child.receiveShadow = true;
 
-      // Настройка неоновых элементов
       if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
         child.material = new THREE.MeshStandardMaterial({
           color: "#E0FF64",
           emissive: "#E0FF64",
-          emissiveIntensity: 18,
+          emissiveIntensity: 20,
           toneMapped: false,
         });
         return;
       }
 
-      // Апгрейд существующего материала без потери текстурных карт
-      const m = child.material as THREE.MeshStandardMaterial;
-      m.metalness = 1.0;
-      m.roughness = 0.18;
-      m.emissive = new THREE.Color("#000000");
-      if (m.map) m.map.anisotropy = 16; // Максимальная четкость текстур
-      
-      // Улучшаем взаимодействие с Environment
-      (m as any).envMapIntensity = 1.2;
-      m.needsUpdate = true;
+      // Улучшенный материал металла: светлее и с отражениями
+      child.material = new THREE.MeshPhysicalMaterial({
+        color: "#1a1a1f", 
+        metalness: 1.0,
+        roughness: 0.15,
+        emissive: "#ffffff",
+        emissiveIntensity: 0.02, // Подсвечиваем грани для видимости
+        envMapIntensity: 1.5,
+      });
     });
   }, [scene]);
 
