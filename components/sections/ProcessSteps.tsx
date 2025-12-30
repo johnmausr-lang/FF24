@@ -1,7 +1,6 @@
 "use client";
 
-// Добавлен useEffect в импорт для исправления ошибки билда
-import React, { Suspense, useRef, useState, useCallback, useEffect } from "react";
+import React, { Suspense, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   PerspectiveCamera,
@@ -25,7 +24,7 @@ const steps = [
   { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-// Компонент сканирующего лазера
+// Компонент сканирующего лазера (ИСПРАВЛЕНО: корректные теги)
 function ScannerLaser() {
   const laserRef = useRef<THREE.Mesh>(null);
   
@@ -44,12 +43,13 @@ function ScannerLaser() {
         emissive="#E0FF64" 
         emissiveIntensity={10} 
         transparent 
-        opacity={0.6} 
+        opacity={0.4} 
       />
-    </group>
+    </mesh>
   );
 }
 
+// Автофокус камеры под модель
 function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3, center: THREE.Vector3 } | null }) {
   const { camera } = useThree();
   
@@ -60,7 +60,7 @@ function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3, ce
       const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
       let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
       
-      cameraZ *= 2.8; // Чуть больше отдаления для 8K панорамы
+      cameraZ *= 2.8; 
       camera.position.set(0, cameraZ * 0.4, cameraZ);
       camera.updateProjectionMatrix();
     }
