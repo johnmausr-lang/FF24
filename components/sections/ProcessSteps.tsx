@@ -7,10 +7,8 @@ import {
   Environment,
   ContactShadows,
   Float,
-  MeshTransmissionMaterial,
   Text,
   Html,
-  Sparkles,
 } from "@react-three/drei";
 import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
@@ -27,7 +25,7 @@ const steps = [
 
 function AbyssBox({ index, title, desc, total }: { index: number; title: string; desc: string; total: number }) {
   const groupRef = useRef<THREE.Group>(null);
-  const velocityRef = useRef(0); // Физика через Ref для стабильности FPS
+  const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
   
   const spacing = 16;
@@ -37,10 +35,8 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
     const g = groupRef.current;
     if (!g) return;
 
-    // Идеально ровное движение по оси X
     g.position.x -= delta * 5.5;
 
-    // Логика падения без вызова React State
     if (g.position.x < conveyorEnd) {
       velocityRef.current += delta * 25;
       g.position.y -= velocityRef.current * delta;
@@ -52,7 +48,6 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       g.rotation.set(0, 0, 0);
     }
 
-    // Респаун
     if (g.position.y < -35) {
       g.position.x = (total - 1) * spacing;
       g.position.y = 2.0;
@@ -68,7 +63,6 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       <Float speed={hovered ? 0 : 2} rotationIntensity={0.2} floatIntensity={0.2}>
         <mesh castShadow receiveShadow>
           <boxGeometry args={[4.2, 2.8, 2.6]} />
-          {/* Четкий PBR материал для "ровных" граней */}
           <meshPhysicalMaterial
             color={hovered ? "#E0FF64" : "#d9d9d9"}
             roughness={0.25}
@@ -103,39 +97,36 @@ export const ProcessSteps = () => {
     <section id="process" className="relative h-screen w-full bg-[#020202] overflow-hidden">
       <Canvas
         shadows
-        dpr={[2, 3]} // Высокое качество для 8K
+        dpr={[2, 3]}
         gl={{
           antialias: true,
           alpha: false,
           powerPreference: "high-performance",
-          physicallyCorrectLights: true,
+          // physicallyCorrectLights удален, так как он включен по умолчанию в новых версиях Three.js
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.0,
-          outputColorSpace: THREE.SRGBColorSpace,
         }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true;
-          gl.shadowMap.type = THREE.PCFSoftShadowMap; // Мягкие тени
+          gl.shadowMap.type = THREE.PCFSoftShadowMap;
         }}
       >
         <PerspectiveCamera makeDefault position={[0, 16, 55]} fov={26} />
-        
         <fog attach="fog" args={["#020202", 40, 95]} />
         
-        {/* Дорогой свет с высоким разрешением теней */}
-        <ambientLight intensity={0.25} /> 
+        <ambientLight intensity={0.4} /> 
         <spotLight 
           position={[0, 80, 30]} 
           angle={0.28} 
           penumbra={1} 
-          intensity={12} 
+          intensity={500} // В новых версиях интенсивность ламп требует больших значений
           color="#E0FF64" 
           castShadow 
           shadow-mapSize-width={4096} 
           shadow-mapSize-height={4096}
           shadow-bias={-0.00015}
         />
-        <directionalLight position={[40, 30, 40]} intensity={0.8} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
+        <directionalLight position={[40, 30, 40]} intensity={1.5} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
 
         <Suspense fallback={null}>
           <group position={[0, -6, 0]}>
@@ -145,6 +136,7 @@ export const ProcessSteps = () => {
             ))}
           </group>
           <Environment preset="night" />
+          <ContactShadows position={[0, -6.1, 0]} opacity={0.6} scale={100} blur={2.5} far={10} color="#000" />
         </Suspense>
       </Canvas>
     </section>
