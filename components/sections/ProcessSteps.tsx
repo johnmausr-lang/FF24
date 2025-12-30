@@ -1,6 +1,7 @@
 "use client";
 
-import React, { Suspense, useRef, useState, useCallback } from "react";
+// Добавлен useEffect в импорт для исправления ошибки билда
+import React, { Suspense, useRef, useState, useCallback, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   PerspectiveCamera,
@@ -24,7 +25,31 @@ const steps = [
   { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-// Компонент автофокуса камеры под модель
+// Компонент сканирующего лазера
+function ScannerLaser() {
+  const laserRef = useRef<THREE.Mesh>(null);
+  
+  useFrame((state) => {
+    if (laserRef.current) {
+      // Лазер движется туда-сюда по линии конвейера
+      laserRef.current.position.x = Math.sin(state.clock.elapsedTime) * 15;
+    }
+  });
+
+  return (
+    <mesh ref={laserRef} position={[0, 4, 0]}>
+      <boxGeometry args={[0.1, 8, 4]} />
+      <meshStandardMaterial 
+        color="#E0FF64" 
+        emissive="#E0FF64" 
+        emissiveIntensity={10} 
+        transparent 
+        opacity={0.6} 
+      />
+    </group>
+  );
+}
+
 function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3, center: THREE.Vector3 } | null }) {
   const { camera } = useThree();
   
@@ -35,8 +60,8 @@ function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3, ce
       const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
       let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
       
-      cameraZ *= 2.5; // Отдаляем камеру для панорамного вида
-      camera.position.set(0, cameraZ * 0.35, cameraZ);
+      cameraZ *= 2.8; // Чуть больше отдаления для 8K панорамы
+      camera.position.set(0, cameraZ * 0.4, cameraZ);
       camera.updateProjectionMatrix();
     }
   }, [targetData, camera]);
@@ -81,7 +106,7 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
   return (
     <group ref={groupRef} position={[index * spacing, 2.0, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
       <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
-        <mesh castShadow>
+        <mesh castShadow receiveShadow>
           <boxGeometry args={[4.2, 2.8, 2.6]} />
           <meshPhysicalMaterial
             color={hovered ? "#E0FF64" : "#f0f0f0"}
@@ -100,7 +125,7 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
 
         {hovered && (
           <Html position={[0, 5, 0]} center>
-            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[400px] shadow-[0_0_100px_rgba(224,255,100,0.3)]">
+            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[400px] shadow-[0_0_100px_rgba(224,255,100,0.3)] pointer-events-none">
               <p className="text-white text-2xl font-black mb-2 uppercase text-center">{title}</p>
               <p className="text-white/80 text-base font-bold leading-relaxed text-center">{desc}</p>
             </div>
@@ -122,8 +147,6 @@ export const ProcessSteps = () => {
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
       >
         <PerspectiveCamera makeDefault position={[0, 20, 60]} fov={28} />
-        
-        {/* Фирменная дымка (Туман) */}
         <fog attach="fog" args={["#020202", 30, 90]} />
         
         <ambientLight intensity={0.7} /> 
@@ -134,6 +157,7 @@ export const ProcessSteps = () => {
           
           <group position={[0, -6, 0]}>
             <ConveyorModel scale={20} onLoaded={setModelData} /> 
+            <ScannerLaser />
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
