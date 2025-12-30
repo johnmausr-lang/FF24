@@ -5,7 +5,6 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export function ConveyorModel(props: any) {
-  // Загружаем вашу модель
   const { scene } = useGLTF("/models/conveyor.glb");
 
   useEffect(() => {
@@ -13,26 +12,24 @@ export function ConveyorModel(props: any) {
 
     scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        const name = child.name.toLowerCase();
-
-        // Полностью перекрашиваем меш в "оружейную сталь"
+        // Создаем материал "черного монолита" для скрытия артефактов меша
         child.material = new THREE.MeshPhysicalMaterial({
-          color: "#0c0c12",
+          color: "#08080a",
           metalness: 1.0,
-          roughness: 0.2,
+          roughness: 0.15,
           reflectivity: 1,
-          clearcoat: 1,
+          clearcoat: 1.0,
           clearcoatRoughness: 0.1,
-          emissive: "#E0FF64",
-          emissiveIntensity: 0.02, // Легкое свечение граней
+          emissive: "#000000",
         });
 
-        // Если в модели есть элементы неона, делаем их максимально яркими
+        // Подсветка неоновых полос, если они есть
+        const name = child.name.toLowerCase();
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 20,
+            emissiveIntensity: 25,
             toneMapped: false,
           });
         }
@@ -48,7 +45,7 @@ export function ConveyorModel(props: any) {
     <primitive 
       object={scene} 
       {...props} 
-      rotation={[0, Math.PI / 2, 0]} // Выравнивание по оси движения
+      rotation={[0, Math.PI / 2, 0]} // Поворот под коробки
     />
   );
 }
