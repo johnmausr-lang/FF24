@@ -5,6 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export function ConveyorModel(props: any) {
+  // Загружаем вашу модель
   const { scene } = useGLTF("/models/conveyor.glb");
 
   useEffect(() => {
@@ -14,23 +15,29 @@ export function ConveyorModel(props: any) {
       if (child instanceof THREE.Mesh) {
         const name = child.name.toLowerCase();
 
-        // Настройка материала для максимальной видимости (светлый металлик)
-        child.material = new THREE.MeshStandardMaterial({
-          color: "#9999aa", 
+        // Полностью перекрашиваем меш в "оружейную сталь"
+        child.material = new THREE.MeshPhysicalMaterial({
+          color: "#0c0c12",
           metalness: 1.0,
-          roughness: 0.1,
-          emissive: "#ffffff",
-          emissiveIntensity: 0.1, 
+          roughness: 0.2,
+          reflectivity: 1,
+          clearcoat: 1,
+          clearcoatRoughness: 0.1,
+          emissive: "#E0FF64",
+          emissiveIntensity: 0.02, // Легкое свечение граней
         });
 
+        // Если в модели есть элементы неона, делаем их максимально яркими
         if (name.includes("neon") || name.includes("light") || name.includes("glow")) {
           child.material = new THREE.MeshStandardMaterial({
             color: "#E0FF64",
             emissive: "#E0FF64",
-            emissiveIntensity: 15,
+            emissiveIntensity: 20,
             toneMapped: false,
           });
         }
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
   }, [scene]);
@@ -41,8 +48,7 @@ export function ConveyorModel(props: any) {
     <primitive 
       object={scene} 
       {...props} 
-      // Принудительный разворот модели на 90 градусов, если она смотрит вбок
-      rotation={[0, Math.PI / 2, 0]} 
+      rotation={[0, Math.PI / 2, 0]} // Выравнивание по оси движения
     />
   );
 }
