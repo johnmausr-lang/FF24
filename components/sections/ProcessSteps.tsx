@@ -15,14 +15,15 @@ import {
 import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
 
+// Подробная расшифровка услуг
 const steps = [
-  { title: "Заявка", desc: "Автоматическая регистрация заказа в системе FF24" },
-  { title: "Забор", desc: "Курьер забирает товар с вашего склада" },
-  { title: "Приёмка", desc: "Полная сверка и проверка на брак" },
-  { title: "Маркировка", desc: "Печать и наклейка кодов Честный знак" },
-  { title: "Упаковка", desc: "Защитная брендированная упаковка" },
-  { title: "Отгрузка", desc: "Доставка на маркетплейс за 24 часа" },
-  { title: "Финиш", desc: "Отчет и обновление статуса в кабинете" },
+  { title: "Заявка", desc: "Автоматическая регистрация ТЗ. Наш менеджер связывается с вами для уточнения деталей упаковки и логистики." },
+  { title: "Забор", desc: "Собственный автопарк забирает товар с вашего склада или от поставщика в любую погоду 24/7." },
+  { title: "Приёмка", desc: "Тщательная проверка на брак, сверка артикулов и занесение каждой единицы в систему учёта FF24." },
+  { title: "Маркировка", desc: "Печать и наклейка штрихкодов, КИЗов и этикеток 'Честный Знак' в строгом соответствии с регламентами." },
+  { title: "Упаковка", desc: "Профессиональная подготовка: от бабл-пленки до брендированных коробов с усиленной защитой углов." },
+  { title: "Отгрузка", desc: "Формирование паллет и оперативная доставка на склады Wildberries, Ozon или Яндекс.Маркет." },
+  { title: "Финиш", desc: "Товар готов к продаже. Вы получаете полный фотоотчет и закрывающие документы в личном кабинете." },
 ];
 
 function MovingBox({ index, title, desc }: { index: number; title: string; desc: string }) {
@@ -31,10 +32,11 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
-    // Движение строго вдоль линии конвейера
+    // Коробки двигаются, конвейер статичен
     groupRef.current.position.x -= delta * 3.5;
-    if (groupRef.current.position.x < -30) groupRef.current.position.x = 30;
+    if (groupRef.current.position.x < -35) groupRef.current.position.x = 35;
     
+    // Плавная анимация масштаба при наведении
     const s = hovered ? 1.2 : 1;
     groupRef.current.scale.lerp(new THREE.Vector3(s, s, s), 0.1);
   });
@@ -42,31 +44,44 @@ function MovingBox({ index, title, desc }: { index: number; title: string; desc:
   return (
     <group
       ref={groupRef}
-      position={[index * 10 - 15, 1.8, 0]} // Опустили коробки ниже, чтобы они касались ленты
+      position={[index * 11 - 20, 2, 0]} 
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.3}>
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+        {/* Коробка из мутного стекла */}
         <mesh castShadow>
-          <boxGeometry args={[3.8, 2.2, 2.2]} />
+          <boxGeometry args={[4, 2.5, 2]} />
           <MeshTransmissionMaterial 
-            backside samples={8} thickness={1.5} chromaticAberration={0.1} 
-            color={hovered ? "#E0FF64" : "#ffffff"} transmission={1} roughness={0.1}
+            backside
+            samples={10}
+            thickness={1.5}
+            chromaticAberration={0.1}
+            transmission={0.95}
+            roughness={0.6} // Эффект мутного (frosted) стекла
+            color={hovered ? "#E0FF64" : "#ffffff"} // Неоновое свечение при наведении
+            ior={1.2}
           />
         </mesh>
         
-        <Text position={[0, 0, 1.11]} fontSize={0.25} color="white" fontWeight="bold">
+        {/* Текстовые метки */}
+        <Text position={[0, 0.2, 1.01]} fontSize={0.2} color="white" fontWeight="bold">
           {`0${index + 1}`}
         </Text>
-        <Text position={[0, -0.4, 1.11]} fontSize={0.35} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
+        <Text position={[0, -0.3, 1.01]} fontSize={0.4} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
           {title.toUpperCase()}
         </Text>
 
+        {/* Подробная расшифровка (всплывает при hover) */}
         {hovered && (
-          <Html position={[0, 4, 0]} center>
-            <div className="bg-black/95 border-2 border-[#E0FF64] p-6 rounded-3xl backdrop-blur-2xl w-80 shadow-[0_0_50px_rgba(224,255,100,0.4)]">
-              <p className="text-[#E0FF64] font-black text-xs mb-2 uppercase tracking-[0.2em]">Этап {index + 1}</p>
-              <p className="text-white text-base font-bold leading-relaxed">{desc}</p>
+          <Html position={[0, 4, 0]} center distanceFactor={10}>
+            <div className="bg-black/90 border-2 border-[#E0FF64] p-6 rounded-3xl backdrop-blur-2xl w-80 shadow-[0_0_50px_rgba(224,255,100,0.5)]">
+              <h4 className="text-[#E0FF64] font-black text-xs mb-2 uppercase tracking-widest">
+                FF24 // ЭТАП {index + 1}
+              </h4>
+              <p className="text-white text-base font-bold leading-snug">
+                {desc}
+              </p>
             </div>
           </Html>
         )}
@@ -80,21 +95,20 @@ export const ProcessSteps = () => {
     <section id="process" className="relative h-screen w-full bg-black overflow-hidden">
       <div className="absolute top-24 w-full z-10 pointer-events-none text-center">
         <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter">
-          ЛИНИЯ <span className="text-[#E0FF64]">FF24</span>
+          КОНВЕЙЕР <span className="text-[#E0FF64]">FF24</span>
         </h2>
       </div>
 
       <Canvas shadows dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[0, 12, 35]} fov={28} />
+        <PerspectiveCamera makeDefault position={[0, 15, 35]} fov={28} />
         
-        <ambientLight intensity={1.0} /> 
-        <pointLight position={[0, 15, 20]} intensity={3} color="#ffffff" />
-        <spotLight position={[0, 30, -10]} angle={0.6} penumbra={1} intensity={8} color="#E0FF64" castShadow />
+        <ambientLight intensity={1.5} /> 
+        <spotLight position={[0, 40, 10]} angle={0.5} penumbra={1} intensity={10} color="#E0FF64" castShadow />
 
         <Suspense fallback={null}>
           <group position={[0, -5, 0]}>
-            {/* ОГРОМНЫЙ масштаб для соответствия коробкам */}
-            <ConveyorModel scale={12} position={[0, 0, 0]} />
+            {/* Увеличенный масштаб конвейера для соответствия коробкам */}
+            <ConveyorModel scale={14} />
             
             {steps.map((step, i) => (
               <MovingBox key={i} index={i} title={step.title} desc={step.desc} />
@@ -102,7 +116,7 @@ export const ProcessSteps = () => {
           </group>
           
           <Environment preset="studio" />
-          <ContactShadows position={[0, -5, 0]} opacity={0.8} scale={80} blur={2} />
+          <ContactShadows position={[0, -5, 0]} opacity={0.8} scale={100} blur={3} />
         </Suspense>
 
         <OrbitControls enableZoom={false} maxPolarAngle={Math.PI / 2.1} />
