@@ -28,60 +28,59 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
   const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
   
-  const spacing = 18;
-  const conveyorEnd = -30;
+  const spacing = 20; // Увеличили расстояние между коробками
+  const conveyorEnd = -35;
 
   useFrame((state, delta) => {
     const g = groupRef.current;
     if (!g) return;
 
-    g.position.x -= delta * 6;
+    g.position.x -= delta * 7; // Скорость конвейера
 
     if (g.position.x < conveyorEnd) {
-      velocityRef.current += delta * 25;
+      velocityRef.current += delta * 30; // Гравитация падения
       g.position.y -= velocityRef.current * delta;
-      g.rotation.z += delta * 1.5;
+      g.rotation.z += delta * 2;
     } else {
       velocityRef.current = 0;
-      g.position.y = 2.0;
+      g.position.y = 2.5; 
       g.rotation.set(0, 0, 0);
     }
 
     if (g.position.y < -40) {
       g.position.x = (total - 1) * spacing;
-      g.position.y = 2.0;
+      g.position.y = 2.5;
       velocityRef.current = 0;
     }
 
-    const targetScale = hovered ? 1.25 : 1;
-    g.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+    const targetScale = hovered ? 1.3 : 1;
+    g.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
   });
 
   return (
-    <group ref={groupRef} position={[index * spacing, 2.0, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
-      <Float speed={hovered ? 0 : 2} rotationIntensity={0.2} floatIntensity={0.2}>
+    <group ref={groupRef} position={[index * spacing, 2.5, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+      <Float speed={hovered ? 0 : 2.5} rotationIntensity={0.3} floatIntensity={0.3}>
         <mesh castShadow receiveShadow>
-          <boxGeometry args={[4.5, 3.0, 2.8]} />
-          <meshPhysicalMaterial
-            color={hovered ? "#E0FF64" : "#f0f0f0"}
-            roughness={0.2}
+          <boxGeometry args={[5, 3.5, 3]} />
+          <meshStandardMaterial
+            color={hovered ? "#E0FF64" : "#f5f5f5"}
+            roughness={0.3}
             metalness={0.1}
-            clearcoat={0.5}
           />
         </mesh>
         
-        <Text position={[0, 0.4, 1.41]} fontSize={0.3} color="white" fontWeight="900">
+        <Text position={[0, 0.5, 1.51]} fontSize={0.35} color="white" fontWeight="900">
           {`ID: 24-0${index + 1}`}
         </Text>
-        <Text position={[0, -0.4, 1.41]} fontSize={0.5} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
+        <Text position={[0, -0.5, 1.51]} fontSize={0.55} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">
           {title.toUpperCase()}
         </Text>
 
         {hovered && (
-          <Html position={[0, 6, 0]} center>
-            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[450px] shadow-[0_0_100px_rgba(224,255,100,0.4)] transition-all">
-              <p className="text-white text-2xl font-black mb-3 uppercase text-center">{title}</p>
-              <p className="text-white/80 text-lg leading-relaxed text-center font-medium">{desc}</p>
+          <Html position={[0, 7, 0]} center>
+            <div className="bg-black/95 border-2 border-[#E0FF64] p-10 rounded-[50px] backdrop-blur-3xl w-[500px] shadow-[0_0_120px_rgba(224,255,100,0.5)]">
+              <p className="text-white text-3xl font-black mb-4 uppercase text-center">{title}</p>
+              <p className="text-white/90 text-xl leading-relaxed text-center font-bold">{desc}</p>
             </div>
           </Html>
         )}
@@ -92,47 +91,32 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
 
 export const ProcessSteps = () => {
   return (
-    <section id="process" className="relative h-screen w-full bg-[#050505] overflow-hidden">
-      <Canvas
-        shadows
-        dpr={[1.5, 2]}
-        gl={{
-          antialias: true,
-          powerPreference: "high-performance",
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.5, // Увеличили экспозицию для яркости
-        }}
-      >
-        <PerspectiveCamera makeDefault position={[0, 18, 60]} fov={28} />
+    <section id="process" className="relative h-screen w-full bg-[#0a0a0a] overflow-hidden">
+      <Canvas shadows dpr={[1, 2]}>
+        {/* Камера поднята выше, чтобы видеть весь конвейер */}
+        <PerspectiveCamera makeDefault position={[0, 25, 70]} fov={30} />
         
-        {/* Освещение */}
-        <ambientLight intensity={1.2} /> 
-        <spotLight 
-          position={[0, 100, 50]} 
-          angle={0.4} 
-          penumbra={1} 
-          intensity={1500} // Яркий прожектор
-          color="#E0FF64" 
-          castShadow 
-          shadow-mapSize={[2048, 2048]}
-        />
-        <directionalLight position={[50, 50, 50]} intensity={1.5} color="#ffffff" castShadow />
+        {/* Мощное заполняющее освещение для гарантии видимости */}
+        <ambientLight intensity={1.5} /> 
+        <pointLight position={[0, 50, 50]} intensity={2} color="#ffffff" castShadow />
+        <spotLight position={[20, 100, 20]} intensity={3} color="#E0FF64" angle={0.5} castShadow />
 
         <Suspense fallback={null}>
-          <group position={[0, -8, 0]}>
-            <ConveyorModel scale={22} /> 
+          <group position={[0, -10, 0]}>
+            {/* ОГРОМНЫЙ масштаб для гарантии того, что модель не "точка" */}
+            <ConveyorModel scale={35} /> 
+            
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
           </group>
-          <Environment preset="studio" />
-          <ContactShadows position={[0, -8.1, 0]} opacity={0.6} scale={150} blur={3} far={15} color="#000" />
+          <Environment preset="night" />
         </Suspense>
       </Canvas>
 
-      <div className="absolute top-24 left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none">
-        <h2 className="text-8xl md:text-[180px] font-black italic uppercase text-white/5 tracking-tighter absolute -top-16 left-0 right-0 select-none">FF24</h2>
-        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter relative z-10 shadow-2xl">КОНВЕЙЕР</h2>
+      <div className="absolute top-24 left-0 right-0 z-10 text-center pointer-events-none">
+        <h2 className="text-8xl md:text-[200px] font-black italic uppercase text-white/5 tracking-tighter absolute -top-20 left-0 right-0">FF24</h2>
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter relative">КОНВЕЙЕР</h2>
       </div>
     </section>
   );
