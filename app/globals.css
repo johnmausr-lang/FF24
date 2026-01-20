@@ -4,141 +4,84 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --primary-dark: 252 100% 18%;
-    --accent-blue: 217 91% 60%;
-    --accent-lime: 78 100% 70%;
-    --border: 240 5% 20%;
-    --radius: 3rem;
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%; /* Тот самый синий из package.json */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.75rem; /* Слегка увеличили радиус для мягкости дизайна */
   }
 
-  /* Плавный скролл для всей страницы */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  * {
-    @apply border-border box-border;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    @apply bg-black text-white antialiased overflow-x-hidden;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .dark {
+    --background: 222.2 84% 3.5%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
-@layer components {
-  .container {
-    @apply max-w-[1300px] mx-auto px-6 lg:px-12;
+@layer base {
+  * {
+    border-color: hsl(var(--border));
   }
-
-  /* Улучшенное Жидкое Стекло */
-  .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  }
-
-  .glass-card {
-    @apply relative overflow-hidden border border-white/10;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border-radius: var(--radius);
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Фикс для Safari */
-    mask-image: radial-gradient(white, black);
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-  }
-
-  .glass-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(224, 255, 100, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-                inset 0 0 20px rgba(224, 255, 100, 0.05);
-  }
-
-  /* Специфический стиль для блоков конвейера */
-  .conveyor-item {
-    @apply glass-card;
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
-  /* Кнопки */
-  .btn-glass-lime {
-    @apply glass bg-accent-lime/10 text-accent-lime font-black uppercase tracking-widest 
-    px-10 py-6 rounded-full border-accent-lime/30 hover:bg-accent-lime hover:text-black 
-    transition-all duration-500 flex items-center justify-center text-sm md:text-base;
-    box-shadow: 0 0 30px rgba(224, 255, 100, 0.1);
-  }
-
-  .btn-glass-secondary {
-    @apply glass bg-white/5 text-white/70 font-bold uppercase tracking-widest 
-    px-10 py-6 rounded-full border-white/10 hover:border-white/30 hover:text-white 
-    transition-all duration-500 flex items-center justify-center text-sm;
-  }
-
-  /* Типографика */
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-lime to-accent-lime;
-    background-size: 200% auto;
-    animation: shine 5s linear infinite;
-  }
-
-  .text-outline-white {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-    color: transparent;
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1; /* Оптимизация шрифтов Geist */
   }
 }
 
 @layer utilities {
-  .bg-mesh {
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(252, 100%, 18%, 0.15) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(78, 100%, 70%, 0.1) 0, transparent 50%),
-      radial-gradient(at 50% 100%, hsla(217, 91%, 60%, 0.1) 0, transparent 50%);
-    background-attachment: fixed;
+  /* Продвинутый эффект стекла для карточек аналитики */
+  .glass-card {
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
   }
 
-  /* Для плавной работы видео под блюром */
-  .backdrop-transform {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    will-change: backdrop-filter;
-    -webkit-transform: translateZ(0);
+  /* Эффект для активных элементов навигации */
+  .glass-active {
+    @apply bg-blue-600/10 dark:bg-blue-400/10 backdrop-blur-md border border-blue-500/20 text-blue-700 dark:text-blue-300;
   }
 
-  /* Свечение для рельсов конвейера */
-  .conveyor-glow {
-    box-shadow: 0 0 30px rgba(224, 255, 100, 0.3), inset 0 0 15px rgba(224, 255, 100, 0.2);
+  /* Специфический градиент для фона (как в вашем layout.tsx) */
+  .bg-surgut-gradient {
+    @apply bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-slate-50 to-white dark:from-blue-950/20 dark:via-slate-950 dark:to-slate-950;
   }
+}
 
-  /* Анимация бегущей строки или конвейера */
-  @keyframes conveyor-flow {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
+/* Кастомные стили для графиков Recharts (убираем обводки фокуса) */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  @apply stroke-slate-200 dark:stroke-slate-800;
+}
 
-  @keyframes shine {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* Скрытие скроллбара для чистоты интерфейса */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+.recharts-text {
+  @apply fill-slate-500 font-medium text-[10px] uppercase tracking-wider;
 }
