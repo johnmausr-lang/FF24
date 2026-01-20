@@ -1,83 +1,97 @@
 import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config: Config = {
+  // Включаем поддержку темной темы через класс, так как вы используете next-themes
+  darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./sections/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
+      // Подключаем шрифты Geist, которые вы уже настроили в Layout
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        mono: ["var(--font-mono)", ...fontFamily.mono],
+      },
       colors: {
+        // Привязываем палитру к HSL переменным из globals.css
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          dark: "hsl(var(--primary-dark))",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          blue: "hsl(var(--accent-blue))",
-          lime: "hsl(var(--accent-lime))",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
-        border: "hsl(var(--border))",
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        // Дополнительные цвета для глубокой синей темы Сургутского района
+        surgut: {
+          900: "#1e3a8a", // Основной синий
+          800: "#1e40af",
+          100: "#dbeafe",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      animation: {
-        "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 6s ease-in-out infinite",
-        "shine": "shine 5s linear infinite",
-        "conveyor-flow": "conveyor-flow 20s linear infinite",
-      },
       keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-20px)" },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
-        shine: {
-          "0%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-          "100%": { backgroundPosition: "0% 50%" },
-        },
-        "conveyor-flow": {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
-      backdropBlur: {
-        xs: "2px",
-        "3xl": "60px",
-        "4xl": "80px",
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
-      // Добавлено для управления трансформациями из JS
-      transformOrigin: {
-        'left-center': '0% 50%',
-      }
     },
   },
-  safelist: [
-    "blur-[20px]",
-    "blur-[40px]",
-    "blur-[60px]",
-    "blur-[80px]",
-    "blur-[100px]",
-    "bg-black/20",
-    "bg-black/40",
-    "bg-black/60",
-    "bg-black/80",
-    "opacity-10",
-    "opacity-15",
-    "opacity-20",
-    "opacity-30",
-    "opacity-40",
-    "opacity-50",
-    "opacity-60",
-    "origin-left",
+  plugins: [
+    require("tailwindcss-animate"), // Для плавных анимаций Radix UI
+    require("@tailwindcss/typography"),
   ],
-  plugins: [require("tailwindcss-animate")],
 };
 
 export default config;
