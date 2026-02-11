@@ -2,8 +2,9 @@
 
 import React, { useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
-// Импортируем KTX2Loader напрямую из примеров Three.js
+// Импортируем KTX2Loader напрямую из JSM примеров
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 
 interface ConveyorProps {
@@ -12,17 +13,17 @@ interface ConveyorProps {
 }
 
 export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
-  // Путь к транскодерам Basis
+  // Достаем рендерер из контекста Canvas
+  const { gl } = useThree();
+  
   const KTX2_TRANSCODER_PATH = "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/basis/";
 
-  const { scene, gl } = useGLTF("/models/conveyor.glb", undefined, true, (loader) => {
-    // Используем импортированный класс напрямую, а не через THREE
+  // Исправленная деструктуризация: убираем gl из useGLTF
+  const { scene } = useGLTF("/models/conveyor.glb", undefined, true, (loader) => {
     const ktx2Loader = new KTX2Loader();
     ktx2Loader.setTranscoderPath(KTX2_TRANSCODER_PATH);
-    
-    // В R3F мы можем получить renderer через колбэк загрузчика, 
-    // но проще использовать хук или прокинуть gl из контекста.
-    // Библиотека загрузит транскодер только при необходимости.
+    // Привязваем загрузчик к текущему рендереру
+    ktx2Loader.detectSupport(gl);
     loader.setKTX2Loader(ktx2Loader);
   });
 
@@ -40,8 +41,9 @@ export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
         if ((child as THREE.Mesh).isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
-          if ((child as THREE.Mesh).material) {
-            (child as THREE.Mesh).material.needsUpdate = true;
+          const mesh = child as THREE.Mesh;
+          if (mesh.material) {
+            mesh.material.needsUpdate = true;
           }
         }
       });
