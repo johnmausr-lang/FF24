@@ -1,13 +1,16 @@
 {
   "name": "ff24-fulfillment",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "FF24 - Premium Fulfillment Platform",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\""
   },
   "dependencies": {
     "next": "^14.2.16",
@@ -31,7 +34,12 @@
     "@tsparticles/slim": "^3.5.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.0",
-    "class-variance-authority": "^0.7.0"
+    "class-variance-authority": "^0.7.0",
+    "@vercel/analytics": "^1.1.1",
+    "zod": "^3.22.4",
+    "nodemailer": "^6.9.7",
+    "@types/nodemailer": "^6.4.14",
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "typescript": "^5.6.3",
@@ -40,6 +48,15 @@
     "@types/react-dom": "^18.3.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "autoprefixer": "^10.4.20"
+    "autoprefixer": "^10.4.20",
+    "prettier": "^3.1.1",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.2.16",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1"
+  },
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
   }
 }
