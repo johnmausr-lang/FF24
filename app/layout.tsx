@@ -1,5 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
+import "mapbox-gl/dist/mapbox-gl.css"; // Оставляем, если где-то еще есть карты, или удаляем
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ReactLenis } from "lenis/react";
@@ -11,7 +12,7 @@ import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
   display: "swap",
-  variable: "--font-inter", // Добавляем переменную для CSS
+  variable: "--font-inter", 
 });
 
 export const metadata: Metadata = {
@@ -39,12 +40,10 @@ export default function RootLayout({
       >
         <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
           <Suspense fallback={<LoadingScreen />}>
-            {/* Обертка для предотвращения скачков контента при загрузке */}
             <div className="relative flex flex-col min-h-screen">
               {children}
             </div>
             
-            {/* Всплывающие элементы */}
             <ExitIntentPopup />
             <FloatingTelegramButton />
           </Suspense>
