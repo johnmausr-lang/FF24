@@ -4,7 +4,7 @@ import React, { ReactNode, ErrorInfo } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 
-// Расширяем глобальный интерфейс Window для поддержки Sentry
+// Глобальное объявление типа для Sentry
 declare global {
   interface Window {
     __SENTRY__?: {
@@ -21,7 +21,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-// Используем default export для исключения ошибки "is not a constructor"
+// Используем default export для предотвращения ошибки "is not a constructor"
 export default class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
