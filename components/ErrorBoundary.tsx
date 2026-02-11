@@ -4,6 +4,15 @@ import React, { ReactNode, ErrorInfo } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 
+// Расширяем глобальный интерфейс Window, чтобы TypeScript знал о Sentry
+declare global {
+  interface Window {
+    __SENTRY__?: {
+      captureException: (error: any, context: any) => void;
+    };
+  }
+}
+
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
@@ -33,10 +42,10 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Логирование ошибки в консоль и отправка на Sentry
+    // Логирование ошибки в консоль
     console.error('Error caught by boundary:', error, errorInfo);
 
-    // Отправка на Sentry
+    // Безопасная отправка на Sentry с использованием расширенного типа Window
     if (typeof window !== 'undefined' && window.__SENTRY__) {
       window.__SENTRY__.captureException(error, { contexts: { react: errorInfo } });
     }
@@ -62,7 +71,7 @@ export class ErrorBoundary extends React.Component<
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-8 max-w-md text-center rounded-2xl"
+            className="glass-card p-8 max-w-md text-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
           >
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -74,7 +83,7 @@ export class ErrorBoundary extends React.Component<
               </div>
             </motion.div>
 
-            <h1 className="text-2xl font-black text-white mb-2 uppercase">
+            <h1 className="text-2xl font-black text-white mb-2 uppercase italic tracking-tighter">
               Что-то пошло не так
             </h1>
             <p className="text-slate-400 text-sm mb-6">
@@ -82,8 +91,8 @@ export class ErrorBoundary extends React.Component<
             </p>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="bg-red-950/20 border border-red-900/30 rounded-lg p-4 mb-6 text-left">
-                <p className="text-red-400 text-xs font-mono break-words">
+              <div className="bg-red-950/20 border border-red-900/30 rounded-lg p-4 mb-6 text-left overflow-hidden">
+                <p className="text-red-400 text-[10px] font-mono break-all leading-tight">
                   {this.state.error.message}
                 </p>
               </div>
@@ -92,16 +101,16 @@ export class ErrorBoundary extends React.Component<
             <div className="flex gap-3">
               <button
                 onClick={this.handleReset}
-                className="flex-1 btn-glass-lime flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 bg-[#E0FF64] text-black text-[10px] font-black uppercase rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="w-3 h-3" />
                 Попробовать снова
               </button>
               <a
                 href="/"
-                className="flex-1 btn-glass-secondary flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 bg-white/10 text-white text-[10px] font-black uppercase rounded-full flex items-center justify-center gap-2 hover:bg-white/20 transition-all"
               >
-                <Home className="w-4 h-4" />
+                <Home className="w-3 h-3" />
                 На главную
               </a>
             </div>
@@ -119,9 +128,9 @@ export function ErrorFallback() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-3xl font-black text-white mb-4">Ошибка сервера</h1>
-        <p className="text-slate-400 mb-8">Пожалуйста, попробуйте позже</p>
-        <a href="/" className="btn-glass-lime inline-flex">
+        <h1 className="text-3xl font-black text-white mb-4 uppercase italic">Ошибка сервера</h1>
+        <p className="text-slate-400 mb-8 font-medium">Пожалуйста, попробуйте позже</p>
+        <a href="/" className="px-8 py-3 bg-[#E0FF64] text-black text-[10px] font-black uppercase rounded-full">
           На главную
         </a>
       </div>
