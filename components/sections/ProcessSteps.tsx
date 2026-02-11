@@ -9,7 +9,6 @@ import {
   Float,
   Text,
   Html,
-  OrbitControls,
 } from "@react-three/drei";
 import { ConveyorModel } from "../Conveyor";
 import * as THREE from "three";
@@ -24,13 +23,20 @@ const steps = [
   { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-function SceneDebugger() {
-  const { scene, camera } = useThree();
+// Автофокус камеры: теперь сцена сама подстроится под масштаб 40
+function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3 } | null }) {
+  const { camera } = useThree();
   useEffect(() => {
-    console.log("%cRENDERER READY", "color: cyan; font-weight: bold;");
-    console.log("Camera Pos:", camera.position);
-    console.log("Scene objects:", scene.children.length);
-  }, [scene, camera]);
+    if (targetData) {
+      const { size } = targetData;
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+      cameraZ *= 2.2; 
+      camera.position.set(0, cameraZ * 0.45, cameraZ);
+      camera.updateProjectionMatrix();
+    }
+  }, [targetData, camera]);
   return null;
 }
 
@@ -39,14 +45,14 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
   const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
   
-  const spacing = 18;
-  const conveyorEnd = -30;
+  const spacing = 20; // Увеличили шаг между коробками для масштабности
+  const conveyorEnd = -35;
 
   useFrame((state, delta) => {
     const g = groupRef.current;
     if (!g) return;
 
-    g.position.x -= delta * 6;
+    g.position.x -= delta * 5; // Чуть замедлили для солидности
 
     if (g.position.x < conveyorEnd) {
       velocityRef.current += delta * 25;
@@ -54,13 +60,13 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       g.rotation.z += delta * 1.5;
     } else {
       velocityRef.current = 0;
-      g.position.y = 2.0; 
+      g.position.y = 1.1; // Идеальная высота для контакта с лентой при масштабе 40
       g.rotation.set(0, 0, 0);
     }
 
-    if (g.position.y < -35) {
+    if (g.position.y < -40) {
       g.position.x = (total - 1) * spacing;
-      g.position.y = 2.0;
+      g.position.y = 1.1;
       velocityRef.current = 0;
     }
 
@@ -69,19 +75,24 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
   });
 
   return (
-    <group ref={groupRef} position={[index * spacing, 2.0, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
+    <group ref={groupRef} position={[index * spacing, 1.1, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+      <Float speed={hovered ? 0 : 2} rotationIntensity={0.2} floatIntensity={0.2}>
         <mesh castShadow receiveShadow>
-          <boxGeometry args={[4.2, 2.8, 2.6]} />
-          <meshPhysicalMaterial color={hovered ? "#E0FF64" : "#f0f0f0"} roughness={0.25} metalness={0.05} clearcoat={0.3} />
+          <boxGeometry args={[4.5, 3.0, 2.8]} />
+          <meshPhysicalMaterial 
+            color={hovered ? "#E0FF64" : "#ffffff"} 
+            roughness={0.2} 
+            metalness={0.1} 
+            clearcoat={0.4} 
+          />
         </mesh>
-        <Text position={[0, 0.4, 1.35]} fontSize={0.25} color="white" fontWeight="900">{`ID: 24-0${index + 1}`}</Text>
-        <Text position={[0, -0.4, 1.35]} fontSize={0.45} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">{title.toUpperCase()}</Text>
+        <Text position={[0, 0.4, 1.45]} fontSize={0.3} color="white" fontWeight="900">{`ID: 24-0${index + 1}`}</Text>
+        <Text position={[0, -0.4, 1.45]} fontSize={0.5} color={hovered ? "#000" : "#E0FF64"} fontWeight="900">{title.toUpperCase()}</Text>
         {hovered && (
-          <Html position={[0, 5, 0]} center>
-            <div className="bg-black/95 border-2 border-[#E0FF64] p-8 rounded-[40px] backdrop-blur-3xl w-[400px] shadow-[0_0_100px_rgba(224,255,100,0.3)] pointer-events-none">
-              <p className="text-white text-2xl font-black mb-2 uppercase text-center">{title}</p>
-              <p className="text-white/80 text-base font-bold leading-relaxed text-center">{desc}</p>
+          <Html position={[0, 6, 0]} center>
+            <div className="bg-black/95 border-2 border-[#E0FF64] p-10 rounded-[50px] backdrop-blur-3xl w-[450px] shadow-[0_0_120px_rgba(224,255,100,0.4)] pointer-events-none">
+              <p className="text-white text-3xl font-black mb-3 uppercase text-center">{title}</p>
+              <p className="text-white/80 text-lg leading-relaxed text-center font-bold">{desc}</p>
             </div>
           </Html>
         )}
@@ -91,35 +102,37 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
 }
 
 export const ProcessSteps = () => {
-  return (
-    <section id="process" className="relative h-screen w-full bg-[#020202] overflow-hidden">
-      <Canvas
-        shadows
-        dpr={[1, 2]}
-        gl={{ antialias: true }}
-      >
-        <SceneDebugger />
-        <PerspectiveCamera makeDefault position={[0, 20, 60]} fov={30} />
-        
-        <ambientLight intensity={1} /> 
-        <pointLight position={[0, 50, 50]} intensity={1.5} color="#ffffff" />
-        <spotLight position={[0, 80, 40]} angle={0.3} intensity={2} color="#E0FF64" castShadow />
+  const [modelData, setModelData] = useState<{size: THREE.Vector3} | null>(null);
 
-        <Suspense fallback={<Html center><div className="text-[#E0FF64] font-black text-xl">LOADING ASSETS...</div></Html>}>
-          <group position={[0, -6, 0]}>
-            <ConveyorModel scale={20} /> 
+  return (
+    <section id="process" className="relative h-screen w-full bg-[#030303] overflow-hidden">
+      <Canvas 
+        shadows 
+        dpr={[1, 2]} 
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.3 }}
+      >
+        <PerspectiveCamera makeDefault position={[0, 20, 70]} fov={28} />
+        <fog attach="fog" args={["#030303", 40, 110]} />
+        
+        <ambientLight intensity={1.0} /> 
+        <spotLight position={[0, 100, 50]} angle={0.4} intensity={2500} color="#E0FF64" castShadow />
+
+        <Suspense fallback={<Html center><div className="text-[#E0FF64] font-black text-2xl animate-pulse tracking-widest">INITIALIZING FF24 LINE...</div></Html>}>
+          <CameraAutofocus targetData={modelData} />
+          <group position={[0, -8, 0]}>
+            <ConveyorModel scale={40} onLoaded={setModelData} /> 
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
           </group>
           <Environment preset="night" />
+          <ContactShadows position={[0, -8.1, 0]} opacity={0.8} scale={200} blur={3} far={20} color="#000" />
         </Suspense>
-        
-        <OrbitControls enableZoom={true} />
       </Canvas>
 
       <div className="absolute top-24 w-full z-10 text-center pointer-events-none">
-        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter opacity-90">КОНВЕЙЕР</h2>
+        <h2 className="text-8xl md:text-[200px] font-black italic uppercase text-white/5 tracking-tighter absolute -top-20 left-0 right-0 select-none">FF24</h2>
+        <h2 className="text-7xl md:text-9xl font-black italic uppercase text-white tracking-tighter relative z-10">КОНВЕЙЕР</h2>
       </div>
     </section>
   );
