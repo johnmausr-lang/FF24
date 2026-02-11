@@ -1,52 +1,55 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useKTX2 } from "@react-three/drei";
 import * as THREE from "three";
 
 interface ConveyorProps {
-  onLoaded?: (data: { size: THREE.Vector3; center: THREE.Vector3 }) => void;
   scale?: number;
-  position?: [number, number, number];
+  onLoaded?: (data: { size: THREE.Vector3 }) => void;
 }
 
-export function ConveyorModel({ onLoaded, ...props }: ConveyorProps) {
-  // Загружаем модель. Указываем путь без /public, так как это корень для Next.js
-  const { scene } = useGLTF("/models/conveyor.glb") as any;
+export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
+  // Путь к транскодерам Basis. 
+  // В Next.js эти файлы должны лежать в папке public/lib/basis/
+  const KTX2_TRANSCODER_PATH = "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/basis/";
+
+  // Загружаем модель. useGLTF в R3F автоматически поддерживает расширения, 
+  // если правильно настроен ktx2Loader.
+  const { scene } = useGLTF("/models/conveyor.glb", undefined, true, (loader) => {
+    const ktx2Loader = new THREE.KTX2Loader();
+    ktx2Loader.setTranscoderPath(KTX2_TRANSCODER_PATH);
+    // detectSupport требует наличия WebGLRenderer, который R3F предоставляет автоматически
+    loader.setKTX2Loader(ktx2Loader);
+  });
 
   useEffect(() => {
     if (scene) {
-      console.log("%cМОДЕЛЬ ОБНАРУЖЕНА:", "color: black; background: #E0FF64; padding: 4px;", scene);
-
-      // Расчет габаритов
+      // Вычисляем размер модели для автофокуса камеры
       const box = new THREE.Box3().setFromObject(scene);
       const size = new THREE.Vector3();
       box.getSize(size);
-      const center = box.getCenter(new THREE.Vector3());
+      
+      if (onLoaded) {
+        onLoaded({ size: size.multiplyScalar(scale) });
+      }
 
-      console.log(`Геометрия: X:${size.x.toFixed(2)} Y:${size.y.toFixed(2)} Z:${size.z.toFixed(2)}`);
-
-      if (onLoaded) onLoaded({ size, center });
-
-      // Явно указываем тип THREE.Object3D для child, чтобы избежать ошибки "implicitly has any type"
-      scene.traverse((child: THREE.Object3D) => {
-        if (child instanceof THREE.Mesh) {
+      // Оптимизация теней и материалов
+      scene.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
-          // Устанавливаем базовый видимый материал
-          child.material = new THREE.MeshStandardMaterial({
-            color: "#888899",
-            metalness: 0.7,
-            roughness: 0.3,
-          });
+          // Улучшаем отображение материалов после сжатия
+          if ((child as THREE.Mesh).material) {
+            (child as THREE.Mesh).material.needsUpdate = true;
+          }
         }
       });
     }
-  }, [scene, onLoaded]);
+  }, [scene, scale, onLoaded]);
 
-  if (!scene) return null;
-
-  return <primitive object={scene} {...props} rotation={[0, Math.PI / 2, 0]} />;
+  return <primitive object={scene} scale={scale} />;
 }
 
+// Предзагрузка модели для ускорения работы LoadingScreen
 useGLTF.preload("/models/conveyor.glb");
