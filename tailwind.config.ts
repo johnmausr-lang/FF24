@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config: Config = {
-  // Включаем поддержку темной темы через класс, так как вы используете next-themes
   darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,13 +19,10 @@ const config: Config = {
       },
     },
     extend: {
-      // Подключаем шрифты Geist, которые вы уже настроили в Layout
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        mono: ["var(--font-mono)", ...fontFamily.mono],
+        sans: ["var(--font-inter)", ...fontFamily.sans],
       },
       colors: {
-        // Привязываем палитру к HSL переменным из globals.css
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -51,6 +47,7 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          lime: "#E0FF64",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -60,12 +57,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Дополнительные цвета для глубокой синей темы Сургутского района
-        surgut: {
-          900: "#1e3a8a", // Основной синий
-          800: "#1e40af",
-          100: "#dbeafe",
-        }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -88,10 +79,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"), // Для плавных анимаций Radix UI
-    require("@tailwindcss/typography"),
-  ],
+  plugins: [require("tailwindcss-animate")],
 };
 
 export default config;
