@@ -7,7 +7,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 import { Analytics } from "@vercel/analytics/react";
-// Импортируем исправленный ErrorBoundary
+// Импорт ErrorBoundary как default export для стабильности билда
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
