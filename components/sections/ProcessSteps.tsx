@@ -23,7 +23,6 @@ const steps = [
   { title: "Финиш", desc: "Полный фотоотчёт в личном кабинете." },
 ];
 
-// Автофокус камеры: теперь сцена сама подстроится под масштаб 40
 function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3 } | null }) {
   const { camera } = useThree();
   useEffect(() => {
@@ -32,7 +31,7 @@ function CameraAutofocus({ targetData }: { targetData: { size: THREE.Vector3 } |
       const maxDim = Math.max(size.x, size.y, size.z);
       const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
       let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-      cameraZ *= 2.2; 
+      cameraZ *= 2.3; 
       camera.position.set(0, cameraZ * 0.45, cameraZ);
       camera.updateProjectionMatrix();
     }
@@ -45,14 +44,14 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
   const velocityRef = useRef(0);
   const [hovered, setHovered] = useState(false);
   
-  const spacing = 20; // Увеличили шаг между коробками для масштабности
-  const conveyorEnd = -35;
+  const spacing = 20; 
+  const conveyorEnd = -40;
 
   useFrame((state, delta) => {
     const g = groupRef.current;
     if (!g) return;
 
-    g.position.x -= delta * 5; // Чуть замедлили для солидности
+    g.position.x -= delta * 5; 
 
     if (g.position.x < conveyorEnd) {
       velocityRef.current += delta * 25;
@@ -60,7 +59,7 @@ function AbyssBox({ index, title, desc, total }: { index: number; title: string;
       g.rotation.z += delta * 1.5;
     } else {
       velocityRef.current = 0;
-      g.position.y = 1.1; // Идеальная высота для контакта с лентой при масштабе 40
+      g.position.y = 1.1; // Высота контакта с лентой
       g.rotation.set(0, 0, 0);
     }
 
@@ -120,7 +119,7 @@ export const ProcessSteps = () => {
         <Suspense fallback={<Html center><div className="text-[#E0FF64] font-black text-2xl animate-pulse tracking-widest">INITIALIZING FF24 LINE...</div></Html>}>
           <CameraAutofocus targetData={modelData} />
           <group position={[0, -8, 0]}>
-            <ConveyorModel scale={40} onLoaded={setModelData} /> 
+            <ConveyorModel scale={45} onLoaded={setModelData} /> 
             {steps.map((step, i) => (
               <AbyssBox key={i} index={i} total={steps.length} title={step.title} desc={step.desc} />
             ))}
