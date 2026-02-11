@@ -4,7 +4,7 @@ import React, { ReactNode, ErrorInfo } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 
-// Глобальное объявление типа для Sentry
+// Глобальное расширение типов для Window, чтобы избежать ошибок типизации
 declare global {
   interface Window {
     __SENTRY__?: {
@@ -21,7 +21,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-// Используем default export для предотвращения ошибки "is not a constructor"
+// Используем default export — это критично для устранения ошибки "is not a constructor"
 export default class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
@@ -38,7 +38,7 @@ export default class ErrorBoundary extends React.Component<
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
 
-    // Безопасная проверка Sentry
+    // Безопасный вызов Sentry, если он инициализирован глобально
     if (typeof window !== 'undefined' && window.__SENTRY__) {
       window.__SENTRY__.captureException(error, { contexts: { react: errorInfo } });
     }
@@ -63,10 +63,10 @@ export default class ErrorBoundary extends React.Component<
               </div>
             </div>
             <h1 className="text-2xl font-black text-white mb-2 uppercase italic tracking-tighter">
-              Ошибка системы
+              Системный сбой
             </h1>
-            <p className="text-slate-400 text-sm mb-6">
-              Произошел технический сбой. Пожалуйста, попробуйте перезагрузить страницу.
+            <p className="text-slate-400 text-sm mb-6 font-medium">
+              Произошла непредвиденная ошибка. Пожалуйста, попробуйте обновить страницу или вернуться на главную.
             </p>
             <div className="flex gap-3">
               <button
@@ -78,7 +78,7 @@ export default class ErrorBoundary extends React.Component<
               </button>
               <a
                 href="/"
-                className="flex-1 px-4 py-3 bg-white/10 text-white text-[10px] font-black uppercase rounded-full flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 bg-white/10 text-white text-[10px] font-black uppercase rounded-full flex items-center justify-center gap-2 hover:bg-white/20 transition-all"
               >
                 <Home className="w-3 h-3" />
                 Главная
