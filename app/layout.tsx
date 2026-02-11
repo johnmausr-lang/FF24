@@ -7,6 +7,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 import { Analytics } from "@vercel/analytics/react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -113,15 +114,17 @@ export default function RootLayout({
       <body 
         className={`${inter.variable} font-sans bg-black text-white antialiased selection:bg-[#E0FF64] selection:text-[#1E1B4B] overflow-x-hidden min-h-screen`}
       >
-        <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-          <Suspense fallback={<LoadingScreen />}>
-            <div className="relative flex flex-col min-h-screen">
-              {children}
-            </div>
-            <ExitIntentPopup />
-            <FloatingTelegramButton />
-          </Suspense>
-        </ReactLenis>
+        <ErrorBoundary>
+          <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+            <Suspense fallback={<LoadingScreen />}>
+              <div className="relative flex flex-col min-h-screen">
+                {children}
+              </div>
+              <ExitIntentPopup />
+              <FloatingTelegramButton />
+            </Suspense>
+          </ReactLenis>
+        </ErrorBoundary>
         <Analytics />
       </body>
     </html>
