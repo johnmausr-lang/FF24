@@ -7,6 +7,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 import { Analytics } from "@vercel/analytics/react";
+// Импорт ErrorBoundary как дефолтный экспорт
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
