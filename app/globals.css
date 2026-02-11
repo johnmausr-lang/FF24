@@ -62,7 +62,7 @@
 @layer utilities {
   /* Продвинутый эффект стекла для карточек аналитики */
   .glass-card {
-    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-lg;
   }
 
   /* Эффект для активных элементов навигации */
@@ -70,18 +70,45 @@
     @apply bg-blue-600/10 dark:bg-blue-400/10 backdrop-blur-md border border-blue-500/20 text-blue-700 dark:text-blue-300;
   }
 
-  /* Специфический градиент для фона (как в вашем layout.tsx) */
-  .bg-surgut-gradient {
-    @apply bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-slate-50 to-white dark:from-blue-950/20 dark:via-slate-950 dark:to-slate-950;
+  /* Кнопка с эффектом стекла и лаймовым акцентом */
+  .btn-glass-lime {
+    @apply px-6 py-3 bg-[#E0FF64] hover:bg-[#E0FF64]/90 text-black font-black uppercase tracking-widest rounded-xl border border-[#E0FF64]/50 transition-all duration-200 inline-flex items-center gap-2;
+  }
+
+  /* Кнопка с вторичным стилем */
+  .btn-glass-secondary {
+    @apply px-6 py-3 bg-white/10 backdrop-blur-md text-white font-bold uppercase tracking-widest rounded-xl border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-200;
+  }
+
+  /* Стеклянный эффект */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg;
+  }
+
+  /* Градиентный текст */
+  .gradient-text {
+    background: linear-gradient(135deg, #E0FF64 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
 
-/* Кастомные стили для графиков Recharts (убираем обводки фокуса) */
+/* Кастомные стили для графиков Recharts */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  @apply stroke-slate-200 dark:stroke-slate-800;
+  stroke: rgb(226, 232, 240);
+  stroke-dasharray: 3 3;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgb(30, 41, 59);
 }
 
 .recharts-text {
-  @apply fill-slate-500 font-medium text-[10px] uppercase tracking-wider;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
