@@ -8,29 +8,58 @@
     @apply text-transparent bg-clip-text bg-gradient-to-r from-[#E0FF64] to-[#FFFFFF];
   }
   
-  /* Строго темное объемное стекло */
+  /* Строго темное объемное стекло для карточек */
   .glass-card {
     @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)];
   }
 
-  /* Эффект объемной кнопки "Жидкое стекло" */
+  /* ЖИВЫЕ КНОПКИ: Объем, дыхание и жидкое стекло */
   .btn-liquid-glass {
-    @apply relative overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300;
+    @apply relative overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 text-white transition-all duration-300 z-10;
+    /* Непрерывное дыхание кнопки */
+    animation: breath-glow 3s infinite ease-in-out;
   }
   
-  /* Блик, пробегающий по кнопке при наведении */
+  /* Мерцающий внутренний фон, который постоянно движется */
   .btn-liquid-glass::before {
     content: '';
-    @apply absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] transition-all duration-700 z-10;
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent z-[-1] transition-opacity duration-300;
+    background-size: 200% auto;
+    animation: shimmer 2.5s linear infinite;
   }
   
-  .btn-liquid-glass:hover::before {
+  /* Резкий блик, пробегающий при наведении */
+  .btn-liquid-glass::after {
+    content: '';
+    @apply absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] transition-all duration-700 z-[-1];
+  }
+  
+  /* Поведение при наведении */
+  .btn-liquid-glass:hover::after {
     @apply left-[200%];
   }
   
   .btn-liquid-glass:hover {
-    @apply border-[#E0FF64]/50 shadow-[0_0_20px_rgba(224,255,100,0.15)] -translate-y-1 bg-white/10;
+    @apply border-[#E0FF64]/50 bg-white/10 -translate-y-1;
+    /* При наведении фиксируем яркую тень, отключая пульсацию */
+    animation: none;
+    box-shadow: 0 10px 30px -10px rgba(224, 255, 100, 0.4);
   }
+
+  /* Физика при клике (продавливание) */
+  .btn-liquid-glass:active {
+    @apply translate-y-0 scale-95 shadow-[0_5px_15px_-5px_rgba(224,255,100,0.3)];
+  }
+}
+
+/* Анимации для кнопок */
+@keyframes breath-glow {
+  0%, 100% { box-shadow: 0 0 15px -5px rgba(224, 255, 100, 0.05); }
+  50% { box-shadow: 0 0 25px 2px rgba(224, 255, 100, 0.15); }
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
 }
 
 body {
