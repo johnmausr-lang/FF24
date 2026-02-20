@@ -1,79 +1,89 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Zap, BarChart3, Clock, Globe } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
+import { ShieldCheck, Zap, Clock, TrendingUp, MapPin, Smartphone } from "lucide-react";
 
-const features = [
-  { 
-    title: "Приёмка 24/7", 
-    desc: "Ваш товар попадает в систему мониторинга сразу после разгрузки.", 
-    icon: <Clock size={40} />,
-    grid: "md:col-span-2"
+const FEATURES = [
+  {
+    title: "100% Финансовая гарантия",
+    description: "Несем полную материальную ответственность за ваш товар на всех этапах.",
+    icon: ShieldCheck,
+    colSpan: "col-span-1 md:col-span-2",
   },
-  { 
-    title: "Безопасность", 
-    desc: "Полная материальная ответственность под охраной 24/7.", 
-    icon: <ShieldCheck size={40} />,
-    grid: "md:col-span-1"
+  {
+    title: "Скорость 24 часа",
+    description: "От приемки до отгрузки на маркетплейс проходит ровно сутки.",
+    icon: Zap,
+    colSpan: "col-span-1",
   },
-  { 
-    title: "Аналитика", 
-    desc: "Ежедневные отчеты прямо в ваш Telegram.", 
-    icon: <BarChart3 size={40} />, 
-    special: "chart",
-    grid: "md:col-span-1"
+  {
+    title: "Прозрачный трекинг",
+    description: "Отслеживание каждого артикула в реальном времени через личный кабинет.",
+    icon: Smartphone,
+    colSpan: "col-span-1",
   },
-  { 
-    title: "Multi-Platform", 
-    desc: "WB, Ozon, Я.Маркет. Поддерживаем все схемы: FBO и FBS.", 
-    icon: <Globe size={40} />,
-    grid: "md:col-span-2"
+  {
+    title: "Рост продаж",
+    description: "Снимаем рутину, чтобы вы могли сфокусироваться на маркетинге и росте.",
+    icon: TrendingUp,
+    colSpan: "col-span-1 md:col-span-2",
+  },
+  {
+    title: "Выгодное расположение",
+    description: "Склады вблизи центральных сортировочных центров WB и Ozon.",
+    icon: MapPin,
+    colSpan: "col-span-1",
+  },
+  {
+    title: "Работаем без выходных",
+    description: "Отгрузки 7 дней в неделю, включая праздники.",
+    icon: Clock,
+    colSpan: "col-span-1 md:col-span-2",
   },
 ];
 
 export const BentoGrid = () => {
   return (
-    <section id="benefits" className="py-32 bg-black relative">
-      <div className="container">
-        <motion.div className="mb-20">
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase mb-6 tracking-tighter">
-            Почему выбирают <span className="text-accent-lime">FF24</span>
+    <section id="features" className="py-32 relative bg-slate-50 dark:bg-black transition-colors duration-500 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter transition-colors duration-500">
+            Экосистема <span className="text-lime-500 dark:text-[#E0FF64]">FF24</span>
           </h2>
+          <p className="mt-6 text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto uppercase tracking-widest text-xs transition-colors duration-500">
+            Инфраструктура, созданная для масштабирования вашего бизнеса
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((item, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+          {FEATURES.map((feature, index) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              key={index}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`relative glass-card p-10 flex flex-col justify-between group overflow-hidden ${item.grid}`}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              className={`group relative p-8 rounded-3xl overflow-hidden flex flex-col justify-end bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(132,204,22,0.1)] dark:hover:shadow-[0_20px_40px_rgba(224,255,100,0.1)] transition-all duration-500 ${feature.colSpan}`}
             >
-              {/* Видео внутри каждой карточки */}
-              <GlassVideo 
-                src="/videos/service-bg.webm" 
-                opacity={0.3} 
-                blur="blur-[40px]" 
-                overlayColor="bg-black/50"
-              />
-
+              <div className="absolute inset-0 bg-gradient-to-br from-lime-100/50 dark:from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <feature.icon className="absolute top-8 right-8 w-12 h-12 text-slate-200 dark:text-white/10 group-hover:text-lime-500 dark:group-hover:text-[#E0FF64] transition-colors duration-500 group-hover:scale-110" />
+              
               <div className="relative z-10">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center mb-8 text-accent-lime group-hover:bg-accent-lime group-hover:text-black transition-all duration-500">
-                  {item.icon}
-                </div>
-                <h3 className="text-3xl font-black uppercase italic mb-4">{item.title}</h3>
-                <p className="text-white/50 text-lg leading-relaxed">{item.desc}</p>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 uppercase tracking-tight transition-colors duration-500">
+                  {feature.title}
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400 font-medium text-sm leading-relaxed transition-colors duration-500">
+                  {feature.description}
+                </p>
               </div>
-
-              {item.special === "chart" && (
-                <div className="mt-12 flex items-end gap-2 h-24 relative z-10">
-                  {[40, 70, 45, 90, 65, 80].map((h, idx) => (
-                    <div key={idx} style={{ height: `${h}%` }} className="flex-1 bg-accent-lime/40 rounded-t-sm" />
-                  ))}
-                </div>
-              )}
             </motion.div>
           ))}
         </div>
