@@ -12,7 +12,6 @@ export const Hero = () => {
   const [mounted, setMounted] = useState(false);
   const [init, setInit] = useState(false);
 
-  // Инициализация частиц
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
@@ -21,20 +20,18 @@ export const Hero = () => {
     });
   }, []);
 
-  // Защита от гидратации (чтобы иконка темы не прыгала при загрузке)
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Настройки частиц (динамически меняют цвет в зависимости от темы)
   const isDark = theme === "dark";
-  const particleColor = isDark ? "#E0FF64" : "#94a3b8"; // Лаймовый для темной, Slate для светлой
+  const particleColor = isDark ? "#E0FF64" : "#94a3b8"; 
   const linkColor = isDark ? "#E0FF64" : "#cbd5e1";
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden bg-slate-50 dark:bg-black transition-colors duration-500">
       
-      {/* Кнопка переключения темы (абсолютное позиционирование) */}
+      {/* Кнопка переключения темы */}
       {mounted && (
         <div className="absolute top-24 right-6 md:right-12 z-50">
           <button
@@ -56,12 +53,8 @@ export const Hero = () => {
               background: { color: { value: "transparent" } },
               fpsLimit: 60,
               interactivity: {
-                events: {
-                  onHover: { enable: true, mode: "grab" },
-                },
-                modes: {
-                  grab: { distance: 150, links: { opacity: 0.5 } },
-                },
+                events: { onHover: { enable: true, mode: "grab" } },
+                modes: { grab: { distance: 150, links: { opacity: 0.5 } } },
               },
               particles: {
                 color: { value: particleColor },
@@ -132,25 +125,29 @@ export const Hero = () => {
             Автоматизированный фулфилмент FF24. Приемка, упаковка и отгрузка на Wildberries, Ozon и Яндекс.Маркет за 24 часа. Без ошибок, без задержек.
           </motion.p>
 
-          {/* Кнопки призыва к действию */}
+          {/* СИСТЕМА НОВЫХ КНОПОК */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
+            {/* Кнопка Prime */}
             <button
               onClick={() => document.getElementById('process')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group w-full sm:w-auto px-8 py-4 bg-[#E0FF64] text-slate-900 font-black uppercase text-sm rounded-full flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_10px_40px_rgba(224,255,100,0.4)]"
+              className="btn-prime w-full sm:w-auto group"
             >
-              Смотреть конвейер
+              <div className="btn-shine"></div>
+              <span>Смотреть конвейер</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
+            
+            {/* Кнопка Ghost Neon */}
             <button
               onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black uppercase text-sm rounded-full hover:bg-slate-50 dark:hover:bg-white/10 transition-all shadow-sm"
+              className="btn-ghost w-full sm:w-auto group"
             >
-              Рассчитать стоимость
+              <span>Рассчитать стоимость</span>
             </button>
           </motion.div>
 
