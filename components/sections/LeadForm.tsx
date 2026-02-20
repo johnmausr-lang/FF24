@@ -1,95 +1,107 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, Check } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
-
-const TELEGRAM_LINK = "https://t.me/manager24ff";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export const LeadForm = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAction = () => {
-    // Открываем диалог с менеджером в новой вкладке
-    window.open(TELEGRAM_LINK, "_blank");
-    // Показываем состояние успеха на сайте
-    setSubmitted(true);
+  const formatPhone = (val: string) => {
+    const cleaned = val.replace(/\D/g, "");
+    if (!cleaned) return "";
+    let formatted = "+7";
+    if (cleaned.length > 1) formatted += ` (${cleaned.slice(1, 4)}`;
+    if (cleaned.length >= 5) formatted += `) ${cleaned.slice(4, 7)}`;
+    if (cleaned.length >= 8) formatted += `-${cleaned.slice(7, 9)}`;
+    if (cleaned.length >= 10) formatted += `-${cleaned.slice(9, 11)}`;
+    return formatted;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Ошибка при отправке");
+      
+      setStatus("success");
+      setFormData({ name: "", phone: "", email: "" });
+    } catch (error: any) {
+      setStatus("error");
+      setErrorMessage(error.message);
+    }
   };
 
   return (
-    <section id="lead" className="py-32 relative overflow-hidden">
-      <div className="container relative z-10">
+    <section id="form" className="py-32 bg-slate-50 dark:bg-black transition-colors duration-500 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-16 items-center">
+        
+        <div className="flex-1 text-center lg:text-left">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter transition-colors duration-500">
+              Начать <span className="text-lime-500 dark:text-[#E0FF64]">Работу</span>
+            </h2>
+            <p className="mt-6 text-slate-600 dark:text-slate-400 font-medium text-lg max-w-xl mx-auto lg:mx-0 transition-colors duration-500">
+              Оставьте заявку, и наш менеджер свяжется с вами в течение 15 минут для расчета индивидуальных тарифов.
+            </p>
+          </motion.div>
+        </div>
+
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }} 
+          whileInView={{ opacity: 1, scale: 1 }} 
           viewport={{ once: true }}
-          className="glass-card max-w-5xl mx-auto overflow-hidden relative border-accent-lime/20"
+          className="flex-1 w-full max-w-lg relative"
         >
-          
-          {/* Видео-фон с оптимизацией (теперь через Intersection Observer из нового GlassVideo) */}
-          <GlassVideo 
-            src="/videos/process-bg.webm" 
-            opacity={0.4} 
-            overlayColor="bg-black/60"
-          />
+          {/* Стеклянная подложка формы */}
+          <div className="p-8 md:p-10 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl dark:shadow-[0_0_50px_rgba(224,255,100,0.05)] transition-colors duration-500">
+            {status === "success" ? (
+              <div className="text-center py-10">
+                <CheckCircle2 className="w-20 h-20 text-lime-500 dark:text-[#E0FF64] mx-auto mb-6" />
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase mb-4 transition-colors duration-500">Заявка принята</h3>
+                <p className="text-slate-600 dark:text-slate-400 font-medium transition-colors duration-500">Мы уже обрабатываем ваши данные. Ожидайте звонка!</p>
+                <button onClick={() => setStatus("idle")} className="mt-8 px-6 py-3 bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white rounded-full font-bold uppercase text-xs hover:bg-slate-200 dark:hover:bg-white/20 transition-all">Отправить еще</button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 transition-colors duration-500">Имя и Компания</label>
+                  <input required type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-5 py-4 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:border-lime-500 dark:focus:border-[#E0FF64] transition-colors duration-500" placeholder="Иван, ООО Логистика" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 transition-colors duration-500">Телефон</label>
+                  <input required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })} className="w-full px-5 py-4 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:border-lime-500 dark:focus:border-[#E0FF64] transition-colors duration-500" placeholder="+7 (999) 000-00-00" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 transition-colors duration-500">Email (опционально)</label>
+                  <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-5 py-4 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:border-lime-500 dark:focus:border-[#E0FF64] transition-colors duration-500" placeholder="hello@company.com" />
+                </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 relative z-10">
-            <div className="p-12 lg:p-20 border-r border-white/5 bg-black/20">
-              <h2 className="text-5xl md:text-6xl font-black italic uppercase mb-8 tracking-tighter">
-                Готовы к <br/><span className="text-accent-lime">взлету?</span>
-              </h2>
-              <p className="text-white/60 text-xl mb-12">
-                Нажмите на кнопку, чтобы перейти в чат с менеджером и получить расчет стоимости за 24 часа.
-              </p>
-            </div>
-
-            <div className="p-12 lg:p-20 flex flex-col justify-center items-center text-center">
-              <AnimatePresence mode="wait">
-                {!submitted ? (
-                  <motion.div 
-                    key="form" 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.1 }}
-                    className="w-full"
-                  >
-                    <div className="mb-10 inline-flex items-center gap-2 text-accent-lime">
-                      <Sparkles className="animate-pulse" />
-                      <span className="font-black uppercase tracking-widest text-sm">Direct Contact</span>
-                    </div>
-                    <button 
-                      onClick={handleAction}
-                      className="btn-glass-lime !text-xl !py-8 w-full group shadow-[0_0_50px_rgba(224,255,100,0.3)]"
-                    >
-                      Написать менеджеру
-                      <Send className="ml-4 group-hover:rotate-12 transition-transform" />
-                    </button>
-                  </motion.div>
-                ) : (
-                  <motion.div 
-                    key="success" 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col items-center"
-                  >
-                    <div className="w-24 h-24 rounded-full bg-accent-lime flex items-center justify-center text-black mb-8 shadow-[0_0_30px_#E0FF64]">
-                      <Check size={40} strokeWidth={3} />
-                    </div>
-                    <h3 className="text-3xl font-black italic uppercase">Диалог открыт!</h3>
-                    <p className="text-white/40 mt-4 uppercase text-xs tracking-widest font-bold">Ждем вас в Telegram</p>
-                    <button 
-                      onClick={() => setSubmitted(false)}
-                      className="mt-8 text-white/20 hover:text-white/60 transition-colors uppercase text-[10px] tracking-[0.3em] font-black"
-                    >
-                      Вернуться назад
-                    </button>
-                  </motion.div>
+                {status === "error" && (
+                  <div className="flex items-center gap-2 text-red-500 bg-red-50 dark:bg-red-500/10 p-4 rounded-xl text-sm font-medium transition-colors duration-500">
+                    <AlertCircle className="w-5 h-5" /> {errorMessage}
+                  </div>
                 )}
-              </AnimatePresence>
-            </div>
+
+                <button disabled={status === "loading"} type="submit" className="w-full py-4 bg-lime-500 dark:bg-[#E0FF64] text-white dark:text-black font-black uppercase text-sm rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-lime-500/30 dark:shadow-[#E0FF64]/20">
+                  {status === "loading" ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Отправить заявку</>}
+                </button>
+              </form>
+            )}
           </div>
         </motion.div>
+
       </div>
     </section>
   );
