@@ -1,26 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
-import { GlassVideo } from "@/components/ui/GlassVideo";
+import { ChevronDown } from "lucide-react";
 
-const faqs = [
+const FAQ_ITEMS = [
   {
-    q: "Сколько времени занимает приемка?",
-    a: "Стандартная приемка — 24 часа. Если товар прибыл до 14:00, в 90% случаев он будет оприходован в тот же день.",
+    question: "Как быстро вы отгружаете товар?",
+    answer: "Стандартный SLA — отгрузка за 24 часа с момента поступления товара на наш склад. В пиковые сезоны (ноябрь-декабрь) сроки фиксируются в договоре.",
   },
   {
-    q: "Как вы проверяете товар на брак?",
-    a: "Мы проводим визуальный осмотр упаковки каждой единицы. По запросу выполняем детальную проверку содержимого с фото-фиксацией.",
+    question: "С какими габаритами вы работаете?",
+    answer: "Мы обрабатываем как стандартные товары (одежда, косметика, электроника), так и КГТ (крупногабаритный товар). У нас есть выделенная зона для работы со сложными грузами.",
   },
   {
-    q: "Работаете ли вы с КИЗами (Честный Знак)?",
-    a: "Да, полностью работаем с маркировкой Честный Знак. Печатаем, наклеиваем и помогаем с документооборотом.",
+    question: "Что происходит в случае утери товара?",
+    answer: "Мы несем 100% материальную ответственность с момента подписания акта приемки. В случае утери или порчи товара по нашей вине, мы компенсируем его розничную стоимость.",
   },
   {
-    q: "Есть ли страхование товара?",
-    a: "Да, мы несем полную материальную ответственность за сохранность вашего товара с момента подписания акта приемки.",
+    question: "Как происходит интеграция с моим магазином?",
+    answer: "Мы предоставляем удобный личный кабинет и возможность интеграции по API. Также мы напрямую связываемся с кабинетами Wildberries и Ozon для автоматизации поставок.",
   },
 ];
 
@@ -28,51 +27,57 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 bg-black relative overflow-hidden">
-      {/* Общий видео-фон для всей секции FAQ */}
-      <GlassVideo 
-        src="/videos/process-bg.webm" 
-        opacity={0.1} 
-        blur="blur-[100px]" 
-        overlayColor="bg-black/80"
-      />
-
-      <div className="container max-w-4xl relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">FAQ</h2>
-          <p className="text-white/40 uppercase tracking-[0.3em] font-bold text-sm">Ответы на критические вопросы</p>
-        </div>
+    <section id="faq" className="py-32 bg-slate-50 dark:bg-black transition-colors duration-500 relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter transition-colors duration-500">
+            Частые <span className="text-lime-500 dark:text-[#E0FF64]">Вопросы</span>
+          </h2>
+        </motion.div>
 
         <div className="space-y-4">
-          {faqs.map((faq, i) => (
-            <div key={i} className="glass-card !rounded-2xl overflow-hidden border-white/5 backdrop-blur-xl">
+          {FAQ_ITEMS.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md rounded-2xl overflow-hidden transition-colors duration-500"
+            >
               <button
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full p-8 flex items-center justify-between text-left group transition-all"
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                className="w-full px-8 py-6 flex items-center justify-between text-left hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
               >
-                <span className={`text-xl font-bold uppercase tracking-tight transition-colors duration-500 ${openIndex === i ? 'text-accent-lime' : 'text-white'}`}>
-                  {faq.q}
+                <span className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-wide transition-colors duration-500">
+                  {item.question}
                 </span>
-                <div className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all duration-500 ${openIndex === i ? 'bg-accent-lime text-black rotate-180' : 'text-white'}`}>
-                  {openIndex === i ? <Minus size={20} /> : <Plus size={20} />}
-                </div>
+                <ChevronDown 
+                  className={`w-6 h-6 text-lime-500 dark:text-[#E0FF64] transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`} 
+                />
               </button>
-
+              
               <AnimatePresence>
-                {openIndex === i && (
+                {openIndex === index && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <div className="px-8 pb-8 text-white/50 text-lg leading-relaxed border-t border-white/5 pt-6">
-                      {faq.a}
+                    <div className="px-8 pb-6 text-slate-600 dark:text-slate-400 font-medium leading-relaxed transition-colors duration-500">
+                      {item.answer}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
