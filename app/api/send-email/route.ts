@@ -1,4 +1,4 @@
-import { NextResponse } from "next/dist/server/web/exports/next-response";
+import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { LeadFormSchema } from "@/lib/validation";
 
