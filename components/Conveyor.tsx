@@ -22,8 +22,6 @@ export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
     ktx2Loader.setTranscoderPath(KTX2_TRANSCODER_PATH);
     ktx2Loader.detectSupport(gl);
     
-    // Используем (ktx2Loader as any), чтобы устранить конфликт типов 
-    // между @types/three и внутренними типами drie/three-stdlib
     (loader as any).setKTX2Loader(ktx2Loader);
   });
 
@@ -42,8 +40,16 @@ export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
           child.castShadow = true;
           child.receiveShadow = true;
           const mesh = child as THREE.Mesh;
+          
           if (mesh.material) {
-            mesh.material.needsUpdate = true;
+            // Исправленная типизация: проверяем, массив это или нет
+            if (Array.isArray(mesh.material)) {
+              mesh.material.forEach((mat) => {
+                mat.needsUpdate = true;
+              });
+            } else {
+              mesh.material.needsUpdate = true;
+            }
           }
         }
       });
