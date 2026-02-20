@@ -9,7 +9,7 @@ import { LeadForm } from "@/components/sections/LeadForm";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 
-// Интерактив (эти компоненты внутри должны иметь 'use client')
+// Интерактив (эти компоненты внутри себя имеют 'use client')
 import { ExitIntentPopup } from "@/components/ExitIntentPopup"; 
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 
@@ -20,15 +20,13 @@ export default function LandingPage() {
       {/* Глобальный фон Mesh Gradient: зафиксирован, чтобы просвечивать сквозь стекло */}
       <div className="fixed inset-0 z-0 bg-mesh pointer-events-none opacity-40 backdrop-transform" />
 
-      {/* Навигация */}
+      {/* Навигация с новым бейджем */}
       <Navbar />
       
-      {/* Основной контент (Server-Side Rendered) */}
+      {/* Основной контент (Server-Side Rendered для SEO) */}
       <main className="relative z-10 flex flex-col">
         <Hero />
         <BentoGrid />
-        
-        {/* Новый легкий CSS-конвейер */}
         <ProcessSteps />
         
         <section className="relative">
@@ -45,11 +43,8 @@ export default function LandingPage() {
       {/* Клиентские компоненты интерактива */}
       <FloatingTelegramButton />
       <ExitIntentPopup />
-
-      {/* Эффект аналогового шума */}
-      <div className="fixed inset-0 z-[99] pointer-events-none opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay" />
       
-      {/* Нижнее свечение */}
+      {/* Нижнее фоновое свечение */}
       <div className="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#E0FF64]/5 to-transparent pointer-events-none z-0" />
     </div>
   );
