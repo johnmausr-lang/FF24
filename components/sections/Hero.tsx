@@ -2,36 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, PackageCheck, Zap, Shield, Sun, Moon } from "lucide-react";
+import { ArrowRight, Sun, Moon, Clock, Target, Box } from "lucide-react";
 import { useTheme } from "next-themes";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
 
 export const Hero = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [init, setInit] = useState(false);
 
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
-  }, []);
-
+  // Защита от гидратации для кнопки переключения темы
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const isDark = theme === "dark";
-  const particleColor = isDark ? "#E0FF64" : "#94a3b8"; 
-  const linkColor = isDark ? "#E0FF64" : "#cbd5e1";
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden bg-slate-50 dark:bg-black transition-colors duration-500">
+    <section className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden bg-slate-50 dark:bg-black transition-colors duration-500">
       
-      {/* Кнопка переключения темы */}
+      {/* Кнопка переключения темы (Glassmorphism) */}
       {mounted && (
         <div className="absolute top-24 right-6 md:right-12 z-50">
           <button
@@ -44,38 +32,11 @@ export const Hero = () => {
         </div>
       )}
 
-      {/* Интерактивные частицы */}
-      {init && (
-        <div className="absolute inset-0 z-0 pointer-events-auto opacity-60 dark:opacity-40">
-          <Particles
-            id="tsparticles"
-            options={{
-              background: { color: { value: "transparent" } },
-              fpsLimit: 60,
-              interactivity: {
-                events: { onHover: { enable: true, mode: "grab" } },
-                modes: { grab: { distance: 150, links: { opacity: 0.5 } } },
-              },
-              particles: {
-                color: { value: particleColor },
-                links: { color: linkColor, distance: 150, enable: true, opacity: 0.3, width: 1 },
-                move: { enable: true, speed: 1, direction: "none", random: false, straight: false, outModes: { default: "bounce" } },
-                number: { density: { enable: true, width: 800 }, value: 60 },
-                opacity: { value: 0.5 },
-                shape: { type: "circle" },
-                size: { value: { min: 1, max: 3 } },
-              },
-              detectRetina: true,
-            }}
-          />
-        </div>
-      )}
-
       {/* Декоративные фоновые свечения */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-lime-300/20 dark:bg-[#E0FF64]/10 blur-[150px] rounded-full mix-blend-multiply dark:mix-blend-screen pointer-events-none transition-colors duration-500" />
       <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-300/20 dark:bg-emerald-900/20 blur-[150px] rounded-full mix-blend-multiply dark:mix-blend-screen pointer-events-none transition-colors duration-500" />
       
-      {/* Сетка для придания технологичности */}
+      {/* Архитектурная сетка */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-50 pointer-events-none transition-colors duration-500" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
@@ -102,7 +63,7 @@ export const Hero = () => {
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-[0.9] italic transition-colors duration-500">
               Логистика для <br className="hidden md:block" />
               <span className="relative inline-block">
-                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-lime-500 to-emerald-600 dark:from-[#E0FF64] dark:to-emerald-400">
+                <span className="text-gradient relative z-10 drop-shadow-sm">
                   лидеров
                 </span>
                 <motion.span 
@@ -125,7 +86,7 @@ export const Hero = () => {
             Автоматизированный фулфилмент FF24. Приемка, упаковка и отгрузка на Wildberries, Ozon и Яндекс.Маркет за 24 часа. Без ошибок, без задержек.
           </motion.p>
 
-          {/* СИСТЕМА НОВЫХ КНОПОК */}
+          {/* СИСТЕМА ПРЕМИАЛЬНЫХ КНОПОК */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -151,34 +112,72 @@ export const Hero = () => {
             </button>
           </motion.div>
 
-          {/* Блок преимуществ */}
+          {/* ==========================================
+              ПРЕМИАЛЬНЫЕ ВИДЖЕТЫ-МЕТРИКИ (ВМЕСТО КОЛХОЗА)
+              ========================================== */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-20 pt-10 border-t border-slate-200 dark:border-white/10 w-full grid grid-cols-1 md:grid-cols-3 gap-8 transition-colors duration-500"
+            className="mt-24 w-full grid grid-cols-1 md:grid-cols-3 gap-6"
           >
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-lime-100 dark:bg-[#E0FF64]/10 flex items-center justify-center text-lime-600 dark:text-[#E0FF64] transition-colors duration-500">
-                <Zap className="w-6 h-6" />
+            {/* Виджет 1: Скорость */}
+            <div className="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 text-left hover:-translate-y-1 hover:border-lime-500 dark:hover:border-[#E0FF64]/50 transition-all duration-300 group shadow-lg dark:shadow-none">
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">Time-to-market</span>
+                <Clock className="w-5 h-5 text-lime-500 dark:text-[#E0FF64] opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
-              <p className="text-slate-900 dark:text-white font-black uppercase tracking-wide text-sm transition-colors duration-500">Скорость 24/7</p>
-              <p className="text-slate-500 dark:text-slate-400 text-xs font-medium transition-colors duration-500">Круглосуточная обработка</p>
-            </div>
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 transition-colors duration-500">
-                <Shield className="w-6 h-6" />
+              <div className="flex items-end gap-3 mb-2">
+                <span className="text-4xl font-black text-slate-900 dark:text-white leading-none font-mono">24</span>
+                <span className="text-sm font-bold text-slate-500 dark:text-white/50 uppercase tracking-widest mb-1">часа</span>
               </div>
-              <p className="text-slate-900 dark:text-white font-black uppercase tracking-wide text-sm transition-colors duration-500">Гарантия SLA 99.9%</p>
-              <p className="text-slate-500 dark:text-slate-400 text-xs font-medium transition-colors duration-500">Финансовая ответственность</p>
-            </div>
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 transition-colors duration-500">
-                <PackageCheck className="w-6 h-6" />
+              <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full mt-4 overflow-hidden">
+                <div className="h-full bg-lime-500 dark:bg-[#E0FF64] w-[100%] rounded-full shadow-[0_0_10px_rgba(224,255,100,0.8)]" />
               </div>
-              <p className="text-slate-900 dark:text-white font-black uppercase tracking-wide text-sm transition-colors duration-500">Любые габариты</p>
-              <p className="text-slate-500 dark:text-slate-400 text-xs font-medium transition-colors duration-500">От косметики до мебели</p>
+              <p className="mt-4 text-xs font-bold text-slate-500 dark:text-white/40 uppercase tracking-wide">Строгий регламент отгрузки</p>
             </div>
+
+            {/* Виджет 2: SLA и Гарантии */}
+            <div className="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 text-left hover:-translate-y-1 hover:border-lime-500 dark:hover:border-[#E0FF64]/50 transition-all duration-300 group shadow-lg dark:shadow-none relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/10 dark:bg-[#E0FF64]/5 blur-2xl rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700" />
+              <div className="flex justify-between items-start mb-6 relative z-10">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">Точность сборки</span>
+                <Target className="w-5 h-5 text-lime-500 dark:text-[#E0FF64] opacity-50 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="flex items-end gap-1 mb-2 relative z-10">
+                <span className="text-4xl font-black text-slate-900 dark:text-white leading-none font-mono">99.9</span>
+                <span className="text-xl font-bold text-lime-500 dark:text-[#E0FF64] mb-0.5">%</span>
+              </div>
+              <div className="mt-4 flex gap-2 relative z-10">
+                <span className="px-2 py-1 bg-slate-100 dark:bg-white/10 rounded text-[9px] font-black uppercase text-slate-600 dark:text-white/60 tracking-wider">SLA Договор</span>
+                <span className="px-2 py-1 bg-lime-100 dark:bg-[#E0FF64]/10 rounded text-[9px] font-black uppercase text-lime-700 dark:text-[#E0FF64] tracking-wider">Страховка 100%</span>
+              </div>
+              <p className="mt-4 text-xs font-bold text-slate-500 dark:text-white/40 uppercase tracking-wide relative z-10">Финансовая ответственность</p>
+            </div>
+
+            {/* Виджет 3: Инфраструктура */}
+            <div className="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 text-left hover:-translate-y-1 hover:border-lime-500 dark:hover:border-[#E0FF64]/50 transition-all duration-300 group shadow-lg dark:shadow-none">
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">Адаптивность</span>
+                <Box className="w-5 h-5 text-lime-500 dark:text-[#E0FF64] opacity-50 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="mb-2">
+                <span className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight block mb-1">Архитектура</span>
+                <span className="text-xl font-black text-lime-500 dark:text-[#E0FF64] uppercase tracking-tight leading-tight block">Любых ниш</span>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-4">
+                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-white/50 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md border border-slate-200 dark:border-white/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> FMCG
+                </span>
+                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-white/50 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md border border-slate-200 dark:border-white/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Fashion
+                </span>
+                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-white/50 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md border border-slate-200 dark:border-white/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> КГТ
+                </span>
+              </div>
+            </div>
+            
           </motion.div>
 
         </div>
