@@ -1,11 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useGLTF } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
+import { useGLTF, useKTX2 } from "@react-three/drei";
 import * as THREE from "three";
-// Импортируем KTX2Loader напрямую из JSM примеров
-import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 
 interface ConveyorProps {
   scale?: number;
@@ -13,17 +10,14 @@ interface ConveyorProps {
 }
 
 export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
-  // Достаем рендерер из контекста Canvas
-  const { gl } = useThree();
-  
+  // Путь к транскодерам Basis через CDN
   const KTX2_TRANSCODER_PATH = "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/basis/";
 
-  // Исправленная деструктуризация: убираем gl из useGLTF
+  // Используем хук useKTX2 — он сам создаст лоадер, совместимый с useGLTF
+  const ktx2Loader = useKTX2(KTX2_TRANSCODER_PATH);
+
+  // Передаем готовый ktx2Loader в настройку GLTFLoader
   const { scene } = useGLTF("/models/conveyor.glb", undefined, true, (loader) => {
-    const ktx2Loader = new KTX2Loader();
-    ktx2Loader.setTranscoderPath(KTX2_TRANSCODER_PATH);
-    // Привязваем загрузчик к текущему рендереру
-    ktx2Loader.detectSupport(gl);
     loader.setKTX2Loader(ktx2Loader);
   });
 
@@ -53,4 +47,5 @@ export function ConveyorModel({ scale = 1, onLoaded }: ConveyorProps) {
   return <primitive object={scene} scale={scale} />;
 }
 
+// Предзагрузка модели для плавности LoadingScreen
 useGLTF.preload("/models/conveyor.glb");
