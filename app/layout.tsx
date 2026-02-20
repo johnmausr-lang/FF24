@@ -7,8 +7,8 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { FloatingTelegramButton } from "@/components/FloatingTelegramButton";
 import { Analytics } from "@vercel/analytics/react";
-// Импорт ErrorBoundary как default export для стабильности билда
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -78,7 +78,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
     { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 };
@@ -113,19 +113,21 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body 
-        className={`${inter.variable} font-sans bg-black text-white antialiased selection:bg-[#E0FF64] selection:text-[#1E1B4B] overflow-x-hidden min-h-screen`}
+        className={`${inter.variable} font-sans antialiased overflow-x-hidden min-h-screen bg-slate-50 text-slate-900 dark:bg-black dark:text-white transition-colors duration-500 selection:bg-lime-300 dark:selection:bg-[#E0FF64] selection:text-black`}
       >
-        <ErrorBoundary>
-          <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-            <Suspense fallback={<LoadingScreen />}>
-              <div className="relative flex flex-col min-h-screen">
-                {children}
-              </div>
-              <ExitIntentPopup />
-              <FloatingTelegramButton />
-            </Suspense>
-          </ReactLenis>
-        </ErrorBoundary>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <ErrorBoundary>
+            <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+              <Suspense fallback={<LoadingScreen />}>
+                <div className="relative flex flex-col min-h-screen">
+                  {children}
+                </div>
+                <ExitIntentPopup />
+                <FloatingTelegramButton />
+              </Suspense>
+            </ReactLenis>
+          </ErrorBoundary>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
